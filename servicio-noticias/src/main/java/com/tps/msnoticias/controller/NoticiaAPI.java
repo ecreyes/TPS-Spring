@@ -30,8 +30,8 @@ public class NoticiaAPI {
             String descripcion = noticiasDB.get(i).getDescripcion();
             String autor = noticiasDB.get(i).getAutor();
             String url = noticiasDB.get(i).getUrl();
-            FuenteNoticia fuenteNoticia = new FuenteNoticia(noticiasDB.get(i).getFuente());
-            noticias.add(new NoticiaRoot(titular,descripcion,autor,url,fuenteNoticia));
+            String fuente = noticiasDB.get(i).getFuente();
+            noticias.add(new NoticiaRoot(titular,descripcion,autor,url,fuente));
         }
         return noticias;
     }

@@ -9,20 +9,23 @@ public class NoticiaRoot {
 
     public NoticiaRoot() {}
 
-    public NoticiaRoot(String titular, String descripcion, String autor, String url, FuenteNoticia fuente) {
+    public NoticiaRoot(String titular, String descripcion, String autor, String url, String fuente) {
         this.titular = titular;
         this.descripcion = descripcion;
         this.autor = autor;
         this.url = url;
-        this.fuente = fuente;
+        FuenteNoticia fuenteNoticia = new FuenteNoticia(fuente);
+        this.fuente = fuenteNoticia;
     }
 
     public FuenteNoticia getFuente() {
         return fuente;
     }
 
-    public void setFuente(FuenteNoticia fuente) {
-        this.fuente = fuente;
+    public void setFuente(String fuente) {
+        FuenteNoticia fuenteNoticia = new FuenteNoticia(fuente);
+        this.fuente = fuenteNoticia;
+
     }
 
     public String getTitular() {
