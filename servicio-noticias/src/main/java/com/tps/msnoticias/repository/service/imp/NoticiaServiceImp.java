@@ -1,6 +1,6 @@
-package com.tps.msnoticias.dominio.service.imp;
+package com.tps.msnoticias.repository.service.imp;
 
-import com.tps.msnoticias.dominio.service.NoticiaService;
+import com.tps.msnoticias.repository.service.NoticiaService;
 import com.tps.msnoticias.repository.NoticiaJpaRepository;
 import com.tps.msnoticias.repository.entity.Noticia;
 import org.springframework.beans.factory.annotation.Autowired;

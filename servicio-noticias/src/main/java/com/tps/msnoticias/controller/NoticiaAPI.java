@@ -2,7 +2,7 @@ package com.tps.msnoticias.controller;
 
 import com.tps.msnoticias.dominio.FuenteNoticia;
 import com.tps.msnoticias.dominio.NoticiaRoot;
-import com.tps.msnoticias.dominio.service.NoticiaService;
+import com.tps.msnoticias.repository.service.NoticiaService;
 import com.tps.msnoticias.repository.entity.Noticia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

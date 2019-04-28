@@ -1,4 +1,4 @@
-package com.tps.msnoticias.dominio.service;
+package com.tps.msnoticias.repository.service;
 
 import com.tps.msnoticias.repository.entity.Noticia;
 
