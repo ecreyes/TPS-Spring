@@ -1,62 +1,63 @@
 package com.tps.msnoticias.dominio;
 
 public class NoticiaRoot {
-    private String titular;
-    private String descripcion;
-    private String autor;
-    private String url;
-    private FuenteNoticia fuente;
 
-    public NoticiaRoot() {}
+	private String titular;
+	private String descripcion;
+	private String autor;
+	private String url;
+	private FuenteNoticia fuente;
 
-    public NoticiaRoot(String titular, String descripcion, String autor, String url, String fuente) {
-        this.titular = titular;
-        this.descripcion = descripcion;
-        this.autor = autor;
-        this.url = url;
-        FuenteNoticia fuenteNoticia = new FuenteNoticia(fuente);
-        this.fuente = fuenteNoticia;
-    }
+	public NoticiaRoot() {
+	}
 
-    public FuenteNoticia getFuente() {
-        return fuente;
-    }
+	public NoticiaRoot(String titular, String descripcion, String autor, String url,
+	                   String fuente) {
+		this.titular = titular;
+		this.descripcion = descripcion;
+		this.autor = autor;
+		this.url = url;
+		this.fuente = new FuenteNoticia(fuente);
+	}
 
-    public void setFuente(String fuente) {
-        FuenteNoticia fuenteNoticia = new FuenteNoticia(fuente);
-        this.fuente = fuenteNoticia;
+	public FuenteNoticia getFuente() {
+		return fuente;
+	}
 
-    }
+	public void setFuente(String fuente) {
+		this.fuente = new FuenteNoticia(fuente);
 
-    public String getTitular() {
-        return titular;
-    }
+	}
 
-    public void setTitular(String titular) {
-        this.titular = titular;
-    }
+	public String getTitular() {
+		return titular;
+	}
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+	public void setTitular(String titular) {
+		this.titular = titular;
+	}
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+	public String getDescripcion() {
+		return descripcion;
+	}
 
-    public String getAutor() {
-        return autor;
-    }
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
+	public String getAutor() {
+		return autor;
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public void setAutor(String autor) {
+		this.autor = autor;
+	}
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
 }

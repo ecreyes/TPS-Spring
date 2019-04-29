@@ -8,5 +8,5 @@ import java.io.Serializable;
 
 @Repository("noticiaJpaRepository")
 public interface NoticiaJpaRepository extends JpaRepository<Noticia, Serializable> {
-    public abstract Noticia findById(int id);
+	public abstract Noticia findById(int id);
 }
