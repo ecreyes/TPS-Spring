@@ -1,4 +1,4 @@
-package com.ts.msfavoritos;
+package com.ts.mscategoria;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class MsfavoritosApplicationTests {
+public class MscategoriaApplicationTests {
 
 	@Test
 	public void contextLoads() {

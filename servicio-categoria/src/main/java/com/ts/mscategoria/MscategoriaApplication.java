@@ -1,13 +1,13 @@
-package com.ts.msfavoritos;
+package com.ts.mscategoria;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MsfavoritosApplication {
+public class MscategoriaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MsfavoritosApplication.class, args);
+		SpringApplication.run(MscategoriaApplication.class, args);
 	}
 
 }

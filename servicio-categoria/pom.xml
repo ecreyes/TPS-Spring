@@ -10,10 +10,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ts</groupId>
-    <artifactId>msfavoritos</artifactId>
+    <artifactId>mscategoria</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>msfavoritos</name>
-    <description>Micro servicio para favoritos</description>
+    <name>mscategoria</name>
+    <description>Micro servicio para categorias</description>
 
     <properties>
         <java.version>1.8</java.version>
