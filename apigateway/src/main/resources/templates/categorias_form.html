@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Categorias</title>
+</head>
+<body>
+
+<h1>Agregar categoría</h1>
+<form action="#" method="post" th:action="@{/menu/categorias/agregar}" th:object="${categoria}">
+    <label>Nombre</label>
+    <input name="id" type="hidden" value="1"/>
+    <input th:field="*{nombre}" type="text"/>
+    <br>
+    <input type="submit" value="Enviar"/>
+</form>
+
+</body>
+</html>
