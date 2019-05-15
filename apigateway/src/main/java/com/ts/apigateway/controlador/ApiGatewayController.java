@@ -1,8 +1,11 @@
 package com.ts.apigateway.controlador;
 
 
+import com.ts.apigateway.component.MsgAdapter;
+import com.ts.apigateway.model.Categoria;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +22,12 @@ public class ApiGatewayController {
 	private static final String FORM_CATEGORIAS = "categorias_form";
 
 	private static final Log LOGGER = LogFactory.getLog(ApiGatewayController.class);
+
+	private final MsgAdapter msgAdapter;
+
+	public ApiGatewayController(@Qualifier("mensajero") MsgAdapter msgAdapter) {
+		this.msgAdapter = msgAdapter;
+	}
 
 	@GetMapping("/categorias")
 	public String index() {
@@ -37,6 +46,8 @@ public class ApiGatewayController {
 		model.addObject("categorias", categoria);
 
 		LOGGER.info("Envio post: " + categoria.toString());
+
+		msgAdapter.send(categoria);
 		return "redirect:/menu/categorias";
 	}
 }

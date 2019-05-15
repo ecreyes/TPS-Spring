@@ -1,6 +1,8 @@
-package com.ts.apigateway.controlador;
+package com.ts.apigateway.model;
 
-public class Categoria {
+import java.io.Serializable;
+
+public class Categoria implements Serializable {
 
 	private String id;
 	private String nombre;
