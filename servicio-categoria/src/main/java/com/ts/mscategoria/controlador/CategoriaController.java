@@ -1,4 +1,4 @@
-package com.ts.mscategoria.controlador;
+/*package com.ts.mscategoria.controlador;
 
 
 import com.ts.mscategoria.repositorio.entidad.Categoria;
@@ -23,4 +23,4 @@ public class CategoriaController {
 	public Categoria agregarCategoria(@RequestBody Categoria categoria) {
 		return categoriaService.agregarCategoria(categoria);
 	}
-}
+}*/

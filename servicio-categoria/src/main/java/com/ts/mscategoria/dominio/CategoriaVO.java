@@ -10,4 +10,11 @@ public class CategoriaVO {
 	public String getNombre() {
 		return nombre;
 	}
+
+	@Override
+	public String toString() {
+		return "CategoriaVO{" +
+				"nombre='" + nombre + '\'' +
+				'}';
+	}
 }
