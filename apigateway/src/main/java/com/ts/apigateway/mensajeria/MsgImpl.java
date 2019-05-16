@@ -1,10 +1,12 @@
-package com.ts.apigateway.component;
+package com.ts.apigateway.mensajeria;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
-import com.ts.apigateway.model.Categoria;
+import com.ts.apigateway.modelo.Categoria;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.SerializationUtils;
 
@@ -18,6 +20,7 @@ import java.util.concurrent.TimeoutException;
 public class MsgImpl implements MsgAdapter {
 
 	private static final String QUEUE_NAME = "categoria_request";
+	private static final Log LOGGER = LogFactory.getLog(MsgImpl.class);
 	private ConnectionFactory factory;
 
 	@Override
@@ -30,11 +33,12 @@ public class MsgImpl implements MsgAdapter {
 			Channel channel = connection.createChannel();
 
 			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+			LOGGER.info("Creando queue: " + QUEUE_NAME);
 
 			byte[] data = SerializationUtils.serialize(categoria);
 
 			channel.basicPublish("", QUEUE_NAME, null, data);
-			System.out.println("[x] Enviando " + data);
+			LOGGER.info("[x] Enviando por queue: " + categoria.toString());
 
 			channel.close();
 			connection.close();

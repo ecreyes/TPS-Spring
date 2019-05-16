@@ -1,26 +1,16 @@
-package com.ts.apigateway.model;
+package com.ts.apigateway.modelo;
 
 import java.io.Serializable;
 
 public class Categoria implements Serializable {
 
-	private String id;
 	private String nombre;
 
 	public Categoria() {
 	}
 
-	public Categoria(String id, String nombre) {
-		this.id = id;
+	public Categoria(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getNombre() {
@@ -34,8 +24,7 @@ public class Categoria implements Serializable {
 	@Override
 	public String toString() {
 		return "Categoria{" +
-				"id='" + id + '\'' +
-				", nombre='" + nombre + '\'' +
+				"nombre='" + nombre + '\'' +
 				'}';
 	}
 }

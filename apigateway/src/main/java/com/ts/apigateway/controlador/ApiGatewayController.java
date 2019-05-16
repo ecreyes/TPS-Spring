@@ -1,8 +1,8 @@
 package com.ts.apigateway.controlador;
 
 
-import com.ts.apigateway.component.MsgAdapter;
-import com.ts.apigateway.model.Categoria;
+import com.ts.apigateway.mensajeria.MsgAdapter;
+import com.ts.apigateway.modelo.Categoria;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,7 +45,7 @@ public class ApiGatewayController {
 		ModelAndView model = new ModelAndView(MENU_CATEGORIAS);
 		model.addObject("categorias", categoria);
 
-		LOGGER.info("Envio post: " + categoria.toString());
+		LOGGER.info("Recibido desde post: " + categoria.toString());
 
 		msgAdapter.send(categoria);
 		return "redirect:/menu/categorias";

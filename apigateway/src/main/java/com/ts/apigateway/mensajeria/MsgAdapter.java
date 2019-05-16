@@ -1,6 +1,6 @@
-package com.ts.apigateway.component;
+package com.ts.apigateway.mensajeria;
 
-import com.ts.apigateway.model.Categoria;
+import com.ts.apigateway.modelo.Categoria;
 
 public interface MsgAdapter {
 

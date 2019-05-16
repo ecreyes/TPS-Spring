@@ -9,7 +9,6 @@
 <h1>Agregar categoría</h1>
 <form action="#" method="post" th:action="@{/menu/categorias/agregar}" th:object="${categoria}">
     <label>Nombre</label>
-    <input name="id" type="hidden" value="1"/>
     <input th:field="*{nombre}" type="text"/>
     <br>
     <input type="submit" value="Enviar"/>
