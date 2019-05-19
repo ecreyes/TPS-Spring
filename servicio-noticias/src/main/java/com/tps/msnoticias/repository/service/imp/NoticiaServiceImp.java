@@ -22,15 +22,26 @@ public class NoticiaServiceImp implements NoticiaService {
 	}
 
 	@Override
+	public Noticia getNoticia(int id) {
+		Noticia noticia = noticiaJpaRepository.getOne(id);
+		return noticia;
+	}
+
+	@Override
 	public Noticia agregarNoticia(Noticia noticia) {
 		return noticiaJpaRepository.save(noticia);
 	}
 
 	@Override
-	public int eliminarNoticia(Noticia noticia) {
-		noticiaJpaRepository.delete(noticia);
-		return 0;
+	public int eliminarNoticia(int id) {
+		try{
+			noticiaJpaRepository.deleteById(id);
+			return 1;
+		}catch(Exception e){
+			return 0;
+		}
 	}
+
 
 	@Override
 	public Noticia editarNoticia(Noticia noticia) {
