@@ -2,6 +2,7 @@ package com.tps.msnoticias.dominio;
 
 public class NoticiaRoot {
 
+	private int id;
 	private String titular;
 	private String descripcion;
 	private String autor;
@@ -11,8 +12,9 @@ public class NoticiaRoot {
 	public NoticiaRoot() {
 	}
 
-	public NoticiaRoot(String titular, String descripcion, String autor, String url,
+	public NoticiaRoot(int id, String titular, String descripcion, String autor, String url,
 	                   String fuente) {
+		this.id = id;
 		this.titular = titular;
 		this.descripcion = descripcion;
 		this.autor = autor;
@@ -59,5 +61,13 @@ public class NoticiaRoot {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
