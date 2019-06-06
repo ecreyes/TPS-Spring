@@ -1,7 +1,6 @@
 package com.ts.mscategoria;
 
 import com.ts.mscategoria.mensajeria.MsgAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,5 +23,6 @@ public class MscategoriaApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		msgAdapter.receive();
+		msgAdapter.sendList();
 	}
 }

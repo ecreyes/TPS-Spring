@@ -8,12 +8,10 @@
 <h1>Listado Categorias</h1>
 <table>
     <thead>
-    <th>ID</th>
-    <th>Nombre</th>
+        <th>Nombre</th>
     </thead>
     <tbody>
     <tr th:each="categoria: ${categorias}">
-        <td th:text="${categoria.id}"></td>
         <td th:text="${categoria.nombre}"></td>
     </tr>
     </tbody>
