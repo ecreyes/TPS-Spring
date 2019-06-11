@@ -2,7 +2,9 @@ package com.ts.apigateway.mensajeria;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.ConnectionFactory;
 import com.ts.apigateway.modelo.Categoria;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,10 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Component("mensajero")
 public class CategoriaMsgAdapterImpl implements CategoriaMsgAdapter {
@@ -34,10 +34,7 @@ public class CategoriaMsgAdapterImpl implements CategoriaMsgAdapter {
 	public void send(Categoria categoria) {
 
 		try {
-			factory = RabbitMQ.getFactory();
-			Connection connection = factory.newConnection();
-
-			Channel channel = connection.createChannel();
+			Channel channel = RabbitMQ.getChannel();
 
 			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 			LOGGER.info("Creando queue: " + QUEUE_NAME);
@@ -47,9 +44,6 @@ public class CategoriaMsgAdapterImpl implements CategoriaMsgAdapter {
 
 			channel.basicPublish("", QUEUE_NAME, null, data);
 			LOGGER.info("[x] Enviando por queue: " + new Gson().toJson(categoria));
-
-			channel.close();
-			connection.close();
 
 		} catch (NoSuchAlgorithmException | KeyManagementException | URISyntaxException | IOException | TimeoutException e) {
 			e.printStackTrace();
@@ -64,10 +58,8 @@ public class CategoriaMsgAdapterImpl implements CategoriaMsgAdapter {
 		List<Categoria> categoriaList=new ArrayList<>();
 
 		try {
-			factory = RabbitMQ.getFactory();
 
-			Connection connection = factory.newConnection();
-			Channel channel = connection.createChannel();
+			Channel channel = RabbitMQ.getChannel();
 
 			String correlation_id = UUID.randomUUID().toString();
 

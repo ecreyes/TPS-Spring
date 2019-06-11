@@ -23,7 +23,6 @@ public class MsgImpl implements MsgAdapter {
 
 	private static final Log LOGGER = LogFactory.getLog(MsgImpl.class);
 	private static final String QUEUE_NAME = "categoria_request";
-	private static ConnectionFactory factory;
 
 	private final CategoriaService categoriaService;
 
@@ -31,15 +30,12 @@ public class MsgImpl implements MsgAdapter {
 		this.categoriaService = categoriaService;
 	}
 
-	//Debe ser implementado en servicio categoria
+	//Metodo que agrega cetegorias
 	@Override
 	public void receive() {
 
 		try {
-			factory = RabbitMQ.getFactory();
-
-			Connection connection = factory.newConnection();
-			Channel channel = connection.createChannel();
+			Channel channel = RabbitMQ.getChannel();
 
 
 			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
@@ -69,14 +65,12 @@ public class MsgImpl implements MsgAdapter {
 		}
 	}
 
+	//recibe peticion de listado y envia lista
 	@Override
 	public void sendList() {
 
 		try {
-			factory = RabbitMQ.getFactory();
-
-			Connection connection = factory.newConnection();
-			Channel channel = connection.createChannel();
+			Channel channel = RabbitMQ.getChannel();
 
 			channel.queueDeclare("rpc_queue", false, false, false, null);
 			channel.queuePurge("rpc_queue");
