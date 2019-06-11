@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.ConnectionFactory;
 import com.ts.apigateway.modelo.Categoria;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,8 +26,12 @@ import java.util.concurrent.TimeoutException;
 public class CategoriaMsgAdapterImpl implements CategoriaMsgAdapter {
 
 	private static final String QUEUE_NAME = "categoria_request";
+	private static final String EXCHANGE_NAME="categoria_exchange";
+
+	private static final String ROUTE_KEY_LIST ="categoria.lista";
+	private static final String ROUTE_KEY_CREATE="categoria.crear";
+
 	private static final Log LOGGER = LogFactory.getLog(CategoriaMsgAdapterImpl.class);
-	private ConnectionFactory factory;
 
 	@Override
 	public void send(Categoria categoria) {
@@ -36,14 +39,14 @@ public class CategoriaMsgAdapterImpl implements CategoriaMsgAdapter {
 		try {
 			Channel channel = RabbitMQ.getChannel();
 
-			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-			LOGGER.info("Creando queue: " + QUEUE_NAME);
+			channel.exchangeDeclare(EXCHANGE_NAME,"direct");
 
-			//byte[] data = SerializationUtils.serialize(categoria);
+			LOGGER.info("Creando exchange: " + EXCHANGE_NAME);
+
 			byte[] data = (new Gson().toJson(categoria)).getBytes(StandardCharsets.UTF_8);
 
-			channel.basicPublish("", QUEUE_NAME, null, data);
-			LOGGER.info("[x] Enviando por queue: " + new Gson().toJson(categoria));
+			channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_CREATE, null, data);
+			LOGGER.info("[x] Enviando por exchange '"+ EXCHANGE_NAME +"' por ruta '" +ROUTE_KEY_CREATE+"' ->" + new Gson().toJson(categoria));
 
 		} catch (NoSuchAlgorithmException | KeyManagementException | URISyntaxException | IOException | TimeoutException e) {
 			e.printStackTrace();
@@ -58,28 +61,32 @@ public class CategoriaMsgAdapterImpl implements CategoriaMsgAdapter {
 		List<Categoria> categoriaList=new ArrayList<>();
 
 		try {
-
 			Channel channel = RabbitMQ.getChannel();
+			channel.exchangeDeclare(EXCHANGE_NAME,"direct");
 
 			String correlation_id = UUID.randomUUID().toString();
 
-			//Queue de respuesta
-			String response_queue = channel.queueDeclare().getQueue();
+			//Queue de respuesta (Queue aleatoria)
+			String receiver_queue = channel.queueDeclare().getQueue();
+			LOGGER.info("Creando queue receptora: " + receiver_queue);
 
 			AMQP.BasicProperties properties = new AMQP.BasicProperties
 					.Builder()
 					.correlationId(correlation_id)
-					.replyTo(response_queue)
+					.replyTo(receiver_queue)
 					.build();
 
-			channel.basicPublish("", "rpc_queue", properties, null);
+			//Publicacion hacia exchange con ruta adecuada
+			channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST, properties, null);
+			LOGGER.info("[x] Solicitando lista categorias por exchange '"+ EXCHANGE_NAME+"' por ruta '"+ ROUTE_KEY_LIST +"'");
 
+			//RECEPCION DE MENSAJES DESDE MSCATEGORIA
 			BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
 
-			String ctag = channel.basicConsume(response_queue, true, (consumerTag, delivery) -> {
+			String ctag = channel.basicConsume(receiver_queue, true, (consumerTag, delivery) -> {
 
 				if (delivery.getProperties().getCorrelationId().equals(correlation_id)) {
-					response.offer(new String(delivery.getBody()));
+					response.offer(new String(delivery.getBody(), StandardCharsets.UTF_8));
 				}
 
 			}, consumerTag -> {
@@ -93,7 +100,7 @@ public class CategoriaMsgAdapterImpl implements CategoriaMsgAdapter {
 			categoriaList = new Gson().fromJson(json, listType);
 			channel.basicCancel(ctag);
 
-			LOGGER.info("[x] Recibido por queue" + response_queue +": " + categoriaList.toString());
+			LOGGER.info("[x] Recibido por queue '" + receiver_queue +"' -> " + categoriaList.toString());
 
 		} catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | InterruptedException | KeyManagementException e) {
 			e.printStackTrace();

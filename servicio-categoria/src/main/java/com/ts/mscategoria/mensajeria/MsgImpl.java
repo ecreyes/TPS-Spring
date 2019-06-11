@@ -1,7 +1,9 @@
 package com.ts.mscategoria.mensajeria;
 
 import com.google.gson.Gson;
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.DeliverCallback;
 import com.ts.mscategoria.repositorio.entidad.Categoria;
 import com.ts.mscategoria.servicio.CategoriaService;
 import org.apache.commons.logging.Log;
@@ -20,9 +22,15 @@ import java.util.concurrent.TimeoutException;
 @Component("mensajero")
 public class MsgImpl implements MsgAdapter {
 
+	private static final String EXCHANGE_NAME = "categoria_exchange";
+
+	private static final String ROUTE_KEY_LIST = "categoria.lista";
+	private static final String ROUTE_KEY_CREATE = "categoria.crear";
+
+	private static final String QUEUE_REQUEST_CREATE = "categoria_request_create";
+	private static final String QUEUE_REQUEST_LIST = "categoria_request_list";
 
 	private static final Log LOGGER = LogFactory.getLog(MsgImpl.class);
-	private static final String QUEUE_NAME = "categoria_request";
 
 	private final CategoriaService categoriaService;
 
@@ -32,23 +40,26 @@ public class MsgImpl implements MsgAdapter {
 
 	//Metodo que agrega cetegorias
 	@Override
-	public void receive() {
+	public void processCreate() {
 
 		try {
 			Channel channel = RabbitMQ.getChannel();
 
+			channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
-			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-			LOGGER.info("Creando queue: " + QUEUE_NAME);
-			LOGGER.info("[*] Esperando por nuevos mensajes. Para salir presiona CTRL+C");
+			String receiver_queue = channel.queueDeclare(QUEUE_REQUEST_CREATE, false, false, false, null).getQueue();
+			LOGGER.info("Creando queue: " + receiver_queue);
+
+			channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_CREATE);
+
+			LOGGER.info("[*] Esperando por solicitudes de creacion. Para salir presiona CTRL+C");
 
 			DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-				//CategoriaVO categoriaVO = SerializationUtils.deserialize(delivery.getBody());
+
 				String json = new String(delivery.getBody());
 				Categoria categoria = new Gson().fromJson(json,Categoria.class);
 
-				//assert categoriaVO != null;
-				LOGGER.info("Recibido desde cola: " + categoria.toString());
+				LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + categoria.toString());
 				channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 
 				//Persistir categoria
@@ -57,7 +68,7 @@ public class MsgImpl implements MsgAdapter {
 			};
 
 			boolean autoAck = false;
-			channel.basicConsume(QUEUE_NAME, autoAck, deliverCallback, (consumerTag) -> {
+			channel.basicConsume(QUEUE_REQUEST_CREATE, autoAck, deliverCallback, (consumerTag) -> {
 			});
 
 		} catch (NoSuchAlgorithmException | KeyManagementException | URISyntaxException | IOException | TimeoutException e) {
@@ -67,19 +78,25 @@ public class MsgImpl implements MsgAdapter {
 
 	//recibe peticion de listado y envia lista
 	@Override
-	public void sendList() {
+	public void processList() {
 
 		try {
 			Channel channel = RabbitMQ.getChannel();
 
-			channel.queueDeclare("rpc_queue", false, false, false, null);
-			channel.queuePurge("rpc_queue");
-			LOGGER.info("Creando queue: " + "rpc_queue");
-			LOGGER.info("[*] Esperando por mensajes de lista. Para salir presiona CTRL+C");
-			channel.basicQos(1);
+			channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+
+			String receiver_queue = channel.queueDeclare(QUEUE_REQUEST_LIST, false, false, false, null).getQueue();
+
+			//Declarar bind para recibir mensajes con ruta "categoria.lista"
+			channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_LIST);
+
+			LOGGER.info("Creando queue: " + receiver_queue);
+			LOGGER.info("[*] Esperando por solicitudes de lista categorias. Para salir presiona CTRL+C");
+
 
 			Object monitor = new Object();
 
+			//RECEPCION DE SOLICITUDES
 			DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
 				AMQP.BasicProperties reply_props = new AMQP.BasicProperties
@@ -91,9 +108,10 @@ public class MsgImpl implements MsgAdapter {
 
 				byte[] data = (new Gson().toJson(categoriaList)).getBytes(StandardCharsets.UTF_8);
 
+				//Enviarlo por cola unica (reply_to)
 				channel.basicPublish("", delivery.getProperties().getReplyTo() , reply_props, data);
-				channel.basicAck(delivery.getEnvelope().getDeliveryTag(),false);
-				LOGGER.info("[x] Enviando por queue "+delivery.getProperties().getReplyTo() +": " + new Gson().toJson(categoriaList));
+
+				LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + categoriaList.toString());
 
 				synchronized (monitor){
 					monitor.notify();
@@ -101,7 +119,8 @@ public class MsgImpl implements MsgAdapter {
 			};
 
 			//En espera de solicitudes
-			channel.basicConsume("rpc_queue",false,deliverCallback,(consumerTag) -> {});
+			channel.basicConsume(receiver_queue, true, deliverCallback, (consumerTag) -> {
+			});
 
 			while(true){
 				synchronized (monitor){

@@ -31,7 +31,7 @@ public class RabbitMQ {
         }
     }
 
-    public static Connection getConnection() throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException, IOException, TimeoutException {
+    private static Connection getConnection() throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException, IOException, TimeoutException {
         if (connection == null) {
             connection = RabbitMQ.getFactory().newConnection();
             LOGGER.info("Creando conexion");
