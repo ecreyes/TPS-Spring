@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 @Component("mensajero")
-public class MsgImpl implements MsgAdapter {
+public class MsgAdapterImpl implements MsgAdapter {
 
 	private static final String EXCHANGE_NAME = "categoria_exchange";
 
@@ -30,11 +30,11 @@ public class MsgImpl implements MsgAdapter {
 	private static final String QUEUE_REQUEST_CREATE = "categoria_request_create";
 	private static final String QUEUE_REQUEST_LIST = "categoria_request_list";
 
-	private static final Log LOGGER = LogFactory.getLog(MsgImpl.class);
+	private static final Log LOGGER = LogFactory.getLog(MsgAdapterImpl.class);
 
 	private final CategoriaService categoriaService;
 
-	public MsgImpl(@Qualifier("categoriaService") CategoriaService categoriaService) {
+	public MsgAdapterImpl(@Qualifier("categoriaService") CategoriaService categoriaService) {
 		this.categoriaService = categoriaService;
 	}
 
