@@ -1,6 +1,7 @@
 package com.tps.msusuario.mensajeria;
 
 import com.google.gson.Gson;
+import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 import com.tps.msusuario.repositorio.entidad.Usuario;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
@@ -19,12 +21,14 @@ import java.util.concurrent.TimeoutException;
 @Component("mensajero")
 public class MsgAdapterImpl implements MsgAdapter {
 
-    private static final String EXCHANGE_NAME="usuario_exchange";
-    private static final String ROUTE_KEY_CREATE="usuario.crear";
+    private static final String EXCHANGE_NAME = "usuario_exchange";
+    private static final String ROUTE_KEY_CREATE = "usuario.crear";
+    private static final String ROUTE_KEY_LOGIN = "usuario.login";
 
-    private static final String QUEUE_REQUEST_CREATE="usuario_request_create";
+    private static final String QUEUE_REQUEST_CREATE = "usuario_request_create";
+    private static final String QUEUE_REQUEST_LOGIN = "usuario_request_login";
 
-    private static final Log LOGGER= LogFactory.getLog(MsgAdapterImpl.class);
+    private static final Log LOGGER = LogFactory.getLog(MsgAdapterImpl.class);
 
     private final UsuarioService usuarioService;
 
@@ -35,12 +39,12 @@ public class MsgAdapterImpl implements MsgAdapter {
     @Override
     public void processCreate() {
 
-        try{
+        try {
             Channel channel = RabbitMQ.getChannel();
 
-            channel.exchangeDeclare(EXCHANGE_NAME,"direct");
+            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
-            String receiver_queue = channel.queueDeclare(QUEUE_REQUEST_CREATE,false,false,false,null).getQueue();
+            String receiver_queue = channel.queueDeclare(QUEUE_REQUEST_CREATE, false, false, false, null).getQueue();
 
             LOGGER.info("Creando queue: " + receiver_queue);
 
@@ -51,7 +55,7 @@ public class MsgAdapterImpl implements MsgAdapter {
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
                 String json = new String(delivery.getBody());
-                Usuario usuario = new Gson().fromJson(json,Usuario.class);
+                Usuario usuario = new Gson().fromJson(json, Usuario.class);
 
                 LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuario.toString());
                 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
@@ -64,6 +68,70 @@ public class MsgAdapterImpl implements MsgAdapter {
             boolean autoAck = false;
             channel.basicConsume(QUEUE_REQUEST_CREATE, autoAck, deliverCallback, (consumerTag) -> {
             });
+        } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void processLogin() {
+        //RPC
+        try {
+            Channel channel = RabbitMQ.getChannel();
+
+            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+
+            String receiver_queue = channel.queueDeclare(QUEUE_REQUEST_LOGIN, false, false, false, null).getQueue();
+
+            LOGGER.info("Creando queue: " + receiver_queue);
+
+            channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_LOGIN);
+
+            LOGGER.info("[*] Esperando por solicitudes de login. Para salir presiona CTRL+C");
+
+            Object monitor = new Object();
+
+            //RECEPCION DE SOLICITUDES
+            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+
+                AMQP.BasicProperties reply_props = new AMQP.BasicProperties
+                        .Builder()
+                        .correlationId(delivery.getProperties().getCorrelationId())
+                        .build();
+
+                String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
+                Usuario usuario = new Gson().fromJson(json, Usuario.class);
+
+                LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuario.toString());
+                channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+
+                //Realizar login
+                String login_status = String.valueOf(usuarioService.loginUsuario(usuario));
+
+                //Enviarlo por cola unica (reply_to)
+                channel.basicPublish("", delivery.getProperties().getReplyTo(), reply_props, login_status.getBytes(StandardCharsets.UTF_8));
+
+                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + login_status);
+
+                synchronized (monitor) {
+                    monitor.notify();
+                }
+            };
+
+            //En espera de solicitudes
+            channel.basicConsume(receiver_queue, false, deliverCallback, (consumerTag) -> {
+            });
+
+            while (true) {
+                synchronized (monitor) {
+                    try {
+                        monitor.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
         } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
             e.printStackTrace();
         }

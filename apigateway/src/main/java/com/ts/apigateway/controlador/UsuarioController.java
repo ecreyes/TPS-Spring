@@ -25,4 +25,9 @@ public class UsuarioController {
         usuarioMsgAdapter.send(usuario);
         return usuario;
     }
+
+    @PostMapping("/usuarios/login")
+    public void login(@RequestBody Usuario usuario) {
+        usuarioMsgAdapter.requestLogin(usuario);
+    }
 }

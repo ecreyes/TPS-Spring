@@ -8,4 +8,7 @@ import java.io.Serializable;
 
 @Repository("usuarioJpaRespository")
 public interface UsuarioJpaRepository extends JpaRepository<Usuario, Serializable> {
+
+    //Busqueda personalizada por mail
+    Usuario findUsuarioByEmail(String email);
 }

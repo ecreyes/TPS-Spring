@@ -23,8 +23,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario agregarUsuario(Usuario usuario) {
-        return usuarioJpaRepository.save(usuario);
+    public void agregarUsuario(Usuario usuario) {
+        usuarioJpaRepository.save(usuario);
     }
 
     @Override
@@ -36,5 +36,23 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario editarUsuario(Usuario usuario) {
         return null;
+    }
+
+    @Override
+    public String loginUsuario(Usuario usuario) {
+        Usuario usuario_bd = usuarioJpaRepository.findUsuarioByEmail(usuario.getEmail());
+
+        if(usuario_bd!=null) {
+
+            //TODO: Mejorar seguridad
+            if (usuario.getPassword().equals(usuario_bd.getPassword())) {
+                return "OK";
+            } else {
+                return "INCORRECTO";
+            }
+        }
+        else{
+            return "NO EXISTE USUARIO";
+        }
     }
 }

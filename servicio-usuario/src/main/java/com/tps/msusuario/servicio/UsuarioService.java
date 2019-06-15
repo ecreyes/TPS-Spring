@@ -6,12 +6,14 @@ import java.util.List;
 
 public interface UsuarioService {
 
-	public abstract List<Usuario> getUsuarios();
+	List<Usuario> getUsuarios();
 
-	public abstract Usuario agregarUsuario(Usuario usuario);
+	void agregarUsuario(Usuario usuario);
 
-	public abstract int eliminarUsuario(Usuario usuario);
+	int eliminarUsuario(Usuario usuario);
 
-	public abstract Usuario editarUsuario(Usuario usuario);
+	Usuario editarUsuario(Usuario usuario);
+
+	String loginUsuario(Usuario usuario);
 
 }

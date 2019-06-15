@@ -21,6 +21,7 @@ public class MsusuarioApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		msgAdapter.processCreate();
+		//msgAdapter.processCreate();
+		msgAdapter.processLogin();
 	}
 }
