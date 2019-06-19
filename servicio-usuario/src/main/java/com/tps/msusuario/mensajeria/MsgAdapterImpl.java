@@ -16,6 +16,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 @Component("mensajero")
@@ -99,19 +100,20 @@ public class MsgAdapterImpl implements MsgAdapter {
                         .correlationId(delivery.getProperties().getCorrelationId())
                         .build();
 
-                String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                Usuario usuario = new Gson().fromJson(json, Usuario.class);
+                String json_received = new String(delivery.getBody(), StandardCharsets.UTF_8);
+                Usuario usuario = new Gson().fromJson(json_received, Usuario.class);
 
                 LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuario.toString());
                 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 
                 //Realizar login
-                String login_status = String.valueOf(usuarioService.loginUsuario(usuario));
+                Map<String,Object> result = usuarioService.loginUsuario(usuario);
+                String json_result = new Gson().toJson(result);
 
                 //Enviarlo por cola unica (reply_to)
-                channel.basicPublish("", delivery.getProperties().getReplyTo(), reply_props, login_status.getBytes(StandardCharsets.UTF_8));
+                channel.basicPublish("", delivery.getProperties().getReplyTo(), reply_props, json_result.getBytes(StandardCharsets.UTF_8));
 
-                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + login_status);
+                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + json_result);
 
                 synchronized (monitor) {
                     monitor.notify();

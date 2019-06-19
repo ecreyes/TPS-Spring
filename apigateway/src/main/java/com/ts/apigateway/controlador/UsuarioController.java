@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 public class UsuarioController {
 
@@ -28,6 +30,8 @@ public class UsuarioController {
 
     @PostMapping("/usuarios/login")
     public void login(@RequestBody Usuario usuario) {
-        usuarioMsgAdapter.requestLogin(usuario);
+
+        Map<String,Object > map = usuarioMsgAdapter.requestLogin(usuario);
+        LOGGER.info("En UsuarioController -> status: "+map.get("STATUS")+", Usuario: "+map.get("Usuario"));
     }
 }

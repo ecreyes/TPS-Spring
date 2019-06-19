@@ -1,6 +1,8 @@
 package com.ts.apigateway.mensajeria;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.ts.apigateway.modelo.Usuario;
@@ -13,6 +15,8 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -48,7 +52,10 @@ public class UsuarioMsgAdapterImpl implements UsuarioMsgAdapter {
     }
 
     @Override
-    public void requestLogin(Usuario usuario) {
+    public Map<String, Object> requestLogin(Usuario usuario) {
+
+        Map<String, Object> map = new HashMap<>();
+
         try {
             Channel channel = RabbitMQ.getChannel();
 
@@ -89,8 +96,21 @@ public class UsuarioMsgAdapterImpl implements UsuarioMsgAdapter {
 
             LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + json);
 
+            //Procesado de resultado
+            JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+
+            //JSON TO data
+            String status = jsonObject.get("STATUS").getAsString();
+
+            if (jsonObject.getAsJsonObject("Usuario") != null) {
+                map.put("Usuario", jsonObject.get("Usuario").getAsJsonObject());
+            }
+            map.put("STATUS", status);
+
         } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException | InterruptedException e) {
             e.printStackTrace();
         }
+
+        return map;
     }
 }

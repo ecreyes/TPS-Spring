@@ -2,6 +2,7 @@ package com.ts.apigateway.modelo;
 
 public class Usuario {
 
+    private int id;
     private String email;
     private String password;
     private String username;
@@ -9,10 +10,19 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String email, String password, String username) {
+    public Usuario(int id, String email, String password, String username) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.username = username;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getEmail() {

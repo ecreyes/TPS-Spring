@@ -3,6 +3,7 @@ package com.tps.msusuario.servicio;
 import com.tps.msusuario.repositorio.entidad.Usuario;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UsuarioService {
 
@@ -14,6 +15,6 @@ public interface UsuarioService {
 
 	Usuario editarUsuario(Usuario usuario);
 
-	String loginUsuario(Usuario usuario);
+	Map<String, Object> loginUsuario(Usuario usuario);
 
 }
