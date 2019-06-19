@@ -20,7 +20,19 @@ public class MsnoticiasApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		msgAdapter.processCreate();
+
+		switch (args[0]){
+			case "All":
+			    //Agregar mas listeners si es necesario
+				msgAdapter.processCreate();
+				break;
+			case "Creacion":
+				msgAdapter.processCreate();
+				break;
+
+			//case "Otro Proceso":
+				//break;
+		}
 	}
 
 }

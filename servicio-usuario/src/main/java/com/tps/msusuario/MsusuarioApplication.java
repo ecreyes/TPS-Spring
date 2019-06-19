@@ -9,19 +9,31 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MsusuarioApplication implements CommandLineRunner {
 
-	private final MsgAdapter msgAdapter;
+    private final MsgAdapter msgAdapter;
 
-	public MsusuarioApplication(@Qualifier("MsgAdapter") MsgAdapter msgAdapter) {
-		this.msgAdapter = msgAdapter;
-	}
+    public MsusuarioApplication(@Qualifier("MsgAdapter") MsgAdapter msgAdapter) {
+        this.msgAdapter = msgAdapter;
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(MsusuarioApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MsusuarioApplication.class, args);
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
-		//msgAdapter.processCreate();
-		msgAdapter.processLogin();
-	}
+    @Override
+    public void run(String... args) throws Exception {
+        switch (args[0]) {
+            case "All":
+                msgAdapter.processCreate();
+                msgAdapter.processLogin();
+                break;
+
+            case "Creacion":
+                msgAdapter.processCreate();
+                break;
+
+            case "Login":
+                msgAdapter.processLogin();
+                break;
+        }
+    }
 }
