@@ -1,6 +1,6 @@
 package com.tps.msnoticias;
 
-import com.tps.msnoticias.mensajeria.NoticiaAdapter;
+import com.tps.msnoticias.mensajeria.MsgAdapter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -8,9 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class MsnoticiasApplication implements CommandLineRunner {
-	private final NoticiaAdapter msgAdapter;
+	private final MsgAdapter msgAdapter;
 
-	public MsnoticiasApplication(@Qualifier("NoticiaAdapterImpl") NoticiaAdapter msgAdapter) {
+	public MsnoticiasApplication(@Qualifier("MsgAdapter") MsgAdapter msgAdapter) {
 		this.msgAdapter = msgAdapter;
 	}
 
@@ -20,7 +20,7 @@ public class MsnoticiasApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		msgAdapter.receive();
+		msgAdapter.processCreate();
 	}
 
 }

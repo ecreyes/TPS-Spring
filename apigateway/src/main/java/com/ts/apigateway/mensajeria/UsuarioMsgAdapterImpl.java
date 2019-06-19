@@ -99,7 +99,17 @@ public class UsuarioMsgAdapterImpl implements UsuarioMsgAdapter {
             //Procesado de resultado
             JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
 
-            //JSON TO data
+            //DATOS QUE LLEGAN
+            //{
+            //  "STATUS": "OK | PASS INCORRECTA | USUARIO NO EXISTE"
+            //  "Usuario":
+            //          {
+            //              "id": "",
+            //              "email": "",
+            //              "password": "",
+            //              "username": ""
+            //          }
+            //}
             String status = jsonObject.get("STATUS").getAsString();
 
             if (jsonObject.getAsJsonObject("Usuario") != null) {

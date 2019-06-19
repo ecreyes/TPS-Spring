@@ -11,7 +11,7 @@ public class MscategoriaApplication implements CommandLineRunner {
 
     private final MsgAdapter msgAdapter;
 
-    public MscategoriaApplication(@Qualifier("mensajero") MsgAdapter msgAdapter) {
+    public MscategoriaApplication(@Qualifier("MsgAdapter") MsgAdapter msgAdapter) {
         this.msgAdapter = msgAdapter;
     }
 

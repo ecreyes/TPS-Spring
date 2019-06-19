@@ -2,8 +2,7 @@ package com.tps.msnoticias.controller;
 
 import com.tps.msnoticias.dominio.NoticiaRoot;
 import com.tps.msnoticias.repository.entity.Noticia;
-import com.tps.msnoticias.repository.service.NoticiaService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tps.msnoticias.service.NoticiaService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +12,11 @@ import java.util.List;
 @RestController
 public class NoticiaAPI {
 
-	@Autowired
-	@Qualifier("noticiaServiceImp")
-	private NoticiaService noticiaService;
+    private final NoticiaService noticiaService;
+
+    public NoticiaAPI(@Qualifier("noticiaService") NoticiaService noticiaService) {
+        this.noticiaService = noticiaService;
+    }
 
 	/**
 	 * Funcion que retorna una lista de noticias root y que mapea una solicitud get de noticias

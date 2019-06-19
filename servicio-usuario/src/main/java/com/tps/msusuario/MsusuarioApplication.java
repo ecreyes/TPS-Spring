@@ -11,7 +11,7 @@ public class MsusuarioApplication implements CommandLineRunner {
 
 	private final MsgAdapter msgAdapter;
 
-	public MsusuarioApplication(@Qualifier("mensajero") MsgAdapter msgAdapter) {
+	public MsusuarioApplication(@Qualifier("MsgAdapter") MsgAdapter msgAdapter) {
 		this.msgAdapter = msgAdapter;
 	}
 

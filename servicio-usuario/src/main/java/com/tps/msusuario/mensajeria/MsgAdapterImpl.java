@@ -19,7 +19,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
-@Component("mensajero")
+@Component("MsgAdapter")
 public class MsgAdapterImpl implements MsgAdapter {
 
     private static final String EXCHANGE_NAME = "usuario_exchange";
@@ -51,7 +51,7 @@ public class MsgAdapterImpl implements MsgAdapter {
 
             channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_CREATE);
 
-            LOGGER.info("[*] Esperando por solicitudes de creacion. Para salir presiona CTRL+C");
+            LOGGER.info("[*] Esperando por solicitudes de creacion de usuarios. Para salir presiona CTRL+C");
 
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
@@ -67,7 +67,7 @@ public class MsgAdapterImpl implements MsgAdapter {
             };
 
             boolean autoAck = false;
-            channel.basicConsume(QUEUE_REQUEST_CREATE, autoAck, deliverCallback, (consumerTag) -> {
+            channel.basicConsume(receiver_queue, autoAck, deliverCallback, (consumerTag) -> {
             });
         } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
             e.printStackTrace();

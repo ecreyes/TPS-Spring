@@ -1,20 +1,21 @@
-package com.tps.msnoticias.repository.service.imp;
+package com.tps.msnoticias.service.imp;
 
 import com.tps.msnoticias.repository.NoticiaJpaRepository;
 import com.tps.msnoticias.repository.entity.Noticia;
-import com.tps.msnoticias.repository.service.NoticiaService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tps.msnoticias.service.NoticiaService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("noticiaServiceImp")
+@Service("noticiaService")
 public class NoticiaServiceImp implements NoticiaService {
 
-	@Autowired
-	@Qualifier("noticiaJpaRepository")
-	private NoticiaJpaRepository noticiaJpaRepository;
+    private final NoticiaJpaRepository noticiaJpaRepository;
+
+    public NoticiaServiceImp(@Qualifier("noticiaJpaRepository") NoticiaJpaRepository noticiaJpaRepository) {
+        this.noticiaJpaRepository = noticiaJpaRepository;
+    }
 
 	@Override
 	public List<Noticia> getNoticias() {

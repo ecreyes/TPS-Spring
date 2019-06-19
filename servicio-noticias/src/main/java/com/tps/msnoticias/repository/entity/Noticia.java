@@ -83,4 +83,16 @@ public class Noticia {
 	public void setFuente(String fuente) {
 		this.fuente = fuente;
 	}
+
+    @Override
+    public String toString() {
+        return "Noticia{" +
+                "id=" + id +
+                ", titular='" + titular + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", autor='" + autor + '\'' +
+                ", url='" + url + '\'' +
+                ", fuente='" + fuente + '\'' +
+                '}';
+    }
 }

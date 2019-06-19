@@ -1,4 +1,4 @@
-package com.tps.msnoticias.repository.service;
+package com.tps.msnoticias.service;
 
 import com.tps.msnoticias.repository.entity.Noticia;
 

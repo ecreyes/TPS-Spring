@@ -19,7 +19,7 @@ public class RabbitMQ {
 
     private static Log LOGGER = LogFactory.getLog(RabbitMQ.class);
 
-    public static ConnectionFactory getFactory() throws NoSuchAlgorithmException, KeyManagementException
+    private static ConnectionFactory getFactory() throws NoSuchAlgorithmException, KeyManagementException
             , URISyntaxException {
         if (factory == null) {
             ConnectionFactory factory = new ConnectionFactory();
@@ -32,7 +32,7 @@ public class RabbitMQ {
         }
     }
 
-    public static Connection getConnection() throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException, IOException, TimeoutException {
+    private static Connection getConnection() throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException, IOException, TimeoutException {
         if (connection == null) {
             connection = RabbitMQ.getFactory().newConnection();
             LOGGER.info("Creando conexion");
@@ -54,7 +54,7 @@ public class RabbitMQ {
         }
     }
 
-    public static boolean sendData(String nombre_cola, byte[] data) {
+    /*public static boolean sendData(String nombre_cola, byte[] data) {
         try {
             factory = getFactory();
             Connection connection = factory.newConnection();
@@ -70,5 +70,5 @@ public class RabbitMQ {
             return false;
         }
 
-    }
+    }*/
 }
