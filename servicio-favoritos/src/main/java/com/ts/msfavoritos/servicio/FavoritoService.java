@@ -1,4 +1,4 @@
-package com.ts.msfavoritos.repositorio.servicio;
+package com.ts.msfavoritos.servicio;
 
 import com.ts.msfavoritos.repositorio.entidad.Favorito;
 

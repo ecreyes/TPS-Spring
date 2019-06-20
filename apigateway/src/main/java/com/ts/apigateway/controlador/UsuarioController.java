@@ -23,9 +23,8 @@ public class UsuarioController {
     }
 
     @PostMapping("/usuarios/agregar")
-    public Usuario add(@RequestBody Usuario usuario){
+    public void add(@RequestBody Usuario usuario) {
         usuarioMsgAdapter.send(usuario);
-        return usuario;
     }
 
     @PostMapping("/usuarios/login")

@@ -14,10 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.jws.WebParam;
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 @RequestMapping("/menu")
 public class CategoriaController {
@@ -29,7 +25,7 @@ public class CategoriaController {
 
 	private final CategoriaMsgAdapter categoriaMsgAdapter;
 
-	public CategoriaController(@Qualifier("mensajero") CategoriaMsgAdapter categoriaMsgAdapter) {
+	public CategoriaController(@Qualifier("categoriaMsgAdapter") CategoriaMsgAdapter categoriaMsgAdapter) {
 		this.categoriaMsgAdapter = categoriaMsgAdapter;
 	}
 

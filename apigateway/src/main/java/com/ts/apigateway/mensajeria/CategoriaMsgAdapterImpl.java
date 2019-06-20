@@ -22,10 +22,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeoutException;
 
-@Component("mensajero")
+@Component("categoriaMsgAdapter")
 public class CategoriaMsgAdapterImpl implements CategoriaMsgAdapter {
 
-	private static final String QUEUE_NAME = "categoria_request";
 	private static final String EXCHANGE_NAME="categoria_exchange";
 
 	private static final String ROUTE_KEY_LIST ="categoria.lista";
