@@ -2,6 +2,6 @@ package com.ts.apigateway.mensajeria;
 
 import com.ts.apigateway.modelo.Noticia;
 
-public interface NoticiaAdapter {
+public interface NoticiaMsgAdapter {
     void send(Noticia noticia);
 }

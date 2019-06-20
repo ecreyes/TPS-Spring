@@ -15,14 +15,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
 
-@Component("NoticiaAdapter")
-public class NoticiaAdapterImpl implements NoticiaAdapter {
+@Component("noticiaMsgAdapter")
+public class NoticiaMsgAdapterImpl implements NoticiaMsgAdapter {
 
     private static final String EXCHANGE_NAME="noticia_exchange";
 
     private static final String ROUTE_KEY_CREATE="noticia.crear";
 
-    private static final Log LOGGER = LogFactory.getLog(NoticiaAdapterImpl.class);
+    private static final Log LOGGER = LogFactory.getLog(NoticiaMsgAdapterImpl.class);
 
     @Override
     public void send(Noticia noticia) {

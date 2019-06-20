@@ -2,11 +2,10 @@ package com.ts.msfavoritos.servicio;
 
 import com.ts.msfavoritos.repositorio.FavoritoJpaRepository;
 import com.ts.msfavoritos.repositorio.entidad.Favorito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component("favoritoService")
+@Service("favoritoService")
 public class FavoritoServiceImpl implements FavoritoService {
 
     private final FavoritoJpaRepository favoritoJpaRepository;

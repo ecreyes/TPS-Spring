@@ -19,7 +19,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
-@Component("MsgAdapter")
+@Component("msgAdapter")
 public class MsgAdapterImpl implements MsgAdapter {
 
     private static final String EXCHANGE_NAME = "usuario_exchange";

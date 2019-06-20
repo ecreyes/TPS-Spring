@@ -7,7 +7,6 @@ import com.ts.msfavoritos.repositorio.entidad.Favorito;
 import com.ts.msfavoritos.servicio.FavoritoService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 

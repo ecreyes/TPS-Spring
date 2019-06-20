@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MsnoticiasApplication implements CommandLineRunner {
 	private final MsgAdapter msgAdapter;
 
-	public MsnoticiasApplication(@Qualifier("MsgAdapter") MsgAdapter msgAdapter) {
+	public MsnoticiasApplication(@Qualifier("msgAdapter") MsgAdapter msgAdapter) {
 		this.msgAdapter = msgAdapter;
 	}
 
