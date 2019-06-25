@@ -5,19 +5,14 @@ Se detallan los puntos de acceso al servicio
 * **Categorías**
   * http://localhost:8080/menu/categoria,  Muestra un listado de categorías almacenadas en microservicio `mscategoria`
   * http://localhost:8080/menu/categoria/agregar, Formulario para agregar una nueva categoría. (Form Eliminable)
+* **Noticia**
   * http://localhost:8080/addnoticia, agregar noticia via `POST`
+* **Usuario**
   * http://localhost:8080/usuarios/agregar, agregar usuario via `POST`
   * http://localhost:8080/usuarios/login, loguear usuario via `POST`
   
 ### MicroServicio Categoria
 Se detalla como ejecutar los diferentes **procesos** del microservicio asociado
-* Via IDE `IntelliJ`
-
-    ![IntelliJ](https://drive.google.com/uc?export=download&id=1ccod3yztlrEkj1lJaBgW2maes22uQk0p)
-  * Ejecutar `AllProcess` , ejecutará un proceso encargado de crear categorias (accesible vía api gateway) y otro para consultar la lista de categorías (accesible via apigateway) en una única instancia de `mscategoria`.
-  * Ejecutar `ProcessCreate`, ejecutará únicamente el proceso encargado de la creación de categorías.
-  * Ejecutar `ProcessList`, ejecutará únicamente el proceso encargado de devolver el listado de categorías en BD.
-
 * Via `Terminal`
   * `mvn install`
   * Micro servicio completo -> `java -jar target/mscategoria-0.0.1-SNAPSHOT.jar All`
@@ -27,10 +22,6 @@ Se detalla como ejecutar los diferentes **procesos** del microservicio asociado
     
 ### MicroServicio Noticia
 Se detalla como ejecutar los diferentes **procesos** del microservicio asociado
-* Via IDE `IntelliJ`
-  * Ejecutar `AllProcess` , ejecutará todos los procesos en una única instancia de `msnoticias`.
-  * Ejecutar `ProcessCreate`, ejecutará únicamente el proceso encargado de la creación de noticias.
-
 * Via `Terminal`
   * `mvn install`
   * Micro servicio completo -> `java -jar target/msnoticias-0.0.1-SNAPSHOT.jar All`
@@ -39,11 +30,6 @@ Se detalla como ejecutar los diferentes **procesos** del microservicio asociado
 
 ### MicroServicio Usuario
 Se detalla como ejecutar los diferentes **procesos** del microservicio asociado
-* Via IDE `IntelliJ`
-  * Ejecutar `AllProcess` , ejecutará un proceso encargado de crear usuario (accesible vía api gateway) y otro para realizar logins (accesible via apigateway) en una única instancia de `msusuario`.
-  * Ejecutar `ProcessCreate`, ejecutará únicamente el proceso encargado de la creación de usuarios.
-  * Ejecutar `ProcessLogin`, ejecutará únicamente el proceso encargado de verificar login de usuarios.
-
 * Via `Terminal`
   * `mvn install`
   * Micro servicio completo -> `java -jar target/msusuario-0.0.1-SNAPSHOT.jar All`
