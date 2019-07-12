@@ -1,17 +1,18 @@
 package com.ts.mscategoria.servicio;
 
 
+import com.ts.mscategoria.dominio.CategoriaList;
 import com.ts.mscategoria.repositorio.entidad.Categoria;
-
-import java.util.List;
 
 public interface CategoriaService {
 
-	public abstract List<Categoria> obtenerCategorias();
+	void cargarAgregado(boolean actualizar);
 
-	public abstract Categoria agregarCategoria(Categoria categoria);
+	CategoriaList getAgregado();
 
-	public abstract int eliminarCategoria();
+	void agregarCategoria(Categoria categoria);
 
-	public abstract Categoria editarCategoria();
+	int eliminarCategoria();
+
+	Categoria editarCategoria();
 }

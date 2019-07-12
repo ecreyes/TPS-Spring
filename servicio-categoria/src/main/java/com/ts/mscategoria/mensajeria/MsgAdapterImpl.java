@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
+import com.ts.mscategoria.dominio.CategoriaVO;
 import com.ts.mscategoria.repositorio.entidad.Categoria;
 import com.ts.mscategoria.servicio.CategoriaService;
 import org.apache.commons.logging.Log;
@@ -57,13 +58,18 @@ public class MsgAdapterImpl implements MsgAdapter {
 			DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
 				String json = new String(delivery.getBody());
-				Categoria categoria = new Gson().fromJson(json,Categoria.class);
+
+				CategoriaVO categoriaVO = new Gson().fromJson(json,CategoriaVO.class);
+				Categoria categoria = new Categoria(categoriaVO.getNombre());
 
 				LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + categoria.toString());
 				channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 
 				//Persistir categoria
 				categoriaService.agregarCategoria(categoria);
+
+				//Actualizar agregado
+				categoriaService.cargarAgregado(true);
 
 			};
 
@@ -99,19 +105,23 @@ public class MsgAdapterImpl implements MsgAdapter {
 			//RECEPCION DE SOLICITUDES
 			DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
+				LOGGER.info("[x] Solicitud de listado de categorias desde apigateway");
 				AMQP.BasicProperties reply_props = new AMQP.BasicProperties
 						.Builder()
 						.correlationId(delivery.getProperties().getCorrelationId())
 						.build();
 
-				List<Categoria> categoriaList = categoriaService.obtenerCategorias();
+				//Codigo comentado envia por rabbit ENTIDADES (NO PERMITIDO)
+				//List<Categoria> categoriaList = categoriaService.obtenerCategorias();
 
-				byte[] data = (new Gson().toJson(categoriaList)).getBytes(StandardCharsets.UTF_8);
+				//Codigo envia por rabbit listado de VO's
+				List<CategoriaVO> categoriaVOList = categoriaService.getAgregado().getCategoriaVOList();
+				byte[] data = (new Gson().toJson(categoriaVOList).getBytes(StandardCharsets.UTF_8));
 
 				//Enviarlo por cola unica (reply_to)
 				channel.basicPublish("", delivery.getProperties().getReplyTo() , reply_props, data);
 
-				LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + categoriaList.toString());
+				LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + categoriaVOList.toString());
 
 				synchronized (monitor){
 					monitor.notify();
