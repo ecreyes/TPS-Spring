@@ -1,6 +1,6 @@
 package com.ts.mscategoria;
 
-import com.ts.mscategoria.mensajeria.MsgAdapter;
+import com.ts.mscategoria.mensajeria.Msg;
 import com.ts.mscategoria.servicio.CategoriaService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -10,11 +10,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MscategoriaApplication implements CommandLineRunner {
 
-    private final MsgAdapter msgAdapter;
+    private final Msg msg;
     private final CategoriaService categoriaService;
 
-    public MscategoriaApplication(@Qualifier("msgAdapter") MsgAdapter msgAdapter, @Qualifier("categoriaService") CategoriaService categoriaService) {
-        this.msgAdapter = msgAdapter;
+    public MscategoriaApplication(@Qualifier("msgAdapter") Msg msg, @Qualifier("categoriaService") CategoriaService categoriaService) {
+        this.msg = msg;
         this.categoriaService = categoriaService;
     }
 
@@ -30,15 +30,14 @@ public class MscategoriaApplication implements CommandLineRunner {
 
         switch (args[0]) {
             case "All":
-
-                msgAdapter.processCreate();
-                msgAdapter.processList();
+                msg.processCUD();
+                msg.processList();
                 break;
             case "Creacion":
-                msgAdapter.processCreate();
+                msg.processCUD();
                 break;
             case "Lista":
-                msgAdapter.processList();
+                msg.processList();
                 break;
         }
     }

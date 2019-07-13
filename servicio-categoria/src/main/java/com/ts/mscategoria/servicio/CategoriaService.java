@@ -7,13 +7,13 @@ import com.ts.mscategoria.repositorio.entidad.Categoria;
 
 public interface CategoriaService {
 
-	void cargarAgregado(boolean actualizar);
+    void cargarAgregado(boolean actualizar);
 
-	CategoriaList getAgregado();
+    CategoriaList obtenerAgregado();
 
-	void agregarCategoria(Categoria categoria);
+    void agregarCategoria(Categoria categoria);
 
-	int eliminarCategoria();
+    int eliminarCategoria();
 
-	Categoria editarCategoria(CategoriaVO categoriaVO);
+    Categoria editarCategoria(CategoriaVO categoriaVO);
 }

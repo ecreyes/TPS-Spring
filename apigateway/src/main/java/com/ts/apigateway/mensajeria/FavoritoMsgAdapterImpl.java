@@ -21,7 +21,7 @@ public class FavoritoMsgAdapterImpl implements FavoritoMsgAdapter {
 
     private static final String ROUTE_KEY_CREATE = "favorito.crear";
 
-    private static final Log LOGGER = LogFactory.getLog(CategoriaMsgAdapterImpl.class);
+    private static final Log LOGGER = LogFactory.getLog(FavoritoMsgAdapterImpl.class);
 
     @Override
     public void send(Favorito favorito) {

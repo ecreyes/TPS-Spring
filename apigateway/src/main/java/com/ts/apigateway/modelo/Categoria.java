@@ -30,7 +30,7 @@ public class Categoria implements Serializable {
 
     @Override
     public String toString() {
-        return "Categoria{" +
+        return "CategoriaMsg{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 '}';

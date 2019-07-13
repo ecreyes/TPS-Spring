@@ -12,7 +12,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
-public class RabbitMQ {
+class RabbitMQ {
     private static ConnectionFactory factory = null;
     private static Connection connection = null;
     private static Channel channel=null;
@@ -42,7 +42,7 @@ public class RabbitMQ {
         }
     }
 
-    public static Channel getChannel() throws URISyntaxException, IOException, TimeoutException, NoSuchAlgorithmException, KeyManagementException {
+    static Channel getChannel() throws URISyntaxException, IOException, TimeoutException, NoSuchAlgorithmException, KeyManagementException {
         if(channel==null){
             channel = RabbitMQ.getConnection().createChannel();
             LOGGER.info("Creando canal");

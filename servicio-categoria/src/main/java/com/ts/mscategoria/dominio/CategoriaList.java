@@ -4,13 +4,13 @@ import java.util.List;
 
 public class CategoriaList {
 
-	private List<CategoriaVO> categoriaVOList;
+    private List<CategoriaVO> categoriaVOList;
 
-	public CategoriaList(List<CategoriaVO> categoriaVOList) {
-		this.categoriaVOList = categoriaVOList;
-	}
+    public CategoriaList(List<CategoriaVO> categoriaVOList) {
+        this.categoriaVOList = categoriaVOList;
+    }
 
-	public List<CategoriaVO> getCategoriaVOList() {
-		return categoriaVOList;
-	}
+    public List<CategoriaVO> getCategoriaVOList() {
+        return categoriaVOList;
+    }
 }

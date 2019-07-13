@@ -1,51 +1,49 @@
 package com.ts.apigateway.controlador;
 
 
-import com.ts.apigateway.mensajeria.CategoriaMsgAdapter;
-import com.ts.apigateway.modelo.Categoria;
+import com.ts.apigateway.mensajeria.CategoriaMsg;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 @RestController
 public class CategoriaController {
 
-	private static final String MENU_CATEGORIAS = "categorias";
-	private static final String FORM_CATEGORIAS = "categorias_form";
+    private static final String ROUTE_KEY_CREATE = "categoria.crear";
+    private static final String ROUTE_KEY_EDIT = "categoria.editar";
 
-	private static final Log LOGGER = LogFactory.getLog(CategoriaController.class);
+    private static final Log LOGGER = LogFactory.getLog(CategoriaController.class);
 
-	private final CategoriaMsgAdapter categoriaMsgAdapter;
+    private final CategoriaMsg categoriaMsgMsgAdapter;
 
-	public CategoriaController(@Qualifier("categoriaMsgAdapter") CategoriaMsgAdapter categoriaMsgAdapter) {
-		this.categoriaMsgAdapter = categoriaMsgAdapter;
-	}
+    public CategoriaController(@Qualifier("categoriaMsgAdapter") CategoriaMsg categoriaMsgMsgAdapter) {
+        this.categoriaMsgMsgAdapter = categoriaMsgMsgAdapter;
+    }
 
-	@GetMapping("/categoria")
-	public List<Categoria> index() {
-		return categoriaMsgAdapter.getList();
-	}
+    @GetMapping("/categoria")
+    public List<com.ts.apigateway.modelo.Categoria> index() {
+        return categoriaMsgMsgAdapter.getList();
+    }
 
-	/*@GetMapping("/categorias/agregar")
-	public String show_form(Model model) {
-		model.addAttribute("categoria", new Categoria());
-		return FORM_CATEGORIAS;
-	}*/
+    @PostMapping("/categoria/agregar")
+    public com.ts.apigateway.modelo.Categoria agregar(@RequestBody com.ts.apigateway.modelo.Categoria categoria) {
 
-	@PostMapping("/categoria/agregar")
-	public Categoria add(@RequestBody Categoria categoria) {
-		/*ModelAndView model = new ModelAndView(MENU_CATEGORIAS);
-		model.addObject("categorias", categoria);*/
+        LOGGER.info("Recibido desde post: " + categoria.toString());
 
-		LOGGER.info("Recibido desde post: " + categoria.toString());
+        categoriaMsgMsgAdapter.send(categoria, ROUTE_KEY_CREATE);
+        return categoria;
+    }
 
-		categoriaMsgAdapter.send(categoria);
-		return categoria;
-	}
+    @PutMapping("/categoria/editar")
+    public com.ts.apigateway.modelo.Categoria editar(@RequestBody com.ts.apigateway.modelo.Categoria categoria) {
+
+        LOGGER.info("Recibido desde post: " + categoria.toString());
+
+        categoriaMsgMsgAdapter.send(categoria, ROUTE_KEY_EDIT);
+
+        return categoria;
+    }
 }

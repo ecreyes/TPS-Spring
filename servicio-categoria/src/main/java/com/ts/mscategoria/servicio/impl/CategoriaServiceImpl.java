@@ -18,7 +18,7 @@ import java.util.List;
 public class CategoriaServiceImpl implements CategoriaService {
 
     private final CategoriaJpaRepository categoriaJpaRepository;
-    private CategoriaList agregado=null;
+    private CategoriaList agregado = null;
 
     private static final Log LOGGER = LogFactory.getLog(CategoriaServiceImpl.class);
 
@@ -27,12 +27,12 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public CategoriaList getAgregado() {
+    public CategoriaList obtenerAgregado() {
         return agregado;
     }
 
     /**
-     * Funcion encargada de cargar el agregado categoria en memoria
+     * Funcion encargada de cargar el agregado categoria en memoria con listado de value objects
      */
     @Override
     public void cargarAgregado(boolean actualizar) {
@@ -58,6 +58,11 @@ public class CategoriaServiceImpl implements CategoriaService {
         }
     }
 
+    /**
+     * Funcion encargada de buscar categorias desde base de datos
+     *
+     * @return Listado de entidades categorias
+     */
     private List<Categoria> obtenerCategorias() {
         return categoriaJpaRepository.findAll();
     }
@@ -67,13 +72,28 @@ public class CategoriaServiceImpl implements CategoriaService {
         categoriaJpaRepository.save(categoria);
     }
 
+    //TODO: Pendiente por ejecutar
     @Override
     public int eliminarCategoria() {
         return 0;
     }
 
     @Override
-    public Categoria editarCategoria(CategoriaVO categoriaVO) {
-        return null;
+    public Categoria editarCategoria(CategoriaVO editCatVO) {
+
+        Categoria categoria = null;
+
+        //si la categoria fue encontrada en BD
+        if (categoriaJpaRepository.findById(editCatVO.getId()).isPresent()) {
+
+            //Buscar categoria en BD
+            categoria = categoriaJpaRepository.findById(editCatVO.getId()).get();
+
+            //Actualizar datos
+            categoria.setNombre(editCatVO.getNombre());
+
+            categoriaJpaRepository.save(categoria);
+        }
+        return categoria;
     }
 }

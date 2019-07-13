@@ -6,33 +6,35 @@ import javax.persistence.*;
 @Table(name = "categoria")
 public class Categoria {
 
-	@Id
-	@GeneratedValue
-	private int id;
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private int id;
 
-	@Column(name = "nombre")
-	private String nombre;
+    @Column(name = "nombre")
+    private String nombre;
 
-	public Categoria() {
-	}
-
-	public Categoria(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
+    public Categoria(String nombre) {
+        this.nombre = nombre;
+    }
 
     public int getId() {
         return id;
-	}
+    }
 
-	@Override
-	public String toString() {
-		return "Categoria{" +
-				"id=" + id +
-				", nombre='" + nombre + '\'' +
-				'}';
-	}
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    @Override
+    public String toString() {
+        return "Categoria{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                '}';
+    }
 }
