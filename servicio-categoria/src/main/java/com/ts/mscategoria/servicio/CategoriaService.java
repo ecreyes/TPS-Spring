@@ -2,6 +2,7 @@ package com.ts.mscategoria.servicio;
 
 
 import com.ts.mscategoria.dominio.CategoriaList;
+import com.ts.mscategoria.dominio.CategoriaVO;
 import com.ts.mscategoria.repositorio.entidad.Categoria;
 
 public interface CategoriaService {
@@ -14,5 +15,5 @@ public interface CategoriaService {
 
 	int eliminarCategoria();
 
-	Categoria editarCategoria();
+	Categoria editarCategoria(CategoriaVO categoriaVO);
 }

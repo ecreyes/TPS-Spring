@@ -47,7 +47,7 @@ public class CategoriaServiceImpl implements CategoriaService {
             for (Categoria categoria : categoriaList) {
 
                 //Transformar entidad a VO
-                CategoriaVO categoriaVO = new CategoriaVO(categoria.getNombre());
+                CategoriaVO categoriaVO = new CategoriaVO(categoria.getId(), categoria.getNombre());
 
                 categoriaVOList.add(categoriaVO);
             }
@@ -73,7 +73,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public Categoria editarCategoria() {
+    public Categoria editarCategoria(CategoriaVO categoriaVO) {
         return null;
     }
 }
