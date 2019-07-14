@@ -14,6 +14,9 @@ public class Categoria {
     @Column(name = "nombre")
     private String nombre;
 
+    public Categoria() {
+    }
+
     public Categoria(String nombre) {
         this.nombre = nombre;
     }

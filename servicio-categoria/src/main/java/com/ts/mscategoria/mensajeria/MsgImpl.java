@@ -28,6 +28,7 @@ public class MsgImpl implements Msg {
     private static final String ROUTE_KEY_LIST = "categoria.lista";
     private static final String ROUTE_KEY_CREATE = "categoria.crear";
     private static final String ROUTE_KEY_EDIT = "categoria.editar";
+    private static final String ROUTE_KEY_DELETE = "categoria.eliminar";
 
     private static final String QUEUE_REQUEST_CUD = "categoria_request_cud";
     private static final String QUEUE_REQUEST_LIST = "categoria_request_list";
@@ -39,8 +40,6 @@ public class MsgImpl implements Msg {
     public MsgImpl(@Qualifier("categoriaService") CategoriaService categoriaService) {
         this.categoriaService = categoriaService;
     }
-
-    //TODO: Pendiente ELiminar categoria
 
     /**
      * Proceso de mensajeria encargado de CREAR, ACTUALIZAR y ELIMINAR categorias.
@@ -60,6 +59,7 @@ public class MsgImpl implements Msg {
             //Configuracion de rutas
             channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_CREATE);
             channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_EDIT);
+            channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_DELETE);
 
             LOGGER.info("[*] Esperando por solicitudes de creacion de categorias. Para salir presiona CTRL+C");
 
@@ -72,28 +72,39 @@ public class MsgImpl implements Msg {
                 LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + categoriaVO.toString());
 
                 //Solicitudes de creacion de categorias
-                if (delivery.getEnvelope().getRoutingKey().equals(ROUTE_KEY_CREATE)) {
+                switch (delivery.getEnvelope().getRoutingKey()) {
+                    case ROUTE_KEY_CREATE:
 
-                    Categoria categoria = new Categoria(categoriaVO.getNombre());
+                        Categoria categoria = new Categoria(categoriaVO.getNombre());
 
-                    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 
-                    //Persistir categoria
-                    categoriaService.agregarCategoria(categoria);
+                        //Persistir categoria
+                        categoriaService.agregarCategoria(categoria);
 
-                    //Actualizar agregado
-                    categoriaService.cargarAgregado(true);
-                }
+                        //Actualizar agregado
+                        categoriaService.cargarAgregado(true);
+                        break;
 
-                //Solicitudes de edicion de categorias
-                else if (delivery.getEnvelope().getRoutingKey().equals(ROUTE_KEY_EDIT)) {
+                    //Solicitudes de edicion de categorias
+                    case ROUTE_KEY_EDIT:
 
-                    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 
-                    categoriaService.editarCategoria(categoriaVO);
+                        categoriaService.editarCategoria(categoriaVO);
 
-                    //TODO:REVISAR SI ES NECESARIO RECARGAR AGREGADO
-                    //categoriaService.cargarAgregado(true);
+                        categoriaService.cargarAgregado(true);
+                        break;
+
+                    //Solicitudes de eliminar categorias
+                    case ROUTE_KEY_DELETE:
+
+                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+
+                        categoriaService.eliminarCategoria(categoriaVO);
+
+                        categoriaService.cargarAgregado(true);
+                        break;
                 }
 
             };

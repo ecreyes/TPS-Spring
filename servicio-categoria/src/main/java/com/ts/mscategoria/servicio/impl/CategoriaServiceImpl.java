@@ -74,7 +74,14 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     //TODO: Pendiente por ejecutar
     @Override
-    public int eliminarCategoria() {
+    public int eliminarCategoria(CategoriaVO categoriaVO) {
+
+        if (categoriaJpaRepository.findById(categoriaVO.getId()).isPresent()) {
+
+            categoriaJpaRepository.deleteById(categoriaVO.getId());
+
+            return 1;
+        }
         return 0;
     }
 

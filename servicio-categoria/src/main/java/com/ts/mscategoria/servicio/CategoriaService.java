@@ -13,7 +13,7 @@ public interface CategoriaService {
 
     void agregarCategoria(Categoria categoria);
 
-    int eliminarCategoria();
+    int eliminarCategoria(CategoriaVO categoriaVO);
 
     Categoria editarCategoria(CategoriaVO categoriaVO);
 }
