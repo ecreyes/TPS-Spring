@@ -2,8 +2,8 @@ package com.ts.mscategoria.dominio;
 
 public class CategoriaVO {
 
-    private String nombre;
-    private int id;
+    private final String nombre;
+    private final int id;
 
     public CategoriaVO(int id, String nombre) {
         this.id = id;

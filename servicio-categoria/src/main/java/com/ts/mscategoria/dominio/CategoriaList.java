@@ -4,7 +4,7 @@ import java.util.List;
 
 public class CategoriaList {
 
-    private List<CategoriaVO> categoriaVOList;
+    private final List<CategoriaVO> categoriaVOList;
 
     public CategoriaList(List<CategoriaVO> categoriaVOList) {
         this.categoriaVOList = categoriaVOList;

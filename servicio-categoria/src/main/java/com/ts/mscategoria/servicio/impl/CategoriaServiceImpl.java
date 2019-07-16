@@ -72,7 +72,6 @@ public class CategoriaServiceImpl implements CategoriaService {
         categoriaJpaRepository.save(categoria);
     }
 
-    //TODO: Pendiente por ejecutar
     @Override
     public int eliminarCategoria(CategoriaVO categoriaVO) {
 

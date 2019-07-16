@@ -77,33 +77,33 @@ public class MsgImpl implements Msg {
 
                         Categoria categoria = new Categoria(categoriaVO.getNombre());
 
-                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-
                         //Persistir categoria
                         categoriaService.agregarCategoria(categoria);
 
                         //Actualizar agregado
                         categoriaService.cargarAgregado(true);
+
+                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                         break;
 
                     //Solicitudes de edicion de categorias
                     case ROUTE_KEY_EDIT:
 
-                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-
                         categoriaService.editarCategoria(categoriaVO);
 
                         categoriaService.cargarAgregado(true);
+
+                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                         break;
 
                     //Solicitudes de eliminar categorias
                     case ROUTE_KEY_DELETE:
 
-                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-
                         categoriaService.eliminarCategoria(categoriaVO);
 
                         categoriaService.cargarAgregado(true);
+
+                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                         break;
                 }
 

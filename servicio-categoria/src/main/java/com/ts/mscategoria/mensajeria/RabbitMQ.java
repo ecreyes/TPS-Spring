@@ -15,23 +15,24 @@ import java.util.concurrent.TimeoutException;
 class RabbitMQ {
     private static ConnectionFactory factory = null;
     private static Connection connection = null;
-    private static Channel channel=null;
-    private static Log LOGGER = LogFactory.getLog(RabbitMQ.class);
+    private static Channel channel = null;
+    private static final Log LOGGER = LogFactory.getLog(RabbitMQ.class);
 
     private static ConnectionFactory getFactory() throws NoSuchAlgorithmException, KeyManagementException
             , URISyntaxException {
-        if(factory==null){
+        if (factory == null) {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setRequestedHeartbeat(30);
             factory.setUri(
                     "amqp://xuueptgg:hYmOJdYsGPSSW-rvY_WSRXB1OK2YW8II@fox.rmq.cloudamqp.com/xuueptgg");
             return factory;
-        }else{
+        } else {
             return factory;
         }
     }
 
-    private static Connection getConnection() throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException, IOException, TimeoutException {
+    private static Connection getConnection() throws NoSuchAlgorithmException, KeyManagementException,
+            URISyntaxException, IOException, TimeoutException {
         if (connection == null) {
             connection = RabbitMQ.getFactory().newConnection();
             LOGGER.info("Creando conexion");
@@ -42,13 +43,13 @@ class RabbitMQ {
         }
     }
 
-    static Channel getChannel() throws URISyntaxException, IOException, TimeoutException, NoSuchAlgorithmException, KeyManagementException {
-        if(channel==null){
+    static Channel getChannel() throws URISyntaxException, IOException, TimeoutException, NoSuchAlgorithmException,
+            KeyManagementException {
+        if (channel == null) {
             channel = RabbitMQ.getConnection().createChannel();
             LOGGER.info("Creando canal");
             return channel;
-        }
-        else{
+        } else {
             LOGGER.info("Reusando canal");
             return channel;
         }
