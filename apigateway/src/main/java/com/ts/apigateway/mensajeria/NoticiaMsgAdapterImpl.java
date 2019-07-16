@@ -20,12 +20,10 @@ public class NoticiaMsgAdapterImpl implements NoticiaMsgAdapter {
 
     private static final String EXCHANGE_NAME="noticia_exchange";
 
-    private static final String ROUTE_KEY_CREATE="noticia.crear";
-
     private static final Log LOGGER = LogFactory.getLog(NoticiaMsgAdapterImpl.class);
 
     @Override
-    public void send(Noticia noticia) {
+    public void send(Noticia noticia,String route_key) {
 
         try{
             Channel channel = RabbitMQ.getChannel();
@@ -36,9 +34,9 @@ public class NoticiaMsgAdapterImpl implements NoticiaMsgAdapter {
 
             byte[] data = (new Gson().toJson(noticia)).getBytes(StandardCharsets.UTF_8);
 
-            channel.basicPublish(EXCHANGE_NAME,ROUTE_KEY_CREATE,null,data);
+            channel.basicPublish(EXCHANGE_NAME,route_key,null,data);
 
-            LOGGER.info("[x] Enviando por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_CREATE + "' ->" + new Gson().toJson(noticia));
+            LOGGER.info("[x] Enviando por exchange '" + EXCHANGE_NAME + "' por ruta '" + route_key + "' ->" + new Gson().toJson(noticia));
 
         } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
             e.printStackTrace();

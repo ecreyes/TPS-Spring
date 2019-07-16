@@ -16,6 +16,10 @@ public class Noticia {
     public Noticia() {
     }
 
+    public Noticia(int id) {
+        this.id = id;
+    }
+
     public Noticia(String titular, String descripcion, String autor, String url, String fuente) {
         this.titular = titular;
         this.descripcion = descripcion;

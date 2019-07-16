@@ -24,10 +24,10 @@ public class MsnoticiasApplication implements CommandLineRunner {
 		switch (args[0]){
 			case "All":
 			    //Agregar mas listeners si es necesario
-				msgAdapter.processCreate();
+				msgAdapter.processCUD();
 				break;
 			case "Creacion":
-				msgAdapter.processCreate();
+				msgAdapter.processCUD();
 				break;
 
 			//case "Otro Proceso":
