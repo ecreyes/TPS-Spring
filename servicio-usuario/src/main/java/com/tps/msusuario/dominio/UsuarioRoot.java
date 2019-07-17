@@ -2,51 +2,84 @@ package com.tps.msusuario.dominio;
 
 public class UsuarioRoot {
 
-	private String nombreUsuario;
-	private String email;
-	private String password;
-	private EstadoUsuario estadoUsuario;
+    private int id;
+    private NombreUsuarioVO nombreUsuarioVO;
+    private String email;
+    private String password;
+    private EstadoUsuarioVO estadoUsuarioVO;
 
-	public UsuarioRoot(String nombreUsuario, String email, String password,
-	                   EstadoUsuario estadoUsuario) {
-		this.nombreUsuario = nombreUsuario;
-		this.email = email;
-		this.password = password;
-		this.estadoUsuario = estadoUsuario;
-	}
+    //Contructor editar
+    public UsuarioRoot(int id, NombreUsuarioVO nombreUsuarioVO, String email, String password,
+                       EstadoUsuarioVO estadoUsuarioVO) {
+        this.id = id;
+        this.nombreUsuarioVO = nombreUsuarioVO;
+        this.email = email;
+        this.password = password;
+        this.estadoUsuarioVO = estadoUsuarioVO;
+    }
 
-	public UsuarioRoot() {
-	}
+    //Contructor crear
+    public UsuarioRoot(NombreUsuarioVO nombreUsuarioVO, String email, String password,
+                       EstadoUsuarioVO estadoUsuarioVO) {
+        this.nombreUsuarioVO = nombreUsuarioVO;
+        this.email = email;
+        this.password = password;
+        this.estadoUsuarioVO = estadoUsuarioVO;
+    }
 
-	public String getNombreUsuario() {
-		return nombreUsuario;
-	}
+    //Contructor para eliminar
+    public UsuarioRoot(int id) {
+        this.id = id;
+    }
 
-	public void setNombreUsuario(String nombreUsuario) {
-		this.nombreUsuario = nombreUsuario;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public NombreUsuarioVO getNombreUsuarioVO() {
+        return nombreUsuarioVO;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setNombreUsuarioVO(NombreUsuarioVO nombreUsuarioVO) {
+        this.nombreUsuarioVO = nombreUsuarioVO;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public EstadoUsuario getEstadoUsuario() {
-		return estadoUsuario;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setEstadoUsuario(EstadoUsuario estadoUsuario) {
-		this.estadoUsuario = estadoUsuario;
-	}
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public EstadoUsuarioVO getEstadoUsuarioVO() {
+        return estadoUsuarioVO;
+    }
+
+    public void setEstadoUsuarioVO(EstadoUsuarioVO estadoUsuarioVO) {
+        this.estadoUsuarioVO = estadoUsuarioVO;
+    }
+
+    @Override
+    public String toString() {
+        return "UsuarioRoot{" +
+                "id=" + id +
+                ", nombreUsuarioVO=" + nombreUsuarioVO +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", estadoUsuarioVO=" + estadoUsuarioVO +
+                '}';
+    }
 }

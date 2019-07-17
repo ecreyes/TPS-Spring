@@ -1,7 +1,8 @@
 package com.tps.msusuario.mensajeria;
 
-public interface MsgAdapter {
+public interface Msg {
 
-    void processCreate();
+    void processCUD();
+
     void processLogin();
 }

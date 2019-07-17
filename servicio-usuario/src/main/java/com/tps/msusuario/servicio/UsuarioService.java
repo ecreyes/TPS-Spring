@@ -1,5 +1,6 @@
 package com.tps.msusuario.servicio;
 
+import com.tps.msusuario.dominio.UsuarioRoot;
 import com.tps.msusuario.repositorio.entidad.Usuario;
 
 import java.util.List;
@@ -9,12 +10,12 @@ public interface UsuarioService {
 
 	List<Usuario> getUsuarios();
 
-	void agregarUsuario(Usuario usuario);
+	void agregarUsuario(UsuarioRoot usuario);
 
-	int eliminarUsuario(Usuario usuario);
+	int eliminarUsuario(UsuarioRoot usuarioRoot);
 
-	Usuario editarUsuario(Usuario usuario);
+	void editarUsuario(UsuarioRoot usuarioRoot);
 
-	Map<String, Object> loginUsuario(Usuario usuario);
+	Map<String, String> loginUsuario(UsuarioRoot usuarioRoot);
 
 }

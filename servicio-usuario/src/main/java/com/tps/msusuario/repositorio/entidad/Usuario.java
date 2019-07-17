@@ -8,6 +8,7 @@ public class Usuario {
 
     @Id
     @GeneratedValue
+    @Column(name = "id")
     private int id;
 
     @Column(name = "email")
@@ -16,25 +17,24 @@ public class Usuario {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "nombreUsuario")
+    private String nombreUsuario;
+
+    @Column(name = "estado")
+    private String estado;
 
     public Usuario() {
     }
 
-    public Usuario(String email, String password, String username) {
+    public Usuario(String email, String password, String nombreUsuario, String estado) {
         this.email = email;
         this.password = password;
-        this.username = username;
+        this.nombreUsuario = nombreUsuario;
+        this.estado = estado;
     }
-
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getEmail() {
@@ -53,12 +53,20 @@ public class Usuario {
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNombreUsuario() {
+        return nombreUsuario;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     @Override
@@ -67,7 +75,8 @@ public class Usuario {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", username='" + username + '\'' +
+                ", nombreUsuario='" + nombreUsuario + '\'' +
+                ", estado='" + estado + '\'' +
                 '}';
     }
 }

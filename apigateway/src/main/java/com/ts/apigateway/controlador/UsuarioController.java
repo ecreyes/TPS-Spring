@@ -1,36 +1,44 @@
 package com.ts.apigateway.controlador;
 
-import com.ts.apigateway.mensajeria.UsuarioMsgAdapter;
-import com.ts.apigateway.mensajeria.UsuarioMsgAdapterImpl;
+import com.ts.apigateway.mensajeria.UsuarioMsg;
+import com.ts.apigateway.mensajeria.UsuarioMsgImpl;
 import com.ts.apigateway.modelo.Usuario;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
 public class UsuarioController {
 
-    private final UsuarioMsgAdapter usuarioMsgAdapter;
-    private static final Log LOGGER = LogFactory.getLog(UsuarioMsgAdapterImpl.class);
+    private final UsuarioMsg usuarioMsg;
+    private static final String ROUTE_KEY_CREATE = "usuario.crear";
+    private static final String ROUTE_KEY_DELETE = "usuario.eliminar";
+    private static final String ROUTE_KEY_EDIT = "usuario.editar";
 
-    public UsuarioController(@Qualifier("usuarioMsgAdapter") UsuarioMsgAdapter usuarioMsgAdapter) {
-        this.usuarioMsgAdapter = usuarioMsgAdapter;
+    public UsuarioController(@Qualifier("usuarioMsgAdapter") UsuarioMsg usuarioMsg) {
+        this.usuarioMsg = usuarioMsg;
     }
 
-    @PostMapping("/usuarios/agregar")
-    public void add(@RequestBody Usuario usuario) {
-        usuarioMsgAdapter.send(usuario);
+    @PostMapping("/usuario/agregar")
+    public void agregar(@RequestBody Usuario usuario) {
+        usuarioMsg.send(usuario, ROUTE_KEY_CREATE);
     }
 
-    @PostMapping("/usuarios/login")
-    public void login(@RequestBody Usuario usuario) {
+    @PutMapping("/usuario/editar")
+    public void editar(@RequestBody Usuario usuario) {
+        usuarioMsg.send(usuario, ROUTE_KEY_EDIT);
+    }
 
-        Map<String,Object > map = usuarioMsgAdapter.requestLogin(usuario);
-        LOGGER.info("En UsuarioController -> status: "+map.get("STATUS")+", Usuario: "+map.get("Usuario"));
+    @DeleteMapping("/usuario/eliminar")
+    public void eliminar(@RequestBody Usuario usuario) {
+        usuarioMsg.send(usuario, ROUTE_KEY_DELETE);
+    }
+
+    @PostMapping("/usuario/login")
+    public String login(@RequestBody Usuario usuario) {
+        return usuarioMsg.requestLogin(usuario);
     }
 }

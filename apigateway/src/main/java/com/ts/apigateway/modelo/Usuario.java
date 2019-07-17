@@ -6,14 +6,17 @@ public class Usuario {
     private String email;
     private String password;
     private String username;
+    private String estado;
 
     public Usuario() {
     }
 
-    public Usuario(String email, String password, String username) {
+    public Usuario(int id, String email, String password, String username, String estado) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.username = username;
+        this.estado = estado;
     }
 
     public int getId() {
@@ -48,12 +51,22 @@ public class Usuario {
         this.username = username;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +
-                "email='" + email + '\'' +
+                "id=" + id +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", username='" + username + '\'' +
+                ", estado='" + estado + '\'' +
                 '}';
     }
 }
