@@ -3,15 +3,26 @@
 ### ApiGateway
 Se detallan los puntos de acceso al servicio
 * **Categorías**
-  * http://localhost:8080/menu/categoria,  Muestra un listado de categorías almacenadas en microservicio `mscategoria`
-  * http://localhost:8080/menu/categoria/agregar, Formulario para agregar una nueva categoría. (Form Eliminable)
+  * http://localhost:8080/categoria,  Muestra un listado de categorías almacenadas en microservicio `mscategoria`
+  * http://localhost:8080/categoria/agregar, Agregar una categoria vía `POST`
+    + Esquema -> ```{"nombre": "Deportes"}```
+  * http://localhost:8080/categoria/editar, edita una categoría vía `PUT`
+    + Esquema -> ```{"nombre": "NombreEditado","id": 7}```
+  * http://localhost:8080/categoria/eliminar, eliminar una categoría vía `DELETE`
+    + Esquema -> ```{"id": 1}```
 * **Noticia**
   * http://localhost:8080/addnoticia, agregar noticia via `POST`
 * **Usuario**
-  * http://localhost:8080/usuarios/agregar, agregar usuario via `POST`
-  * http://localhost:8080/usuarios/login, loguear usuario via `POST`
+  * http://localhost:8080/usuario/agregar, agregar usuario via `POST`
+    + Esquema -> ```{"email": "email@email.com","username": "username","password": "pass","estado": "creado"}```
+  * http://localhost:8080/usuario/editar, agregar usuario via `PUT`
+    + Esquema -> ```{"id": 1,"email": "email@email.com","username": "username","password": "pass","estado": "editado"}```
+  * http://localhost:8080/usuario/eliminar, agregar usuario via `DELETE`
+    + Esquema -> ```{"id": 1}```
+  * http://localhost:8080/usuario/login, loguear usuario via `POST`
+    + Esquema -> ```{"email": "email@email.com","password": "pass1"}```
   
-### MicroServicio Categoria
+### MicroServicio Categoría
 Se detalla como ejecutar los diferentes **procesos** del microservicio asociado
 * Via `Terminal`
   * `mvn install`
