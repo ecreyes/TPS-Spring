@@ -20,6 +20,14 @@ public class FavoritoRoot {
         this.fechaFavorito = fechaFavorito;
     }
 
+    //Constructor para consulta de favs
+    public FavoritoRoot(int id, UsuarioIdVO usuarioIdVO, NoticiaIdVO noticiaIdVO, String fechaFavorito) {
+        this.id = id;
+        this.usuarioIdVO = usuarioIdVO;
+        this.noticiaIdVO = noticiaIdVO;
+        this.fechaFavorito = fechaFavorito;
+    }
+
     public int getId() {
         return id;
     }
@@ -55,7 +63,8 @@ public class FavoritoRoot {
     @Override
     public String toString() {
         return "FavoritoRoot{" +
-                "usuarioIdVO=" + usuarioIdVO +
+                "id=" + id +
+                ", usuarioIdVO=" + usuarioIdVO +
                 ", noticiaIdVO=" + noticiaIdVO +
                 ", fechaFavorito='" + fechaFavorito + '\'' +
                 '}';

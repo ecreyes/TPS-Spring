@@ -13,15 +13,16 @@ public class MsfavoritosApplication implements CommandLineRunner {
 
     public MsfavoritosApplication(@Qualifier("msgAdapter") Msg msg) {
         this.msg = msg;
-	}
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(MsfavoritosApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MsfavoritosApplication.class, args);
+    }
 
-	@Override
+    @Override
     public void run(String... args) {
 
         msg.processCD();
-	}
+        msg.processUserFavList();
+    }
 }

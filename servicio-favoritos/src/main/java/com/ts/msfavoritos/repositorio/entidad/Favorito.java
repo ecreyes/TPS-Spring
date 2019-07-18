@@ -9,8 +9,8 @@ public class Favorito {
 
     @Id
     @GeneratedValue
-    @Column(name = "id_favorito")
-    private int id_favorito;
+    @Column(name = "id")
+    private int id;
 
     @Column(name = "id_noticia")
     private int id_noticia;
@@ -30,12 +30,12 @@ public class Favorito {
         this.fecha_favorito = fecha_favorito;
     }
 
-    public int getId_favorito() {
-        return id_favorito;
+    public int getId() {
+        return id;
     }
 
-    public void setId_favorito(int id_favorito) {
-        this.id_favorito = id_favorito;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getId_noticia() {
@@ -65,7 +65,7 @@ public class Favorito {
     @Override
     public String toString() {
         return "Favorito{" +
-                "id_favorito=" + id_favorito +
+                "id_favorito=" + id +
                 ", id_noticia=" + id_noticia +
                 ", id_usuario=" + id_usuario +
                 ", fecha_favorito='" + fecha_favorito + '\'' +

@@ -7,6 +7,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 public class FavoritoController {
 
@@ -14,8 +17,6 @@ public class FavoritoController {
 
     private static final String ROUTE_KEY_CREATE = "favorito.crear";
     private static final String ROUTE_KEY_DELETE = "favorito.eliminar";
-
-    private static final Log LOGGER = LogFactory.getLog(FavoritoController.class);
 
     public FavoritoController(@Qualifier("favoritoMsgAdapter") FavoritoMsg favoritoMsg) {
         this.favoritoMsg = favoritoMsg;
@@ -28,10 +29,13 @@ public class FavoritoController {
 
     @DeleteMapping("/favorito/eliminar")
     public void eliminar(@RequestBody Favorito favorito) {
-        favoritoMsg.send(favorito,ROUTE_KEY_DELETE);
+        favoritoMsg.send(favorito, ROUTE_KEY_DELETE);
     }
 
-    //@GetMapping("/favorito/usuario")
+    @GetMapping("/favorito/usuario/{id}")
+    public List<Favorito> favoritosUsuario(@PathVariable(name = "id") String id_usuario) {
+        return favoritoMsg.getFavList(id_usuario);
+    }
 
 
 }

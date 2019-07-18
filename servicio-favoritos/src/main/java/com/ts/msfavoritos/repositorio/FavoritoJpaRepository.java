@@ -8,10 +8,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 
 @Repository("favoritoJpaRepository")
 public interface FavoritoJpaRepository extends JpaRepository<Favorito, Serializable> {
+
+    @Query("select t from #{#entityName} t where t.id_usuario = ?1")
+    List<Favorito> findAllById_usuario(int id_usuario);
 
     //Metodo JPA personalizado para buscar por id_usuario e id_noticia en vez de usar PK id_favorito
     @Query("select t from #{#entityName} t where t.id_usuario = ?1 and t.id_noticia = ?2")
