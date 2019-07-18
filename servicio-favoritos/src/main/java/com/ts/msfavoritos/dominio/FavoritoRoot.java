@@ -2,40 +2,71 @@ package com.ts.msfavoritos.dominio;
 
 public class FavoritoRoot {
 
-	private String usuarioId;
-	private String noticiaId;
-	private String fechaFavorito;
+    private int id;
+    private UsuarioIdVO usuarioIdVO;
+    private NoticiaIdVO noticiaIdVO;
+    private String fechaFavorito;
 
-	public FavoritoRoot() {
-	}
+    //Constructor de eliminacion
+    public FavoritoRoot(UsuarioIdVO usuarioIdVO, NoticiaIdVO noticiaIdVO) {
+        this.usuarioIdVO = usuarioIdVO;
+        this.noticiaIdVO = noticiaIdVO;
+    }
 
-	public FavoritoRoot(String usuarioId, String noticiaId, String fechaFavorito) {
-		this.usuarioId = usuarioId;
-		this.noticiaId = noticiaId;
-		this.fechaFavorito = fechaFavorito;
-	}
+    //Constructor de creacion
+    public FavoritoRoot(UsuarioIdVO usuarioIdVO, NoticiaIdVO noticiaIdVO, String fechaFavorito) {
+        this.usuarioIdVO = usuarioIdVO;
+        this.noticiaIdVO = noticiaIdVO;
+        this.fechaFavorito = fechaFavorito;
+    }
 
-	public String getUsuarioId() {
-		return usuarioId;
-	}
+    //Constructor para consulta de favs
+    public FavoritoRoot(int id, UsuarioIdVO usuarioIdVO, NoticiaIdVO noticiaIdVO, String fechaFavorito) {
+        this.id = id;
+        this.usuarioIdVO = usuarioIdVO;
+        this.noticiaIdVO = noticiaIdVO;
+        this.fechaFavorito = fechaFavorito;
+    }
 
-	public void setUsuarioId(String usuarioId) {
-		this.usuarioId = usuarioId;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public String getNoticiaId() {
-		return noticiaId;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setNoticiaId(String noticiaId) {
-		this.noticiaId = noticiaId;
-	}
+    public UsuarioIdVO getUsuarioIdVO() {
+        return usuarioIdVO;
+    }
 
-	public String getFechaFavorito() {
-		return fechaFavorito;
-	}
+    public void setUsuarioIdVO(UsuarioIdVO usuarioIdVO) {
+        this.usuarioIdVO = usuarioIdVO;
+    }
 
-	public void setFechaFavorito(String fechaFavorito) {
-		this.fechaFavorito = fechaFavorito;
-	}
+    public NoticiaIdVO getNoticiaIdVO() {
+        return noticiaIdVO;
+    }
+
+    public void setNoticiaIdVO(NoticiaIdVO noticiaIdVO) {
+        this.noticiaIdVO = noticiaIdVO;
+    }
+
+    public String getFechaFavorito() {
+        return fechaFavorito;
+    }
+
+    public void setFechaFavorito(String fechaFavorito) {
+        this.fechaFavorito = fechaFavorito;
+    }
+
+    @Override
+    public String toString() {
+        return "FavoritoRoot{" +
+                "id=" + id +
+                ", usuarioIdVO=" + usuarioIdVO +
+                ", noticiaIdVO=" + noticiaIdVO +
+                ", fechaFavorito='" + fechaFavorito + '\'' +
+                '}';
+    }
 }

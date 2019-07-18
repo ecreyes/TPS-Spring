@@ -1,13 +1,14 @@
 package com.ts.msfavoritos.servicio;
 
-import com.ts.msfavoritos.repositorio.entidad.Favorito;
+import com.ts.msfavoritos.dominio.FavoritoRoot;
+
+import java.util.List;
 
 public interface FavoritoService {
 
-	public abstract Favorito agregarFavorito(Favorito favorito);
+    void agregar(FavoritoRoot favorito);
 
-	public abstract int eliminarFavorito(Favorito favorito);
+    int eliminar(FavoritoRoot favorito);
 
-	public abstract Favorito editarFavorito(Favorito favorito);
-
+    List<FavoritoRoot> getListaFavUsuario(int id_usuario);
 }
