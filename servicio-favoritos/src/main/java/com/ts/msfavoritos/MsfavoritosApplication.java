@@ -1,7 +1,6 @@
 package com.ts.msfavoritos;
 
-import com.ts.msfavoritos.mensajeria.MsgAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ts.msfavoritos.mensajeria.Msg;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,10 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MsfavoritosApplication implements CommandLineRunner {
 
-	private final MsgAdapter msgAdapter;
+    private final Msg msg;
 
-	public MsfavoritosApplication(@Qualifier("msgAdapter") MsgAdapter msgAdapter) {
-		this.msgAdapter = msgAdapter;
+    public MsfavoritosApplication(@Qualifier("msgAdapter") Msg msg) {
+        this.msg = msg;
 	}
 
 	public static void main(String[] args) {
@@ -21,8 +20,8 @@ public class MsfavoritosApplication implements CommandLineRunner {
 	}
 
 	@Override
-	public void run(String... args) throws Exception {
+    public void run(String... args) {
 
-		msgAdapter.processFavorite();
+        msg.processCD();
 	}
 }

@@ -2,6 +2,7 @@ package com.ts.apigateway.mensajeria;
 
 import com.google.gson.Gson;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.MessageProperties;
 import com.ts.apigateway.modelo.Favorito;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,16 +16,20 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
 @Component("favoritoMsgAdapter")
-public class FavoritoMsgAdapterImpl implements FavoritoMsgAdapter {
+public class FavoritoMsgImpl implements FavoritoMsg {
 
     private static final String EXCHANGE_NAME = "favorito_exchange";
 
-    private static final String ROUTE_KEY_CREATE = "favorito.crear";
+    private static final Log LOGGER = LogFactory.getLog(FavoritoMsgImpl.class);
 
-    private static final Log LOGGER = LogFactory.getLog(FavoritoMsgAdapterImpl.class);
-
+    /**
+     * Envío de solicitudes de creacion y eliminacion de favoritos hacia msfavorito
+     *
+     * @param favorito  Objecto favorito con datos
+     * @param route_key Llave usada para identificar proceso
+     */
     @Override
-    public void send(Favorito favorito) {
+    public void send(Favorito favorito, String route_key) {
 
         try {
             Channel channel = RabbitMQ.getChannel();
@@ -35,8 +40,8 @@ public class FavoritoMsgAdapterImpl implements FavoritoMsgAdapter {
 
             byte[] data = (new Gson().toJson(favorito)).getBytes(StandardCharsets.UTF_8);
 
-            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_CREATE, null, data);
-            LOGGER.info("[x] Enviando por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_CREATE + "' ->" + new Gson().toJson(favorito));
+            channel.basicPublish(EXCHANGE_NAME, route_key, MessageProperties.PERSISTENT_TEXT_PLAIN, data);
+            LOGGER.info("[x] Enviando por exchange '" + EXCHANGE_NAME + "' por ruta '" + route_key + "' ->" + new Gson().toJson(favorito));
 
         } catch (NoSuchAlgorithmException | KeyManagementException | URISyntaxException | IOException | TimeoutException e) {
             e.printStackTrace();

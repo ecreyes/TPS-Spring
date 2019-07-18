@@ -5,6 +5,11 @@ public class Favorito {
     private int id_usuario;
     private int id_noticia;
 
+    public Favorito(int id_usuario, int id_noticia) {
+        this.id_usuario = id_usuario;
+        this.id_noticia = id_noticia;
+    }
+
     public int getId_usuario() {
         return id_usuario;
     }
@@ -18,14 +23,6 @@ public class Favorito {
     }
 
     public void setId_noticia(int id_noticia) {
-        this.id_noticia = id_noticia;
-    }
-
-    public Favorito() {
-    }
-
-    public Favorito(int id_usuario, int id_noticia) {
-        this.id_usuario = id_usuario;
         this.id_noticia = id_noticia;
     }
 
