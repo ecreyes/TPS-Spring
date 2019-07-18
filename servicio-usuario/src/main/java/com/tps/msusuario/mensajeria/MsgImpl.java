@@ -86,7 +86,7 @@ public class MsgImpl implements Msg {
 
                         LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot.toString());
 
-                        usuarioService.agregarUsuario(usuarioRoot);
+                        usuarioService.agregar(usuarioRoot);
 
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                         break;
@@ -106,7 +106,7 @@ public class MsgImpl implements Msg {
 
                         LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot.toString());
 
-                        usuarioService.editarUsuario(usuarioRoot);
+                        usuarioService.editar(usuarioRoot);
 
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                         break;
@@ -121,7 +121,7 @@ public class MsgImpl implements Msg {
                         LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot.toString());
 
                         //Eliminar usuario
-                        usuarioService.eliminarUsuario(usuarioRoot);
+                        usuarioService.eliminar(usuarioRoot);
 
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                         break;
@@ -143,7 +143,7 @@ public class MsgImpl implements Msg {
      */
     @Override
     public void processLogin() {
-        //RPC
+
         try {
             Channel channel = RabbitMQ.getChannel();
 
@@ -174,7 +174,7 @@ public class MsgImpl implements Msg {
                 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 
                 //Realizar login
-                Map<String, String> result = usuarioService.loginUsuario(usuarioRoot);
+                Map<String, Object> result = usuarioService.login(usuarioRoot);
                 String json_result = new Gson().toJson(result);
 
                 //Enviarlo por cola unica (reply_to)

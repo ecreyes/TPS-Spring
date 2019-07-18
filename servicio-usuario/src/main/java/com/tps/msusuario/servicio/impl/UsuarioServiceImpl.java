@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service("usuarioService")
@@ -21,19 +20,14 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<Usuario> getUsuarios() {
-        return usuarioJpaRepository.findAll();
-    }
-
-    @Override
-    public void agregarUsuario(UsuarioRoot usuarioRoot) {
+    public void agregar(UsuarioRoot usuarioRoot) {
         Usuario usuario = new Usuario(usuarioRoot.getEmail(), usuarioRoot.getPassword(),
                 usuarioRoot.getNombreUsuarioVO().getNombreUsuario(), usuarioRoot.getEstadoUsuarioVO().getEstado());
         usuarioJpaRepository.save(usuario);
     }
 
     @Override
-    public int eliminarUsuario(UsuarioRoot usuarioRoot) {
+    public int eliminar(UsuarioRoot usuarioRoot) {
 
         if (usuarioJpaRepository.findById(usuarioRoot.getId()).isPresent()) {
 
@@ -45,7 +39,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public void editarUsuario(UsuarioRoot usuarioRoot) {
+    public void editar(UsuarioRoot usuarioRoot) {
 
         if (usuarioJpaRepository.findById(usuarioRoot.getId()).isPresent()) {
 
@@ -61,26 +55,33 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Map<String, String> loginUsuario(UsuarioRoot usuarioRoot) {
+    public Map<String, Object> login(UsuarioRoot usuarioRoot) {
         Usuario usuario_bd = usuarioJpaRepository.findUsuarioByEmail(usuarioRoot.getEmail());
 
-        Map<String, String> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
 
         if (usuario_bd != null) {
 
             //TODO: Mejorar seguridad
-            if (usuarioRoot.getPassword().equals(usuario_bd.getPassword())) {
+            if (usuarioRoot.getPassword().equals(usuario_bd.getPassword()) && usuarioRoot.getEmail().equals(usuario_bd.getEmail())) {
 
                 //TODO: Quizas utilizar EstadoUsuarioVO para representar status de login
-                result.put("Estado", "OK");
+                result.put("Login_estado", "OK");
+
+                Map<String, Object> userMap = new HashMap<>();
+                userMap.put("id", usuario_bd.getId());
+                userMap.put("email", usuario_bd.getEmail());
+                userMap.put("username", usuario_bd.getNombreUsuario());
+
+                result.put("Usuario", userMap);
                 return result;
 
             } else {
-                result.put("Estado", "PASS INCORRECTA");
+                result.put("Login_estado", "PASS INCORRECTA");
                 return result;
             }
         } else {
-            result.put("Estado", "USUARIO NO EXISTE");
+            result.put("Login_estado", "USUARIO NO EXISTE");
             return result;
         }
     }

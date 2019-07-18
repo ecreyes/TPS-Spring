@@ -27,6 +27,15 @@ public class UsuarioRoot {
         this.estadoUsuarioVO = estadoUsuarioVO;
     }
 
+    //Constructor login
+    public UsuarioRoot(int id, NombreUsuarioVO nombreUsuarioVO, String email,
+                       EstadoUsuarioVO estadoUsuarioVO) {
+        this.id = id;
+        this.nombreUsuarioVO = nombreUsuarioVO;
+        this.email = email;
+        this.estadoUsuarioVO = estadoUsuarioVO;
+    }
+
     //Contructor para eliminar
     public UsuarioRoot(int id) {
         this.id = id;

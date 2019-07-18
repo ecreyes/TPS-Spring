@@ -23,18 +23,24 @@ public class UsuarioController {
     }
 
     @PostMapping("/usuario/agregar")
-    public void agregar(@RequestBody Usuario usuario) {
+    public Usuario agregar(@RequestBody Usuario usuario) {
         usuarioMsg.send(usuario, ROUTE_KEY_CREATE);
+
+        return usuario;
     }
 
     @PutMapping("/usuario/editar")
-    public void editar(@RequestBody Usuario usuario) {
+    public Usuario editar(@RequestBody Usuario usuario) {
         usuarioMsg.send(usuario, ROUTE_KEY_EDIT);
+
+        return usuario;
     }
 
     @DeleteMapping("/usuario/eliminar")
-    public void eliminar(@RequestBody Usuario usuario) {
+    public Usuario eliminar(@RequestBody Usuario usuario) {
         usuarioMsg.send(usuario, ROUTE_KEY_DELETE);
+
+        return usuario;
     }
 
     @PostMapping("/usuario/login")
