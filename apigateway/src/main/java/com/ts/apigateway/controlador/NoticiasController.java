@@ -7,6 +7,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class NoticiasController {
     private static final String ROUTE_KEY_CREATE = "noticia.crear";
@@ -18,6 +20,11 @@ public class NoticiasController {
 
     public NoticiasController(@Qualifier("noticiaMsgAdapter") NoticiaMsgAdapter noticiaMsgAdapter) {
         this.noticiaMsgAdapter = noticiaMsgAdapter;
+    }
+
+    @GetMapping("/noticias")
+    public List<Noticia> noticias(){
+        return noticiaMsgAdapter.getList();
     }
 
     @PostMapping("/noticia/agregar")

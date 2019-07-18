@@ -25,6 +25,7 @@ public class MsnoticiasApplication implements CommandLineRunner {
 			case "All":
 			    //Agregar mas listeners si es necesario
 				msgAdapter.processCUD();
+				msgAdapter.processList();
 				break;
 			case "Creacion":
 				msgAdapter.processCUD();
