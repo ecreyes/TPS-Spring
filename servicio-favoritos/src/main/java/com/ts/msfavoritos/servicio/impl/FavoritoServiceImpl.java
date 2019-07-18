@@ -43,7 +43,7 @@ public class FavoritoServiceImpl implements FavoritoService {
     }
 
     @Override
-    public List<FavoritoRoot> getUserFavList(int id_usuario) {
+    public List<FavoritoRoot> getListaFavUsuario(int id_usuario) {
 
         List<FavoritoRoot> favoritoRootList = new ArrayList<>();
 
@@ -54,7 +54,6 @@ public class FavoritoServiceImpl implements FavoritoService {
             UsuarioIdVO usuarioIdVO = new UsuarioIdVO(favorito.getId_usuario());
             NoticiaIdVO noticiaIdVO = new NoticiaIdVO(favorito.getId_noticia());
 
-            System.out.println(favorito.getId());
             FavoritoRoot favoritoRoot = new FavoritoRoot(favorito.getId(), usuarioIdVO, noticiaIdVO,
                     favorito.getFecha_favorito());
 

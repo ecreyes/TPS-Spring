@@ -148,7 +148,7 @@ public class MsgImpl implements Msg {
                         .correlationId(delivery.getProperties().getCorrelationId())
                         .build();
 
-                List<FavoritoRoot> favoritoRootList = favoritoService.getUserFavList(Integer.parseInt(id_usuario));
+                List<FavoritoRoot> favoritoRootList = favoritoService.getListaFavUsuario(Integer.parseInt(id_usuario));
                 byte[] data = (new Gson().toJson(favoritoRootList).getBytes(StandardCharsets.UTF_8));
 
                 //Enviarlo por cola unica (reply_to)

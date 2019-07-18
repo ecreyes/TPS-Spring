@@ -10,5 +10,5 @@ public interface FavoritoService {
 
     int eliminar(FavoritoRoot favorito);
 
-    List<FavoritoRoot> getUserFavList(int id_usuario);
+    List<FavoritoRoot> getListaFavUsuario(int id_usuario);
 }

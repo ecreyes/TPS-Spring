@@ -88,7 +88,7 @@ public class FavoritoMsgImpl implements FavoritoMsg {
             //Publicacion hacia exchange con ruta adecuada
             channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST, properties,
                     id_usuario.getBytes(StandardCharsets.UTF_8));
-            LOGGER.info("[x] Solicitando lista categorias por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LIST + "'");
+            LOGGER.info("[x] Solicitando lista favoritos usuario por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LIST + "'");
 
 
             //RECEPCION DE MENSAJES DESDE MSFAVORITO
