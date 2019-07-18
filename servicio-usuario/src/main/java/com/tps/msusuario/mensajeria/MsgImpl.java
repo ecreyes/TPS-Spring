@@ -63,17 +63,18 @@ public class MsgImpl implements Msg {
             channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_DELETE);
             channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_EDIT);
 
-            LOGGER.info("[*] Esperando por solicitudes de creacion de usuarios. Para salir presiona CTRL+C");
+            LOGGER.info("[*] Esperando por solicitudes de (Creacion - Edicion - Eliminacion) de usuarios. Para salir " +
+                    "presiona CTRL+C");
 
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
                 String json = new String(delivery.getBody());
                 JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
 
-                //Solicitud de creacion de usuario
                 switch (delivery.getEnvelope().getRoutingKey()) {
 
-                    case ROUTE_KEY_CREATE:
+                    //Solicitud de creacion de usuario
+                    case ROUTE_KEY_CREATE: {
 
                         NombreUsuarioVO nombreUsuarioVO = new NombreUsuarioVO(jsonObject.get("username").getAsString());
                         EstadoUsuarioVO estadoUsuarioVO = new EstadoUsuarioVO(jsonObject.get("estado").getAsString());
@@ -89,40 +90,42 @@ public class MsgImpl implements Msg {
 
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                         break;
+                    }
 
                     //Solicitudes de editar usuario
-                    case ROUTE_KEY_EDIT:
+                    case ROUTE_KEY_EDIT: {
 
-                        NombreUsuarioVO nombreUsuarioVO2 =
+                        NombreUsuarioVO nombreUsuarioVO =
                                 new NombreUsuarioVO(jsonObject.get("username").getAsString());
-                        EstadoUsuarioVO estadoUsuarioVO2 = new EstadoUsuarioVO(jsonObject.get("estado").getAsString());
+                        EstadoUsuarioVO estadoUsuarioVO = new EstadoUsuarioVO(jsonObject.get("estado").getAsString());
 
                         //Construccion agregado
-                        UsuarioRoot usuarioRoot2 = new UsuarioRoot(jsonObject.get("id").getAsInt(), nombreUsuarioVO2,
+                        UsuarioRoot usuarioRoot = new UsuarioRoot(jsonObject.get("id").getAsInt(), nombreUsuarioVO,
                                 jsonObject.get("email").getAsString(),
-                                jsonObject.get("password").getAsString(), estadoUsuarioVO2);
+                                jsonObject.get("password").getAsString(), estadoUsuarioVO);
 
-                        LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot2.toString());
+                        LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot.toString());
 
-                        usuarioService.editarUsuario(usuarioRoot2);
+                        usuarioService.editarUsuario(usuarioRoot);
 
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                         break;
+                    }
 
                     //Solicitudes de eliminar usuarios
-                    case ROUTE_KEY_DELETE:
+                    case ROUTE_KEY_DELETE: {
 
                         //Construccion agregado
-                        UsuarioRoot usuarioRoot3 = new UsuarioRoot(jsonObject.get("id").getAsInt());
+                        UsuarioRoot usuarioRoot = new UsuarioRoot(jsonObject.get("id").getAsInt());
 
-                        LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot3.toString());
+                        LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot.toString());
 
                         //Eliminar usuario
-                        usuarioService.eliminarUsuario(usuarioRoot3);
+                        usuarioService.eliminarUsuario(usuarioRoot);
 
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-
                         break;
+                    }
                 }
             };
 
@@ -132,6 +135,7 @@ public class MsgImpl implements Msg {
         } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
             e.printStackTrace();
         }
+
     }
 
     /**
