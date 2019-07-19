@@ -25,8 +25,8 @@ public class CategoriaController {
         this.categoriaMsgMsgAdapter = categoriaMsgMsgAdapter;
     }
 
-    @GetMapping("/categoria")
-    public List<Categoria> index() {
+    @GetMapping("/categorias")
+    public List<Categoria> categorias() {
         return categoriaMsgMsgAdapter.getList();
     }
 
