@@ -18,12 +18,18 @@ Se detallan los puntos de acceso al servicio
     + Esquema -> ```{"id": 1,"titular": "titular","descripcion": "descripcion","autor": "autor","url": "url","fuente": "fuente"}```
   * http://localhost:8080/noticia/eliminar, eliminar una noticia vía `DELETE`
     + Esquema -> ```{"id": 1}```
+* **Favorito**
+  * http://localhost:8080/favorito/usuario/{id}, listado de las noticias que son guardadas como favoritos por un usuario según `id` vía `GET`
+  * http://localhost:8080/favorito/agregar, agregar favorito via `POST`
+    + Esquema -> ```{"id_usuario": 1,"id_noticia": 12}```
+  * http://localhost:8080/favorito/eliminar, eliminar favorito via `DELETE`
+    + Esquema -> ```{"id_usuario": 1,"id_noticia": 12}```
 * **Usuario**
   * http://localhost:8080/usuario/agregar, agregar usuario via `POST`
     + Esquema -> ```{"email": "email@email.com","username": "username","password": "pass","estado": "creado"}```
-  * http://localhost:8080/usuario/editar, agregar usuario via `PUT`
+  * http://localhost:8080/usuario/editar, editar usuario via `PUT`
     + Esquema -> ```{"id": 1,"email": "email@email.com","username": "username","password": "pass","estado": "editado"}```
-  * http://localhost:8080/usuario/eliminar, agregar usuario via `DELETE`
+  * http://localhost:8080/usuario/eliminar, eliminar usuario via `DELETE`
     + Esquema -> ```{"id": 1}```
   * http://localhost:8080/usuario/login, loguear usuario via `POST`
     + Esquema -> ```{"email": "email@email.com","password": "pass1"}```
