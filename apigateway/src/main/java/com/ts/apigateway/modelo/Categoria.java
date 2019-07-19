@@ -6,10 +6,12 @@ public class Categoria implements Serializable {
 
     private int id;
     private String nombre;
+    private String estado;
 
-    public Categoria(int id, String nombre) {
+    public Categoria(int id, String nombre, String estado) {
         this.id = id;
         this.nombre = nombre;
+        this.estado = estado;
     }
 
     public int getId() {
@@ -28,11 +30,20 @@ public class Categoria implements Serializable {
         this.nombre = nombre;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     @Override
     public String toString() {
-        return "CategoriaMsg{" +
+        return "Categoria{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
+                ", estado='" + estado + '\'' +
                 '}';
     }
 }

@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
-import com.ts.mscategoria.dominio.CategoriaVO;
+import com.ts.mscategoria.dominio.CategoriaRoot;
 import com.ts.mscategoria.repositorio.entidad.Categoria;
 import com.ts.mscategoria.servicio.CategoriaService;
 import org.apache.commons.logging.Log;
@@ -23,6 +23,7 @@ import java.util.concurrent.TimeoutException;
 @Component("msgAdapter")
 public class MsgImpl implements Msg {
 
+    //Categoria
     private static final String EXCHANGE_NAME = "categoria_exchange";
 
     private static final String ROUTE_KEY_LIST = "categoria.lista";
@@ -32,6 +33,9 @@ public class MsgImpl implements Msg {
 
     private static final String QUEUE_REQUEST_CUD = "categoria_request_cud";
     private static final String QUEUE_REQUEST_LIST = "categoria_request_list";
+
+    //Noticia
+    private static final String ROUTE_KEY_LIST_SUBS = "noticia.lista.subscribers";
 
     private static final Log LOGGER = LogFactory.getLog(MsgImpl.class);
 
@@ -67,46 +71,48 @@ public class MsgImpl implements Msg {
 
                 String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
 
-                CategoriaVO categoriaVO = new Gson().fromJson(json, CategoriaVO.class);
+                CategoriaRoot categoriaRoot = new Gson().fromJson(json, CategoriaRoot.class);
 
-                LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + categoriaVO.toString());
+                LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + categoriaRoot.toString());
 
                 //Solicitudes de creacion de categorias
                 switch (delivery.getEnvelope().getRoutingKey()) {
                     case ROUTE_KEY_CREATE:
 
-                        Categoria categoria = new Categoria(categoriaVO.getNombre());
-
                         //Persistir categoria
-                        categoriaService.agregarCategoria(categoria);
-
-                        //Actualizar agregado
-                        categoriaService.cargarAgregado(true);
+                        categoriaService.agregar(categoriaRoot);
 
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+
+                        //envia nueva lista a miscroservicios que lo requieran
+                        sendList();
+
                         break;
 
                     //Solicitudes de edicion de categorias
                     case ROUTE_KEY_EDIT:
 
-                        categoriaService.editarCategoria(categoriaVO);
-
-                        categoriaService.cargarAgregado(true);
+                        categoriaService.editar(categoriaRoot);
 
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+
+                        //envia nueva lista a miscroservicios que lo requieran
+                        sendList();
+
                         break;
 
                     //Solicitudes de eliminar categorias
                     case ROUTE_KEY_DELETE:
 
-                        categoriaService.eliminarCategoria(categoriaVO);
-
-                        categoriaService.cargarAgregado(true);
+                        categoriaService.eliminar(categoriaRoot);
 
                         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+
+                        //envia nueva lista a miscroservicios que lo requieran
+                        sendList();
+
                         break;
                 }
-
             };
 
             boolean autoAck = false;
@@ -120,6 +126,7 @@ public class MsgImpl implements Msg {
 
     /**
      * Proceso de mensajeria encargado de enviar listado de categorias
+     * (Request-Response Sincronico a solicitudes de Apigateway)
      */
     @Override
     public void processList() {
@@ -142,20 +149,23 @@ public class MsgImpl implements Msg {
             //RECEPCION DE SOLICITUDES
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
-                LOGGER.info("[x] Solicitud de listado de categorias desde apigateway");
+                String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
+
+                LOGGER.info("[x] Solicitud de listado de categorias desde '" + json + "'");
 
                 AMQP.BasicProperties reply_props = new AMQP.BasicProperties
                         .Builder()
                         .correlationId(delivery.getProperties().getCorrelationId())
                         .build();
 
-                List<CategoriaVO> categoriaVOList = categoriaService.obtenerAgregado().getCategoriaVOList();
-                byte[] data = (new Gson().toJson(categoriaVOList).getBytes(StandardCharsets.UTF_8));
+                List<CategoriaRoot> categoriaRootList = categoriaService.getCategorias();
+
+                byte[] data = (new Gson().toJson(categoriaRootList).getBytes(StandardCharsets.UTF_8));
 
                 //Enviarlo por cola unica (reply_to)
                 channel.basicPublish("", delivery.getProperties().getReplyTo(), reply_props, data);
 
-                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + categoriaVOList.toString());
+                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + categoriaRootList.toString());
 
                 synchronized (monitor) {
                     monitor.notify();
@@ -175,6 +185,32 @@ public class MsgImpl implements Msg {
                     }
                 }
             }
+
+        } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Funcion utilizada para enviar el listado de categorías a los miscroservicios que esten suscritos
+     * a la actualizacion de categorias
+     */
+    private void sendList() {
+
+        try {
+            Channel channel = RabbitMQ.getChannel();
+
+            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+
+            LOGGER.info("Creando exchange: " + EXCHANGE_NAME);
+
+            List<CategoriaRoot> categoriaRootList = categoriaService.getCategorias();
+
+            byte[] data = (new Gson().toJson(categoriaRootList)).getBytes(StandardCharsets.UTF_8);
+
+            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST_SUBS, null, data);
+
+            LOGGER.info("[x] Enviando por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LIST_SUBS + "' ->" + new Gson().toJson(categoriaRootList));
 
         } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
             e.printStackTrace();

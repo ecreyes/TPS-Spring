@@ -33,16 +33,12 @@ public class CategoriaController {
     @PostMapping("/categoria/agregar")
     public Categoria agregar(@RequestBody Categoria categoria) {
 
-        LOGGER.info("Recibido desde post: " + categoria.toString());
-
         categoriaMsgMsgAdapter.send(categoria, ROUTE_KEY_CREATE);
         return categoria;
     }
 
     @PutMapping("/categoria/editar")
     public Categoria editar(@RequestBody Categoria categoria) {
-
-        LOGGER.info("Recibido desde put: " + categoria.toString());
 
         categoriaMsgMsgAdapter.send(categoria, ROUTE_KEY_EDIT);
 
@@ -51,7 +47,6 @@ public class CategoriaController {
 
     @DeleteMapping("/categoria/eliminar")
     public Categoria eliminar(@RequestBody Categoria categoria) {
-        LOGGER.info("Recibido desde delete: " + categoria.toString());
 
         categoriaMsgMsgAdapter.send(categoria, ROUTE_KEY_DELETE);
 

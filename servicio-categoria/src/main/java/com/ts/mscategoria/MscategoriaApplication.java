@@ -27,8 +27,6 @@ public class MscategoriaApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        categoriaService.cargarAgregado(false);
-
         msg.processCUD();
         msg.processList();
     }

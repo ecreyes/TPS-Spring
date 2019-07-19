@@ -1,19 +1,17 @@
 package com.ts.mscategoria.servicio;
 
 
-import com.ts.mscategoria.dominio.CategoriaList;
-import com.ts.mscategoria.dominio.CategoriaVO;
-import com.ts.mscategoria.repositorio.entidad.Categoria;
+import com.ts.mscategoria.dominio.CategoriaRoot;
+
+import java.util.List;
 
 public interface CategoriaService {
 
-    void cargarAgregado(boolean actualizar);
+    List<CategoriaRoot> getCategorias();
 
-    CategoriaList obtenerAgregado();
+    void agregar(CategoriaRoot categoriaRoot);
 
-    void agregarCategoria(Categoria categoria);
+    void eliminar(CategoriaRoot categoriaRoot);
 
-    int eliminarCategoria(CategoriaVO categoriaVO);
-
-    Categoria editarCategoria(CategoriaVO categoriaVO);
+    void editar(CategoriaRoot categoriaRoot);
 }

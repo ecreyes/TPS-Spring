@@ -61,13 +61,13 @@ public class CategoriaMsgImpl implements CategoriaMsg {
 
     /**
      * Funcion de mensajeria encargada de obtener el listado de categorias desde Mscategoria.
+     * (REQUEST-RESPONSE SINCRONICO)
      *
      * @return Listado de categorias
      */
     @Override
     public List<Categoria> getList() {
 
-        //OPERACION RPC
         List<Categoria> categoriaList = new ArrayList<>();
 
         try {
@@ -86,8 +86,11 @@ public class CategoriaMsgImpl implements CategoriaMsg {
                     .replyTo(receiver_queue)
                     .build();
 
+            String consumer = "apigateway";
+            byte[] data = consumer.getBytes(StandardCharsets.UTF_8);
+
             //Publicacion hacia exchange con ruta adecuada
-            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST, properties, null);
+            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST, properties, data);
             LOGGER.info("[x] Solicitando lista categorias por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LIST + "'");
 
             //RECEPCION DE MENSAJES DESDE MSCATEGORIA
