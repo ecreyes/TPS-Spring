@@ -1,16 +1,12 @@
 package com.ts.apigateway.modelo;
 
 public class Noticia {
+
     private int id;
-
     private String titular;
-
     private String descripcion;
-
     private String autor;
-
     private String url;
-
     private String fuente;
 
     public Noticia() {
@@ -21,6 +17,15 @@ public class Noticia {
     }
 
     public Noticia(String titular, String descripcion, String autor, String url, String fuente) {
+        this.titular = titular;
+        this.descripcion = descripcion;
+        this.autor = autor;
+        this.url = url;
+        this.fuente = fuente;
+    }
+
+    public Noticia(int id, String titular, String descripcion, String autor, String url, String fuente) {
+        this.id = id;
         this.titular = titular;
         this.descripcion = descripcion;
         this.autor = autor;

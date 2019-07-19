@@ -1,17 +1,18 @@
 package com.tps.msnoticias.service;
 
+import com.tps.msnoticias.dominio.NoticiaRoot;
 import com.tps.msnoticias.repository.entity.Noticia;
 
 import java.util.List;
 
 public interface NoticiaService {
-	public List<Noticia> getNoticias();
+	List<NoticiaRoot> getNoticias();
 
-	public Noticia getNoticia(int id);
+	Noticia getNoticia(int id);
 
-	public Noticia agregarNoticia(Noticia noticia);
+	void agregarNoticia(NoticiaRoot noticiaRoot);
 
-	public int eliminarNoticia(int id);
+	int eliminarNoticia(int id);
 
-	public Noticia editarNoticia(Noticia noticia);
+	void editarNoticia(NoticiaRoot noticiaRoot);
 }

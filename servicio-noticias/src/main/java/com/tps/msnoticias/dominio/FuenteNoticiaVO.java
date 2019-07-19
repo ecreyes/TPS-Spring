@@ -1,10 +1,10 @@
 package com.tps.msnoticias.dominio;
 
-public class FuenteNoticia {
+public class FuenteNoticiaVO {
 
 	private String fuente;
 
-	public FuenteNoticia(String fuente) {
+	public FuenteNoticiaVO(String fuente) {
 		this.fuente = fuente;
 	}
 

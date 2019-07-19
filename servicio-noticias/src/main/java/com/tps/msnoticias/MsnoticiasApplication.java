@@ -1,6 +1,6 @@
 package com.tps.msnoticias;
 
-import com.tps.msnoticias.mensajeria.MsgAdapter;
+import com.tps.msnoticias.mensajeria.Msg;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -8,32 +8,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class MsnoticiasApplication implements CommandLineRunner {
-	private final MsgAdapter msgAdapter;
+    private final Msg msg;
 
-	public MsnoticiasApplication(@Qualifier("msgAdapter") MsgAdapter msgAdapter) {
-		this.msgAdapter = msgAdapter;
-	}
+    public MsnoticiasApplication(@Qualifier("msgAdapter") Msg msg) {
+        this.msg = msg;
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(MsnoticiasApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MsnoticiasApplication.class, args);
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
+    @Override
+    public void run(String... args) {
 
-		switch (args[0]){
-			case "All":
-			    //Agregar mas listeners si es necesario
-				msgAdapter.processCUD();
-				msgAdapter.processList();
-				break;
-			case "Creacion":
-				msgAdapter.processCUD();
-				break;
-
-			//case "Otro Proceso":
-				//break;
-		}
-	}
-
+        msg.processCUD();
+        msg.processList();
+    }
 }

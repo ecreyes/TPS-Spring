@@ -1,6 +1,7 @@
 package com.tps.msnoticias.mensajeria;
 
-public interface MsgAdapter {
+public interface Msg {
     void processCUD();
+
     void processList();
 }

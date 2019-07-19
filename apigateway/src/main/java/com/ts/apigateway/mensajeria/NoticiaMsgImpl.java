@@ -1,16 +1,18 @@
 package com.ts.apigateway.mensajeria;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.MessageProperties;
 import com.ts.apigateway.modelo.Noticia;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
@@ -24,26 +26,26 @@ import java.util.concurrent.TimeoutException;
 
 
 @Component("noticiaMsgAdapter")
-public class NoticiaMsgAdapterImpl implements NoticiaMsgAdapter {
+public class NoticiaMsgImpl implements NoticiaMsg {
 
-    private static final String EXCHANGE_NAME="noticia_exchange";
+    private static final String EXCHANGE_NAME = "noticia_exchange";
     private static final String ROUTE_KEY_LIST = "noticia.lista";
 
-    private static final Log LOGGER = LogFactory.getLog(NoticiaMsgAdapterImpl.class);
+    private static final Log LOGGER = LogFactory.getLog(NoticiaMsgImpl.class);
 
     @Override
-    public void send(Noticia noticia,String route_key) {
+    public void send(Noticia noticia, String route_key) {
 
-        try{
+        try {
             Channel channel = RabbitMQ.getChannel();
 
-            channel.exchangeDeclare(EXCHANGE_NAME,"direct");
+            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
             LOGGER.info("Creando exchange: " + EXCHANGE_NAME);
 
             byte[] data = (new Gson().toJson(noticia)).getBytes(StandardCharsets.UTF_8);
 
-            channel.basicPublish(EXCHANGE_NAME,route_key,null,data);
+            channel.basicPublish(EXCHANGE_NAME, route_key, MessageProperties.PERSISTENT_TEXT_PLAIN, data);
 
             LOGGER.info("[x] Enviando por exchange '" + EXCHANGE_NAME + "' por ruta '" + route_key + "' ->" + new Gson().toJson(noticia));
 
@@ -52,9 +54,10 @@ public class NoticiaMsgAdapterImpl implements NoticiaMsgAdapter {
         }
     }
 
-    public List<Noticia> getList(){
+    public List<Noticia> getList() {
+
         List<Noticia> noticiaList = new ArrayList<>();
-        try{
+        try {
             Channel channel = RabbitMQ.getChannel();
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
             String correlation_id = UUID.randomUUID().toString();
@@ -71,9 +74,9 @@ public class NoticiaMsgAdapterImpl implements NoticiaMsgAdapter {
 
             //Publicacion hacia exchange con ruta adecuada
             channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST, properties, null);
-            LOGGER.info("[x] Solicitando lista categorias por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LIST + "'");
+            LOGGER.info("[x] Solicitando lista noticias por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LIST + "'");
 
-            //RECEPCION DE MENSAJES DESDE MSCATEGORIA
+            //RECEPCION DE MENSAJES DESDE MSNOTICIA
             BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
 
             String ctag = channel.basicConsume(receiver_queue, true, (consumerTag, delivery) -> {
@@ -86,14 +89,23 @@ public class NoticiaMsgAdapterImpl implements NoticiaMsgAdapter {
             });
 
             String json = response.take();
-            Type listType = new TypeToken<ArrayList<Noticia>>() {
-            }.getType();
 
-            noticiaList = new Gson().fromJson(json, listType);
-            channel.basicCancel(ctag);
+            JsonArray jsonArray = new JsonParser().parse(json).getAsJsonArray();
+
+            for (int i = 0; i < jsonArray.size(); i++) {
+
+                JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+
+                Noticia noticia = new Noticia(jsonObject.get("id").getAsInt(),
+                        jsonObject.get("titular").getAsString(), jsonObject.get("descripcion").getAsString(),
+                        jsonObject.get("autor").getAsString(), jsonObject.get("url").getAsString(),
+                        jsonObject.getAsJsonObject("fuenteNoticiaVO").get("fuente").getAsString());
+
+                noticiaList.add(noticia);
+            }
             LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + noticiaList.toString());
 
-        }catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | InterruptedException | KeyManagementException e) {
+        } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | InterruptedException | KeyManagementException e) {
             e.printStackTrace();
         }
         return noticiaList;

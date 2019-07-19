@@ -22,7 +22,7 @@ public class NoticiaAPI {
 	 * Funcion que retorna una lista de noticias root y que mapea una solicitud get de noticias
 	 * @return Lista de Noticias Root
 	 */
-	@GetMapping("/noticias")
+	/*@GetMapping("/noticias")
 	public List<NoticiaRoot> getNoticias() {
 		List<NoticiaRoot> noticias = new ArrayList<>();
 		List<Noticia> noticiasDB = noticiaService.getNoticias();
@@ -36,7 +36,7 @@ public class NoticiaAPI {
 			noticias.add(new NoticiaRoot(id,titular, descripcion, autor, url, fuente));
 		}
 		return noticias;
-	}
+	}*/
 
 
 	/*
@@ -57,13 +57,13 @@ public class NoticiaAPI {
 	 * @param noticia Entidad noticia desde metodo POST
 	 * @return Noticia , objecto que contiene la noticia recien ingresada
 	 */
-	@PostMapping("/noticia")
+	/*@PostMapping("/noticia")
 	public Noticia agregarNoticia(@RequestBody Noticia noticia) {
 		noticiaService.agregarNoticia(noticia);
 		return noticia;
-	}
+	}*/
 
-	@PutMapping("/noticia/{id}")
+	/*@PutMapping("/noticia/{id}")
 	public NoticiaRoot editarNoticia(@PathVariable int id,@RequestBody Noticia noticia){
 		NoticiaRoot noticiaRoot = new NoticiaRoot();
 		Noticia mNoticia = noticiaService.getNoticia(id);
@@ -82,7 +82,7 @@ public class NoticiaAPI {
 			mNoticia.setDescripcion(noticia.getDescripcion());
 		}
 		if(noticia.getFuente()!=null){
-			noticiaRoot.setFuente(noticia.getFuente());
+			noticiaRoot.setFuenteNoticiaVO(noticia.getFuente());
 			mNoticia.setFuente(noticia.getFuente());
 		}
 		if(noticia.getUrl()!=null){
@@ -110,6 +110,6 @@ public class NoticiaAPI {
 		}else{
 			return false;
 		}
-	}
+	}*/
 
 }

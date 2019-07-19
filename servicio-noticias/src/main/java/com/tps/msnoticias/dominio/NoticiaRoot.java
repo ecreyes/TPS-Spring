@@ -2,72 +2,98 @@ package com.tps.msnoticias.dominio;
 
 public class NoticiaRoot {
 
-	private int id;
-	private String titular;
-	private String descripcion;
-	private String autor;
-	private String url;
-	private FuenteNoticia fuente;
+    private int id;
+    private String titular;
+    private String descripcion;
+    private String autor;
+    private String url;
+    private FuenteNoticiaVO fuenteNoticiaVO;
 
-	public NoticiaRoot() {
-	}
+    public NoticiaRoot() {
+    }
 
-	public NoticiaRoot(int id, String titular, String descripcion, String autor, String url,
-	                   String fuente) {
-		this.id = id;
-		this.titular = titular;
-		this.descripcion = descripcion;
-		this.autor = autor;
-		this.url = url;
-		this.fuente = new FuenteNoticia(fuente);
-	}
+    //Contructor para edicion
+    public NoticiaRoot(int id, String titular, String descripcion, String autor, String url,
+                       FuenteNoticiaVO fuenteNoticiaVO) {
+        this.id = id;
+        this.titular = titular;
+        this.descripcion = descripcion;
+        this.autor = autor;
+        this.url = url;
+        this.fuenteNoticiaVO = fuenteNoticiaVO;
+    }
 
-	public FuenteNoticia getFuente() {
-		return fuente;
-	}
+    //Constructor para creacion
+    public NoticiaRoot(String titular, String descripcion, String autor, String url, FuenteNoticiaVO fuenteNoticiaVO) {
+        this.titular = titular;
+        this.descripcion = descripcion;
+        this.autor = autor;
+        this.url = url;
+        this.fuenteNoticiaVO = fuenteNoticiaVO;
+    }
 
-	public void setFuente(String fuente) {
-		this.fuente = new FuenteNoticia(fuente);
+    //Constructor para eliminacion
+    public NoticiaRoot(int id) {
+        this.id=id;
+    }
 
-	}
+    public int getId() {
+        return id;
+    }
 
-	public String getTitular() {
-		return titular;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setTitular(String titular) {
-		this.titular = titular;
-	}
+    public String getTitular() {
+        return titular;
+    }
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    public void setTitular(String titular) {
+        this.titular = titular;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-	public String getAutor() {
-		return autor;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public void setAutor(String autor) {
-		this.autor = autor;
-	}
+    public String getAutor() {
+        return autor;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public FuenteNoticiaVO getFuenteNoticiaVO() {
+        return fuenteNoticiaVO;
+    }
+
+    public void setFuenteNoticiaVO(FuenteNoticiaVO fuenteNoticiaVO) {
+        this.fuenteNoticiaVO = fuenteNoticiaVO;
+    }
+
+    @Override
+    public String toString() {
+        return "NoticiaRoot{" +
+                "id=" + id +
+                ", titular='" + titular + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", autor='" + autor + '\'' +
+                ", url='" + url + '\'' +
+                ", fuenteNoticiaVO=" + fuenteNoticiaVO +
+                '}';
+    }
 }
