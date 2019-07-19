@@ -13,7 +13,8 @@ public class MscategoriaApplication implements CommandLineRunner {
     private final Msg msg;
     private final CategoriaService categoriaService;
 
-    public MscategoriaApplication(@Qualifier("msgAdapter") Msg msg, @Qualifier("categoriaService") CategoriaService categoriaService) {
+    public MscategoriaApplication(@Qualifier("msgAdapter") Msg msg,
+                                  @Qualifier("categoriaService") CategoriaService categoriaService) {
         this.msg = msg;
         this.categoriaService = categoriaService;
     }
@@ -28,17 +29,7 @@ public class MscategoriaApplication implements CommandLineRunner {
 
         categoriaService.cargarAgregado(false);
 
-        switch (args[0]) {
-            case "All":
-                msg.processCUD();
-                msg.processList();
-                break;
-            case "Creacion":
-                msg.processCUD();
-                break;
-            case "Lista":
-                msg.processList();
-                break;
-        }
+        msg.processCUD();
+        msg.processList();
     }
 }
