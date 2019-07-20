@@ -26,24 +26,24 @@ public class NoticiasController {
 
     @GetMapping("/noticias")
     public List<Noticia> noticias() {
-        return noticiaMsg.getList();
+        return noticiaMsg.obtenerListadoNoticias();
     }
 
     @PostMapping("/noticia/agregar")
     public Noticia agregar(@RequestBody Noticia noticia) {
-        noticiaMsg.send(noticia, ROUTE_KEY_CREATE);
+        noticiaMsg.enviarMsg(noticia, ROUTE_KEY_CREATE);
         return noticia;
     }
 
     @DeleteMapping("/noticia/eliminar")
     public Noticia eliminar(@RequestBody Noticia noticia) {
-        noticiaMsg.send(noticia, ROUTE_KEY_DELETE);
+        noticiaMsg.enviarMsg(noticia, ROUTE_KEY_DELETE);
         return noticia;
     }
 
     @PutMapping("/noticia/editar")
     public Noticia editar(@RequestBody Noticia noticia) {
-        noticiaMsg.send(noticia, ROUTE_KEY_EDIT);
+        noticiaMsg.enviarMsg(noticia, ROUTE_KEY_EDIT);
         return noticia;
     }
 }

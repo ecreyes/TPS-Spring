@@ -30,12 +30,13 @@ public class UsuarioMsgImpl implements UsuarioMsg {
 
     /**
      * Envio de solicitudes de usuarios hacia exchange
+     * (Publicacion)
      *
      * @param usuario   Objecto con datos de usuario enviado a MsUsuario
      * @param route_key Ruta utilizada para diferenciar operacion (Create,edit,delete)
      */
     @Override
-    public void send(Usuario usuario, String route_key) {
+    public void enviarMsg(Usuario usuario, String route_key) {
 
         try {
             Channel channel = RabbitMQ.getChannel();
@@ -55,12 +56,13 @@ public class UsuarioMsgImpl implements UsuarioMsg {
 
     /**
      * Funcion que solicita el login de un usuario en el sistema
+     * (Request-Response) desde MsUsuario
      *
      * @param usuario Objecto usuario con datos
      * @return JSON con el estado de login
      */
     @Override
-    public String requestLogin(Usuario usuario) {
+    public String solicitarLogin(Usuario usuario) {
 
         String json = "";
 
@@ -109,7 +111,6 @@ public class UsuarioMsgImpl implements UsuarioMsg {
         } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException | InterruptedException e) {
             e.printStackTrace();
         }
-
         return json;
     }
 }

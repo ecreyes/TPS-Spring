@@ -39,7 +39,6 @@ public class MsgImpl implements Msg {
 
     private static final Log LOGGER = LogFactory.getLog(MsgImpl.class);
 
-
     private final FavoritoService favoritoService;
 
     public MsgImpl(@Qualifier("favoritoService") FavoritoService favoritoService) {
@@ -48,9 +47,10 @@ public class MsgImpl implements Msg {
 
     /**
      * Proceso de mensajeria encargado de la Creacion y Eliminacion de noticias favoritas
+     * (Suscripcion)
      */
     @Override
-    public void processCD() {
+    public void procesarCD() {
 
         try {
             Channel channel = RabbitMQ.getChannel();
@@ -118,9 +118,10 @@ public class MsgImpl implements Msg {
 
     /**
      * Proceso de mensajeria encargado de enviar el listado de noticias favoritas de un usuario específico
+     * (Request-Response Sincronico a solicitudes desde Apigateway)
      */
     @Override
-    public void processUserFavList() {
+    public void procesarListaFavUsuario() {
 
         try {
             Channel channel = RabbitMQ.getChannel();
@@ -132,23 +133,27 @@ public class MsgImpl implements Msg {
             channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_LIST);
 
             LOGGER.info("Creando queue: " + receiver_queue);
-            LOGGER.info("[*] Esperando por solicitudes de lista favoritos usuario. Para salir presiona CTRL+C");
+            LOGGER.info("[*] Esperando por solicitudes de lista favoritos de usuario. Para salir presiona CTRL+C");
 
             Object monitor = new Object();
 
             //RECEPCION DE SOLICITUDES
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
-                LOGGER.info("[x] Solicitud de listado de favoritos de usuario desde apigateway");
+                String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
 
-                String id_usuario = new String(delivery.getBody(), StandardCharsets.UTF_8);
+                JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+
+                LOGGER.info("[x] Solicitud de listado de favoritos de usuario desde '" + jsonObject.get("consumer").getAsString() + "'");
+
+                int id_usuario = jsonObject.get("id_usuario").getAsInt();
 
                 AMQP.BasicProperties reply_props = new AMQP.BasicProperties
                         .Builder()
                         .correlationId(delivery.getProperties().getCorrelationId())
                         .build();
 
-                List<FavoritoRoot> favoritoRootList = favoritoService.getListaFavUsuario(Integer.parseInt(id_usuario));
+                List<FavoritoRoot> favoritoRootList = favoritoService.getListaFavUsuario(id_usuario);
                 byte[] data = (new Gson().toJson(favoritoRootList).getBytes(StandardCharsets.UTF_8));
 
                 //Enviarlo por cola unica (reply_to)

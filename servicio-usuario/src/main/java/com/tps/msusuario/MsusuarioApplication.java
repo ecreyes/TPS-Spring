@@ -21,19 +21,8 @@ public class MsusuarioApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        switch (args[0]) {
-            case "All":
-                msg.processCUD();
-                msg.processLogin();
-                break;
 
-            case "Creacion":
-                msg.processCUD();
-                break;
-
-            case "Login":
-                msg.processLogin();
-                break;
-        }
+        msg.procesarCUD();
+        msg.procesarLogin();
     }
 }

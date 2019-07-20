@@ -1,14 +1,9 @@
 package com.ts.apigateway.controlador;
 
 import com.ts.apigateway.mensajeria.UsuarioMsg;
-import com.ts.apigateway.mensajeria.UsuarioMsgImpl;
 import com.ts.apigateway.modelo.Usuario;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 public class UsuarioController {
@@ -24,27 +19,27 @@ public class UsuarioController {
 
     @PostMapping("/usuario/agregar")
     public Usuario agregar(@RequestBody Usuario usuario) {
-        usuarioMsg.send(usuario, ROUTE_KEY_CREATE);
+        usuarioMsg.enviarMsg(usuario, ROUTE_KEY_CREATE);
 
         return usuario;
     }
 
     @PutMapping("/usuario/editar")
     public Usuario editar(@RequestBody Usuario usuario) {
-        usuarioMsg.send(usuario, ROUTE_KEY_EDIT);
+        usuarioMsg.enviarMsg(usuario, ROUTE_KEY_EDIT);
 
         return usuario;
     }
 
     @DeleteMapping("/usuario/eliminar")
     public Usuario eliminar(@RequestBody Usuario usuario) {
-        usuarioMsg.send(usuario, ROUTE_KEY_DELETE);
+        usuarioMsg.enviarMsg(usuario, ROUTE_KEY_DELETE);
 
         return usuario;
     }
 
     @PostMapping("/usuario/login")
     public String login(@RequestBody Usuario usuario) {
-        return usuarioMsg.requestLogin(usuario);
+        return usuarioMsg.solicitarLogin(usuario);
     }
 }

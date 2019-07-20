@@ -8,7 +8,7 @@ public interface FavoritoService {
 
     void agregar(FavoritoRoot favorito);
 
-    int eliminar(FavoritoRoot favorito);
+    void eliminar(FavoritoRoot favorito);
 
     List<FavoritoRoot> getListaFavUsuario(int id_usuario);
 }

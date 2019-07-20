@@ -1,11 +1,10 @@
-package com.ts.msfavoritos.servicio.impl;
+package com.ts.msfavoritos.servicio;
 
 import com.ts.msfavoritos.dominio.FavoritoRoot;
 import com.ts.msfavoritos.dominio.NoticiaIdVO;
 import com.ts.msfavoritos.dominio.UsuarioIdVO;
 import com.ts.msfavoritos.repositorio.FavoritoJpaRepository;
 import com.ts.msfavoritos.repositorio.entidad.Favorito;
-import com.ts.msfavoritos.servicio.FavoritoService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -29,19 +28,22 @@ public class FavoritoServiceImpl implements FavoritoService {
     }
 
     @Override
-    public int eliminar(FavoritoRoot favoritoRoot) {
+    public void eliminar(FavoritoRoot favoritoRoot) {
 
         if (favoritoJpaRepository.findById_usuarioAndId_noticia(favoritoRoot.getUsuarioIdVO().getId(),
                 favoritoRoot.getNoticiaIdVO().getId()).isPresent()) {
 
             favoritoJpaRepository.deleteById_usuarioAndId_noticia(favoritoRoot.getUsuarioIdVO().getId(),
                     favoritoRoot.getNoticiaIdVO().getId());
-
-            return 1;
         }
-        return 0;
     }
 
+    /**
+     * Funcion que busca en BD los favoritos de un usuario
+     *
+     * @param id_usuario Necesario para busqueda
+     * @return Listado de agregados de favoritos
+     */
     @Override
     public List<FavoritoRoot> getListaFavUsuario(int id_usuario) {
 
@@ -59,9 +61,6 @@ public class FavoritoServiceImpl implements FavoritoService {
 
             favoritoRootList.add(favoritoRoot);
         }
-
         return favoritoRootList;
     }
-
-
 }

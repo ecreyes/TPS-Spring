@@ -8,7 +8,7 @@ public interface UsuarioService {
 
     void agregar(UsuarioRoot usuario);
 
-    int eliminar(UsuarioRoot usuarioRoot);
+    void eliminar(UsuarioRoot usuarioRoot);
 
     void editar(UsuarioRoot usuarioRoot);
 

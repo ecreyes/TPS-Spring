@@ -22,7 +22,7 @@ public class MsfavoritosApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        msg.processCD();
-        msg.processUserFavList();
+        msg.procesarCD();
+        msg.procesarListaFavUsuario();
     }
 }

@@ -33,8 +33,15 @@ public class NoticiaMsgImpl implements NoticiaMsg {
 
     private static final Log LOGGER = LogFactory.getLog(NoticiaMsgImpl.class);
 
+    /**
+     * Envio de solicitudes de noticia hacia Exchange
+     * (Publicacion)
+     *
+     * @param noticia Objecto noticia a ser enviado a MsNoticia
+     * @param route_key Llave usada para identificar proceso. (Crear,Eliminar,Editar)
+     */
     @Override
-    public void send(Noticia noticia, String route_key) {
+    public void enviarMsg(Noticia noticia, String route_key) {
 
         try {
             Channel channel = RabbitMQ.getChannel();
@@ -54,8 +61,14 @@ public class NoticiaMsgImpl implements NoticiaMsg {
         }
     }
 
+    /**
+     * Funcion de mensajeria encargada de obtener el listado de noticias desde MsNoticia.
+     * (REQUEST-RESPONSE SINCRONICO) desde MsNoticia
+     *
+     * @return Listado de noticias
+     */
     @Override
-    public List<Noticia> getList() {
+    public List<Noticia> obtenerListadoNoticias() {
 
         List<Noticia> noticiaList = new ArrayList<>();
         try {

@@ -1,4 +1,4 @@
-package com.tps.msusuario.servicio.impl;
+package com.tps.msusuario.servicio;
 
 import com.tps.msusuario.dominio.UsuarioRoot;
 import com.tps.msusuario.repositorio.UsuarioJpaRepository;
@@ -27,15 +27,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public int eliminar(UsuarioRoot usuarioRoot) {
+    public void eliminar(UsuarioRoot usuarioRoot) {
 
         if (usuarioJpaRepository.findById(usuarioRoot.getId()).isPresent()) {
 
             usuarioJpaRepository.deleteById(usuarioRoot.getId());
-
-            return 1;
         }
-        return 0;
     }
 
     @Override
@@ -56,6 +53,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Map<String, Object> login(UsuarioRoot usuarioRoot) {
+
         Usuario usuario_bd = usuarioJpaRepository.findUsuarioByEmail(usuarioRoot.getEmail());
 
         Map<String, Object> result = new HashMap<>();

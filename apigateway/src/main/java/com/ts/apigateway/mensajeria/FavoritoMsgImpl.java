@@ -21,9 +21,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeoutException;
@@ -39,12 +37,13 @@ public class FavoritoMsgImpl implements FavoritoMsg {
 
     /**
      * Envío de solicitudes de creacion y eliminacion de favoritos hacia msfavorito
+     * (Publicacion)
      *
      * @param favorito  Objecto favorito con datos
      * @param route_key Llave usada para identificar proceso
      */
     @Override
-    public void send(Favorito favorito, String route_key) {
+    public void enviarMsg(Favorito favorito, String route_key) {
 
         try {
             Channel channel = RabbitMQ.getChannel();
@@ -63,8 +62,14 @@ public class FavoritoMsgImpl implements FavoritoMsg {
         }
     }
 
+    /**
+     * Funcion de mensajeria encargada de obtener el listado de noticias favoritas de un usuario específico.
+     * (REQUEST-RESPONSE SINCRONICO) desde MsFavorito
+     *
+     * @return Listado de favoritos
+     */
     @Override
-    public List<Favorito> getFavList(String id_usuario) {
+    public List<Favorito> obtenerListaFavoritosUsuario(String id_usuario) {
 
         List<Favorito> favoritoList = new ArrayList<>();
 
@@ -85,11 +90,18 @@ public class FavoritoMsgImpl implements FavoritoMsg {
                     .replyTo(receiver_queue)
                     .build();
 
-            //Publicacion hacia exchange con ruta adecuada
-            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST, properties,
-                    id_usuario.getBytes(StandardCharsets.UTF_8));
-            LOGGER.info("[x] Solicitando lista favoritos usuario por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LIST + "'");
 
+            String consumer = "apigateway";
+            Map<String, Object> map = new HashMap<>();
+            map.put("id_usuario",id_usuario);
+            map.put("consumer",consumer);
+
+            byte[] data = (new Gson().toJson(map)).getBytes(StandardCharsets.UTF_8);
+
+            //Publicacion hacia exchange con ruta adecuada
+            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST, properties,data);
+
+            LOGGER.info("[x] Solicitando listado favoritos de usuario por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LIST + "'");
 
             //RECEPCION DE MENSAJES DESDE MSFAVORITO
             BlockingQueue<String> response = new ArrayBlockingQueue<>(1);

@@ -46,9 +46,10 @@ public class MsgImpl implements Msg {
 
     /**
      * Proceso de mensajeria encargado de CREAR, ACTUALIZAR y ELIMINAR usuarios.
+     * (Suscripcion)
      */
     @Override
-    public void processCUD() {
+    public void procesarCUD() {
 
         try {
             Channel channel = RabbitMQ.getChannel();
@@ -140,9 +141,10 @@ public class MsgImpl implements Msg {
 
     /**
      * Proceso de mensajeria encargado del logear usuarios en el sistema
+     * (Request-Response Sincronico a solicitudes desde Apigateway)
      */
     @Override
-    public void processLogin() {
+    public void procesarLogin() {
 
         try {
             Channel channel = RabbitMQ.getChannel();

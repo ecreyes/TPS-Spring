@@ -38,6 +38,7 @@ public class CategoriaMsgImpl implements CategoriaMsg {
 
     /**
      * Envio de solicitudes de categorias hacia Exchange
+     * (Publicacion)
      *
      * @param categoria Objecto categoria a ser enviado a Mscategoria
      * @param route_key Llave usada para identificar proceso.

@@ -2,12 +2,9 @@ package com.ts.apigateway.controlador;
 
 import com.ts.apigateway.mensajeria.FavoritoMsg;
 import com.ts.apigateway.modelo.Favorito;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,17 +21,17 @@ public class FavoritoController {
 
     @PostMapping("/favorito/agregar")
     public void agregar(@RequestBody Favorito favorito) {
-        favoritoMsg.send(favorito, ROUTE_KEY_CREATE);
+        favoritoMsg.enviarMsg(favorito, ROUTE_KEY_CREATE);
     }
 
     @DeleteMapping("/favorito/eliminar")
     public void eliminar(@RequestBody Favorito favorito) {
-        favoritoMsg.send(favorito, ROUTE_KEY_DELETE);
+        favoritoMsg.enviarMsg(favorito, ROUTE_KEY_DELETE);
     }
 
     @GetMapping("/favorito/usuario/{id}")
     public List<Favorito> favoritosUsuario(@PathVariable(name = "id") String id_usuario) {
-        return favoritoMsg.getFavList(id_usuario);
+        return favoritoMsg.obtenerListaFavoritosUsuario(id_usuario);
     }
 
 

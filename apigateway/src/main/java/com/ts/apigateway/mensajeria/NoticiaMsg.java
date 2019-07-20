@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface NoticiaMsg {
 
-    void send(Noticia noticia, String route_key);
+    void enviarMsg(Noticia noticia, String route_key);
 
-    List<Noticia> getList();
+    List<Noticia> obtenerListadoNoticias();
 }
