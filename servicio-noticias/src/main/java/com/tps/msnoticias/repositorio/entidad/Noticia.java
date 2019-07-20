@@ -1,27 +1,43 @@
-package com.ts.apigateway.modelo;
+package com.tps.msnoticias.repositorio.entidad;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "noticia")
 public class Noticia {
-
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "titular")
     private String titular;
+
+    @Column(name = "descripcion")
     private String descripcion;
+
+    @Column(name = "autor")
     private String autor;
+
+    @Column(name = "url")
     private String url;
+
+    @Column(name = "fuente")
     private String fuente;
-    private String categoria;
+
+    @Column(name = "id_categoria")
+    private int id_categoria;
 
     public Noticia() {
     }
 
-    public Noticia(int id, String titular, String descripcion, String autor, String url, String fuente,
-                   String categoria) {
-        this.id = id;
+    public Noticia(String titular, String descripcion, String autor, String url, String fuente, int id_categoria) {
         this.titular = titular;
         this.descripcion = descripcion;
         this.autor = autor;
         this.url = url;
         this.fuente = fuente;
-        this.categoria = categoria;
+        this.id_categoria = id_categoria;
     }
 
     public int getId() {
@@ -72,12 +88,12 @@ public class Noticia {
         this.fuente = fuente;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public int getId_categoria() {
+        return id_categoria;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setId_categoria(int id_categoria) {
+        this.id_categoria = id_categoria;
     }
 
     @Override
@@ -89,7 +105,7 @@ public class Noticia {
                 ", autor='" + autor + '\'' +
                 ", url='" + url + '\'' +
                 ", fuente='" + fuente + '\'' +
-                ", categoria='" + categoria + '\'' +
+                ", id_categoria=" + id_categoria +
                 '}';
     }
 }

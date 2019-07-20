@@ -1,7 +1,9 @@
 package com.tps.msnoticias.mensajeria;
 
 public interface Msg {
-    void processCUD();
+    void procesarCUD();
 
-    void processList();
+    void procesarListadoNoticias();
+
+    void procesarListadoCategorias();
 }

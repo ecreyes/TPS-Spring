@@ -21,7 +21,9 @@ public class MsnoticiasApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        msg.processCUD();
-        msg.processList();
+        msg.procesarCUD();
+        msg.procesarListadoCategorias();
+        msg.procesarListadoNoticias();
+
     }
 }

@@ -2,7 +2,7 @@ package com.ts.mscategoria.mensajeria;
 
 public interface Msg {
 
-    void processCUD();
+    void procesarCUD();
 
-    void processList();
+    void procesarListaCategorias();
 }

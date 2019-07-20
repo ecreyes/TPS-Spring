@@ -1,16 +1,14 @@
 package com.ts.mscategoria.dominio;
 
-import java.util.List;
-
 public class EstadoCategoriaVO {
 
-    private String mensaje;
+    private String estado;
 
-    public EstadoCategoriaVO(String mensaje) {
-        this.mensaje = mensaje;
+    public EstadoCategoriaVO(String estado) {
+        this.estado = estado;
     }
 
-    public String getMensaje() {
-        return mensaje;
+    public String getEstado() {
+        return estado;
     }
 }

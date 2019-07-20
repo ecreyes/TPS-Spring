@@ -17,8 +17,6 @@ public class CategoriaController {
     private static final String ROUTE_KEY_EDIT = "categoria.editar";
     private static final String ROUTE_KEY_DELETE = "categoria.eliminar";
 
-    private static final Log LOGGER = LogFactory.getLog(CategoriaController.class);
-
     private final CategoriaMsg categoriaMsgMsgAdapter;
 
     public CategoriaController(@Qualifier("categoriaMsgAdapter") CategoriaMsg categoriaMsgMsgAdapter) {
@@ -27,20 +25,20 @@ public class CategoriaController {
 
     @GetMapping("/categorias")
     public List<Categoria> categorias() {
-        return categoriaMsgMsgAdapter.getList();
+        return categoriaMsgMsgAdapter.obtenerListaCategorias();
     }
 
     @PostMapping("/categoria/agregar")
     public Categoria agregar(@RequestBody Categoria categoria) {
 
-        categoriaMsgMsgAdapter.send(categoria, ROUTE_KEY_CREATE);
+        categoriaMsgMsgAdapter.enviarMsg(categoria, ROUTE_KEY_CREATE);
         return categoria;
     }
 
     @PutMapping("/categoria/editar")
     public Categoria editar(@RequestBody Categoria categoria) {
 
-        categoriaMsgMsgAdapter.send(categoria, ROUTE_KEY_EDIT);
+        categoriaMsgMsgAdapter.enviarMsg(categoria, ROUTE_KEY_EDIT);
 
         return categoria;
     }
@@ -48,7 +46,7 @@ public class CategoriaController {
     @DeleteMapping("/categoria/eliminar")
     public Categoria eliminar(@RequestBody Categoria categoria) {
 
-        categoriaMsgMsgAdapter.send(categoria, ROUTE_KEY_DELETE);
+        categoriaMsgMsgAdapter.enviarMsg(categoria, ROUTE_KEY_DELETE);
 
         return categoria;
     }

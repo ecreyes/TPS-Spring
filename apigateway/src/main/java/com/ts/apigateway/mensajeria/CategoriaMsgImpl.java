@@ -2,11 +2,15 @@ package com.ts.apigateway.mensajeria;
 
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.MessageProperties;
 import com.ts.apigateway.modelo.Categoria;
+import com.ts.apigateway.modelo.Noticia;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
@@ -39,7 +43,7 @@ public class CategoriaMsgImpl implements CategoriaMsg {
      * @param route_key Llave usada para identificar proceso.
      */
     @Override
-    public void send(Categoria categoria, String route_key) {
+    public void enviarMsg(Categoria categoria, String route_key) {
 
         try {
             Channel channel = RabbitMQ.getChannel();
@@ -61,12 +65,12 @@ public class CategoriaMsgImpl implements CategoriaMsg {
 
     /**
      * Funcion de mensajeria encargada de obtener el listado de categorias desde Mscategoria.
-     * (REQUEST-RESPONSE SINCRONICO)
+     * (REQUEST-RESPONSE SINCRONICO) desde MsCategoria
      *
      * @return Listado de categorias
      */
     @Override
-    public List<Categoria> getList() {
+    public List<Categoria> obtenerListaCategorias() {
 
         List<Categoria> categoriaList = new ArrayList<>();
 
@@ -106,12 +110,20 @@ public class CategoriaMsgImpl implements CategoriaMsg {
             });
 
             String json = response.take();
-
-            Type listType = new TypeToken<ArrayList<Categoria>>() {
-            }.getType();
-
-            categoriaList = new Gson().fromJson(json, listType);
             channel.basicCancel(ctag);
+
+            JsonArray jsonArray = new JsonParser().parse(json).getAsJsonArray();
+
+            for (int i = 0; i < jsonArray.size(); i++) {
+
+                JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+
+                Categoria categoria = new Categoria(jsonObject.get("id").getAsInt(),
+                        jsonObject.get("nombre").getAsString(), jsonObject.getAsJsonObject("estadoCategoriaVO").get(
+                        "estado").getAsString());
+
+                categoriaList.add(categoria);
+            }
 
             LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + categoriaList.toString());
 

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CategoriaService {
 
-    List<CategoriaRoot> getCategorias();
+    List<CategoriaRoot> obtenerCategorias();
 
     void agregar(CategoriaRoot categoriaRoot);
 

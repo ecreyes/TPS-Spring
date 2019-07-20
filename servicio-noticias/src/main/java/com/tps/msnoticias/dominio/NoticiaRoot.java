@@ -8,33 +8,37 @@ public class NoticiaRoot {
     private String autor;
     private String url;
     private FuenteNoticiaVO fuenteNoticiaVO;
+    private CategoriaNoticiaVO categoriaNoticiaVO;
 
     public NoticiaRoot() {
     }
 
     //Contructor para edicion
     public NoticiaRoot(int id, String titular, String descripcion, String autor, String url,
-                       FuenteNoticiaVO fuenteNoticiaVO) {
+                       FuenteNoticiaVO fuenteNoticiaVO, CategoriaNoticiaVO categoriaNoticiaVO) {
         this.id = id;
         this.titular = titular;
         this.descripcion = descripcion;
         this.autor = autor;
         this.url = url;
         this.fuenteNoticiaVO = fuenteNoticiaVO;
+        this.categoriaNoticiaVO = categoriaNoticiaVO;
     }
 
     //Constructor para creacion
-    public NoticiaRoot(String titular, String descripcion, String autor, String url, FuenteNoticiaVO fuenteNoticiaVO) {
+    public NoticiaRoot(String titular, String descripcion, String autor, String url, FuenteNoticiaVO fuenteNoticiaVO,
+                       CategoriaNoticiaVO categoriaNoticiaVO) {
         this.titular = titular;
         this.descripcion = descripcion;
         this.autor = autor;
         this.url = url;
         this.fuenteNoticiaVO = fuenteNoticiaVO;
+        this.categoriaNoticiaVO = categoriaNoticiaVO;
     }
 
     //Constructor para eliminacion
     public NoticiaRoot(int id) {
-        this.id=id;
+        this.id = id;
     }
 
     public int getId() {
@@ -85,6 +89,14 @@ public class NoticiaRoot {
         this.fuenteNoticiaVO = fuenteNoticiaVO;
     }
 
+    public CategoriaNoticiaVO getCategoriaNoticiaVO() {
+        return categoriaNoticiaVO;
+    }
+
+    public void setCategoriaNoticiaVO(CategoriaNoticiaVO categoriaNoticiaVO) {
+        this.categoriaNoticiaVO = categoriaNoticiaVO;
+    }
+
     @Override
     public String toString() {
         return "NoticiaRoot{" +
@@ -94,6 +106,7 @@ public class NoticiaRoot {
                 ", autor='" + autor + '\'' +
                 ", url='" + url + '\'' +
                 ", fuenteNoticiaVO=" + fuenteNoticiaVO +
+                ", categoriaNoticiaVO=" + categoriaNoticiaVO +
                 '}';
     }
 }

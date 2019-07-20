@@ -54,6 +54,7 @@ public class NoticiaMsgImpl implements NoticiaMsg {
         }
     }
 
+    @Override
     public List<Noticia> getList() {
 
         List<Noticia> noticiaList = new ArrayList<>();
@@ -72,8 +73,11 @@ public class NoticiaMsgImpl implements NoticiaMsg {
                     .replyTo(receiver_queue)
                     .build();
 
+            String consumer = "apigateway";
+            byte[] data = consumer.getBytes(StandardCharsets.UTF_8);
+
             //Publicacion hacia exchange con ruta adecuada
-            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST, properties, null);
+            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST, properties, data);
             LOGGER.info("[x] Solicitando lista noticias por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LIST + "'");
 
             //RECEPCION DE MENSAJES DESDE MSNOTICIA
@@ -89,6 +93,7 @@ public class NoticiaMsgImpl implements NoticiaMsg {
             });
 
             String json = response.take();
+            channel.basicCancel(ctag);
 
             JsonArray jsonArray = new JsonParser().parse(json).getAsJsonArray();
 
@@ -99,7 +104,8 @@ public class NoticiaMsgImpl implements NoticiaMsg {
                 Noticia noticia = new Noticia(jsonObject.get("id").getAsInt(),
                         jsonObject.get("titular").getAsString(), jsonObject.get("descripcion").getAsString(),
                         jsonObject.get("autor").getAsString(), jsonObject.get("url").getAsString(),
-                        jsonObject.getAsJsonObject("fuenteNoticiaVO").get("fuente").getAsString());
+                        jsonObject.getAsJsonObject("fuenteNoticiaVO").get("fuente").getAsString(),
+                        jsonObject.getAsJsonObject("categoriaNoticiaVO").get("nombre").getAsString());
 
                 noticiaList.add(noticia);
             }

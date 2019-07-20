@@ -4,12 +4,24 @@ public class CategoriaRoot {
 
     private int id;
     private String nombre;
-    private String estado;
+    private EstadoCategoriaVO estadoCategoriaVO;
 
-    public CategoriaRoot(int id, String nombre, String estado) {
+    //Constructor de creacion
+    public CategoriaRoot(String nombre, EstadoCategoriaVO estadoCategoriaVO) {
+        this.nombre = nombre;
+        this.estadoCategoriaVO = estadoCategoriaVO;
+    }
+
+    //Constructor de edicion
+    public CategoriaRoot(int id, String nombre, EstadoCategoriaVO estadoCategoriaVO) {
         this.id = id;
         this.nombre = nombre;
-        this.estado = estado;
+        this.estadoCategoriaVO = estadoCategoriaVO;
+    }
+
+    //Constructor de eliminacion
+    public CategoriaRoot(int id) {
+        this.id = id;
     }
 
     public int getId() {
@@ -28,12 +40,12 @@ public class CategoriaRoot {
         this.nombre = nombre;
     }
 
-    public String getEstado() {
-        return estado;
+    public EstadoCategoriaVO getEstadoCategoriaVO() {
+        return estadoCategoriaVO;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setEstadoCategoriaVO(EstadoCategoriaVO estadoCategoriaVO) {
+        this.estadoCategoriaVO = estadoCategoriaVO;
     }
 
     @Override
@@ -41,7 +53,8 @@ public class CategoriaRoot {
         return "CategoriaRoot{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
-                ", estado='" + estado + '\'' +
+                ", estadoCategoriaVO=" + estadoCategoriaVO +
                 '}';
     }
 }
+

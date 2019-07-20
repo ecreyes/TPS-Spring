@@ -1,12 +1,10 @@
-package com.ts.mscategoria.servicio.impl;
+package com.ts.mscategoria.servicio;
 
 
 import com.ts.mscategoria.dominio.CategoriaRoot;
+import com.ts.mscategoria.dominio.EstadoCategoriaVO;
 import com.ts.mscategoria.repositorio.CategoriaJpaRepository;
 import com.ts.mscategoria.repositorio.entidad.Categoria;
-import com.ts.mscategoria.servicio.CategoriaService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +16,6 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     private final CategoriaJpaRepository categoriaJpaRepository;
 
-    private static final Log LOGGER = LogFactory.getLog(CategoriaServiceImpl.class);
-
     public CategoriaServiceImpl(@Qualifier("categoriaJpaRepository") CategoriaJpaRepository categoriaJpaRepository) {
         this.categoriaJpaRepository = categoriaJpaRepository;
     }
@@ -27,10 +23,10 @@ public class CategoriaServiceImpl implements CategoriaService {
     /**
      * Funcion encargada de buscar categorias desde base de datos
      *
-     * @return Listado de entidades categorias
+     * @return Listado de agregados categorias
      */
     @Override
-    public List<CategoriaRoot> getCategorias() {
+    public List<CategoriaRoot> obtenerCategorias() {
 
         //Categorias BD
         List<Categoria> categoriaList = categoriaJpaRepository.findAll();
@@ -39,7 +35,10 @@ public class CategoriaServiceImpl implements CategoriaService {
 
         for (Categoria categoria : categoriaList) {
 
-            CategoriaRoot categoriaRoot = new CategoriaRoot(categoria.getId(), categoria.getNombre(),categoria.getEstado());
+            EstadoCategoriaVO estadoCategoriaVO = new EstadoCategoriaVO(categoria.getEstado());
+
+            CategoriaRoot categoriaRoot = new CategoriaRoot(categoria.getId(), categoria.getNombre(),
+                    estadoCategoriaVO);
 
             categoriaRootList.add(categoriaRoot);
         }
@@ -49,7 +48,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     public void agregar(CategoriaRoot categoriaRoot) {
 
-        Categoria categoria = new Categoria(categoriaRoot.getNombre(),categoriaRoot.getEstado());
+        Categoria categoria = new Categoria(categoriaRoot.getNombre(),
+                categoriaRoot.getEstadoCategoriaVO().getEstado());
         categoriaJpaRepository.save(categoria);
     }
 
@@ -72,7 +72,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
             //Actualizar datos
             categoria.setNombre(editCatVO.getNombre());
-            categoria.setEstado(editCatVO.getEstado());
+            categoria.setEstado(editCatVO.getEstadoCategoriaVO().getEstado());
 
             categoriaJpaRepository.save(categoria);
         }

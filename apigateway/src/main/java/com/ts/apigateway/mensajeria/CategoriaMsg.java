@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CategoriaMsg {
 
-    void send(Categoria categoria, String route_key);
+    void enviarMsg(Categoria categoria, String route_key);
 
-    List<Categoria> getList();
+    List<Categoria> obtenerListaCategorias();
 }
