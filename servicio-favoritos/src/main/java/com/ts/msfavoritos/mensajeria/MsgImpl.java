@@ -12,6 +12,7 @@ import com.ts.msfavoritos.dominio.UsuarioIdVO;
 import com.ts.msfavoritos.servicio.FavoritoService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.aspectj.weaver.patterns.HasMemberTypePattern;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
@@ -154,12 +157,27 @@ public class MsgImpl implements Msg {
                         .build();
 
                 List<FavoritoRoot> favoritoRootList = favoritoService.getListaFavUsuario(id_usuario);
-                byte[] data = (new Gson().toJson(favoritoRootList).getBytes(StandardCharsets.UTF_8));
+
+                //Construccion de JSON
+                List<HashMap<String,Object>> mapList = new ArrayList<>();
+
+                for(FavoritoRoot favoritoRoot: favoritoRootList){
+
+                    HashMap<String,Object> map = new HashMap<>();
+                    map.put("id",favoritoRoot.getId());
+                    map.put("id_usuario",favoritoRoot.getUsuarioIdVO().getId());
+                    map.put("id_noticia",favoritoRoot.getNoticiaIdVO().getId());
+                    map.put("fecha_favorito",favoritoRoot.getFechaFavorito());
+
+                    mapList.add(map);
+                }
+
+                byte[] data = (new Gson().toJson(mapList).getBytes(StandardCharsets.UTF_8));
 
                 //Enviarlo por cola unica (reply_to)
                 channel.basicPublish("", delivery.getProperties().getReplyTo(), reply_props, data);
 
-                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + favoritoRootList.toString());
+                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + mapList.toString());
 
                 synchronized (monitor) {
                     monitor.notify();

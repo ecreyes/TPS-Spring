@@ -120,8 +120,7 @@ public class CategoriaMsgImpl implements CategoriaMsg {
                 JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
 
                 Categoria categoria = new Categoria(jsonObject.get("id").getAsInt(),
-                        jsonObject.get("nombre").getAsString(), jsonObject.getAsJsonObject("estadoCategoriaVO").get(
-                        "estado").getAsString());
+                        jsonObject.get("nombre").getAsString(), jsonObject.get("estado").getAsString());
 
                 categoriaList.add(categoria);
             }

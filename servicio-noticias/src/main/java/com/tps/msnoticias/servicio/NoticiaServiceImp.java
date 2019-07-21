@@ -31,7 +31,7 @@ public class NoticiaServiceImp implements NoticiaService {
      * @return Lista de Agregados noticias
      */
     @Override
-    public List<NoticiaRoot> obtenerLista(String categorias) {
+    public List<NoticiaRoot> obtenerNoticias(String categorias) {
 
         JsonArray jsonArray = new JsonParser().parse(categorias).getAsJsonArray();
 

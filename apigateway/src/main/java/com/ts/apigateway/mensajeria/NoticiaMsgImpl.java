@@ -37,7 +37,7 @@ public class NoticiaMsgImpl implements NoticiaMsg {
      * Envio de solicitudes de noticia hacia Exchange
      * (Publicacion)
      *
-     * @param noticia Objecto noticia a ser enviado a MsNoticia
+     * @param noticia   Objecto noticia a ser enviado a MsNoticia
      * @param route_key Llave usada para identificar proceso. (Crear,Eliminar,Editar)
      */
     @Override
@@ -116,9 +116,8 @@ public class NoticiaMsgImpl implements NoticiaMsg {
 
                 Noticia noticia = new Noticia(jsonObject.get("id").getAsInt(),
                         jsonObject.get("titular").getAsString(), jsonObject.get("descripcion").getAsString(),
-                        jsonObject.get("autor").getAsString(), jsonObject.get("url").getAsString(),
-                        jsonObject.getAsJsonObject("fuenteNoticiaVO").get("fuente").getAsString(),
-                        jsonObject.getAsJsonObject("categoriaNoticiaVO").get("nombre").getAsString());
+                        jsonObject.get("autor").getAsString(), jsonObject.get("url").getAsString(), jsonObject.get(
+                                "fuente").getAsString(), jsonObject.get("categoria").getAsString());
 
                 noticiaList.add(noticia);
             }

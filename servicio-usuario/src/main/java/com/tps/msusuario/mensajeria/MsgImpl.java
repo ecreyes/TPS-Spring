@@ -176,14 +176,13 @@ public class MsgImpl implements Msg {
                 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 
                 //Realizar login
-                Map<String, Object> result = usuarioService.login(usuarioRoot);
-                String json_result = new Gson().toJson(result);
+                Map<String, Object> map = usuarioService.login(usuarioRoot);
+                byte[] data = (new Gson().toJson(map)).getBytes(StandardCharsets.UTF_8);
 
                 //Enviarlo por cola unica (reply_to)
-                channel.basicPublish("", delivery.getProperties().getReplyTo(), reply_props,
-                        json_result.getBytes(StandardCharsets.UTF_8));
+                channel.basicPublish("", delivery.getProperties().getReplyTo(), reply_props, data);
 
-                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + json_result);
+                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + map.toString());
 
                 synchronized (monitor) {
                     monitor.notify();

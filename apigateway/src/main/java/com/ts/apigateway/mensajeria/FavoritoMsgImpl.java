@@ -93,15 +93,16 @@ public class FavoritoMsgImpl implements FavoritoMsg {
 
             String consumer = "apigateway";
             Map<String, Object> map = new HashMap<>();
-            map.put("id_usuario",id_usuario);
-            map.put("consumer",consumer);
+            map.put("id_usuario", id_usuario);
+            map.put("consumer", consumer);
 
             byte[] data = (new Gson().toJson(map)).getBytes(StandardCharsets.UTF_8);
 
             //Publicacion hacia exchange con ruta adecuada
-            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST, properties,data);
+            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST, properties, data);
 
-            LOGGER.info("[x] Solicitando listado favoritos de usuario por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LIST + "'");
+            LOGGER.info("[x] Solicitando listado favoritos de usuario por exchange '" + EXCHANGE_NAME + "' por ruta " +
+                    "'" + ROUTE_KEY_LIST + "'");
 
             //RECEPCION DE MENSAJES DESDE MSFAVORITO
             BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
@@ -116,23 +117,19 @@ public class FavoritoMsgImpl implements FavoritoMsg {
             });
 
             String json = response.take();
+            channel.basicCancel(ctag);
             JsonArray jsonArray = new JsonParser().parse(json).getAsJsonArray();
 
             for (int i = 0; i < jsonArray.size(); i++) {
 
 
                 JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-                Favorito favorito = new Favorito(jsonObject.get("id").getAsInt(), jsonObject.getAsJsonObject(
-                        "usuarioIdVO").get("id").getAsInt(),
-                        jsonObject.getAsJsonObject("noticiaIdVO").get("id").getAsInt(), jsonObject.get("fechaFavorito"
-                ).getAsString());
+                Favorito favorito = new Favorito(jsonObject.get("id").getAsInt(),
+                        jsonObject.get("id_usuario").getAsInt(), jsonObject.get("id_noticia").getAsInt(),
+                        jsonObject.get("fecha_favorito").getAsString());
 
                 favoritoList.add(favorito);
-
             }
-            ;
-            channel.basicCancel(ctag);
-
             LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + favoritoList.toString());
 
         } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException | InterruptedException e) {

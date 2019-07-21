@@ -8,6 +8,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 import com.ts.mscategoria.dominio.CategoriaRoot;
 import com.ts.mscategoria.dominio.EstadoCategoriaVO;
+import com.ts.mscategoria.repositorio.entidad.Categoria;
 import com.ts.mscategoria.servicio.CategoriaService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,7 +20,10 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 @Component("msgAdapter")
@@ -182,12 +186,25 @@ public class MsgImpl implements Msg {
 
                 List<CategoriaRoot> categoriaRootList = categoriaService.obtenerCategorias();
 
-                byte[] data = (new Gson().toJson(categoriaRootList).getBytes(StandardCharsets.UTF_8));
+                //Construccion de JSON
+                List<Map<String,Object>> mapList = new ArrayList<>();
+
+                for (CategoriaRoot categoriaRoot : categoriaRootList){
+
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("id",categoriaRoot.getId());
+                    map.put("nombre",categoriaRoot.getNombre());
+                    map.put("estado",categoriaRoot.getEstadoCategoriaVO().getEstado());
+
+                    mapList.add(map);
+                }
+
+                byte[] data = (new Gson().toJson(mapList).getBytes(StandardCharsets.UTF_8));
 
                 //Enviarlo por cola unica (reply_to)
                 channel.basicPublish("", delivery.getProperties().getReplyTo(), reply_props, data);
 
-                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + categoriaRootList.toString());
+                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + mapList.toString());
 
                 synchronized (monitor) {
                     monitor.notify();
@@ -229,7 +246,20 @@ public class MsgImpl implements Msg {
 
             List<CategoriaRoot> categoriaRootList = categoriaService.obtenerCategorias();
 
-            byte[] data = (new Gson().toJson(categoriaRootList)).getBytes(StandardCharsets.UTF_8);
+            //Construccion de JSON
+            List<Map<String,Object>> mapList = new ArrayList<>();
+
+            for (CategoriaRoot categoriaRoot : categoriaRootList){
+
+                Map<String,Object> map = new HashMap<>();
+                map.put("id",categoriaRoot.getId());
+                map.put("nombre",categoriaRoot.getNombre());
+                map.put("estado",categoriaRoot.getEstadoCategoriaVO().getEstado());
+
+                mapList.add(map);
+            }
+
+            byte[] data = (new Gson().toJson(mapList).getBytes(StandardCharsets.UTF_8));
 
             channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST_SUBS, null, data);
 

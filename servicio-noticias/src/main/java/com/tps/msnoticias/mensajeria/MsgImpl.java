@@ -9,6 +9,7 @@ import com.rabbitmq.client.DeliverCallback;
 import com.tps.msnoticias.dominio.CategoriaNoticiaVO;
 import com.tps.msnoticias.dominio.FuenteNoticiaVO;
 import com.tps.msnoticias.dominio.NoticiaRoot;
+import com.tps.msnoticias.repositorio.entidad.Noticia;
 import com.tps.msnoticias.servicio.NoticiaService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,8 +21,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeoutException;
@@ -184,16 +184,31 @@ public class MsgImpl implements Msg {
                         .correlationId(delivery.getProperties().getCorrelationId())
                         .build();
 
-                //SOLICITAR LISTADO DE CATEGORIAS A MSCATEGORIA
+                List<NoticiaRoot> noticiaRootList = noticiaService.obtenerNoticias(jsonCategoriaList);
 
-                List<NoticiaRoot> noticias = noticiaService.obtenerLista(jsonCategoriaList);
+                //Construccion JSON
+                List<Map<String,Object>> mapList = new ArrayList<>();
 
-                byte[] data = (new Gson().toJson(noticias).getBytes(StandardCharsets.UTF_8));
+                for(NoticiaRoot noticiaRoot: noticiaRootList){
+
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("id",noticiaRoot.getId());
+                    map.put("titular",noticiaRoot.getTitular());
+                    map.put("descripcion",noticiaRoot.getDescripcion());
+                    map.put("autor",noticiaRoot.getAutor());
+                    map.put("url",noticiaRoot.getUrl());
+                    map.put("fuente",noticiaRoot.getFuenteNoticiaVO().getFuente());
+                    map.put("categoria",noticiaRoot.getCategoriaNoticiaVO().getNombre());
+
+                    mapList.add(map);
+                }
+
+                byte[] data = (new Gson().toJson(mapList).getBytes(StandardCharsets.UTF_8));
 
                 //Enviarlo por cola unica (reply_to)
                 channel.basicPublish("", delivery.getProperties().getReplyTo(), reply_props, data);
 
-                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + noticias
+                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + mapList
                         .toString());
 
                 synchronized (monitor) {
@@ -230,7 +245,7 @@ public class MsgImpl implements Msg {
     public void procesarListadoCategorias() {
 
         //Solicitar datos en primera partida
-        solicitarListadoCategorias();
+        jsonCategoriaList = solicitarListadoCategorias();
 
         try {
             Channel channel = RabbitMQ.getChannel();
@@ -267,8 +282,9 @@ public class MsgImpl implements Msg {
      * MsNoticia se encuentra en partida en frio.
      * (Request-response) Hacia mscategoria
      */
-    private void solicitarListadoCategorias() {
+    private String solicitarListadoCategorias() {
 
+        String json = "";
         try {
             Channel channel = RabbitMQ.getChannel();
             channel.exchangeDeclare(EXCHANGE_NAME_CAT, "direct");
@@ -304,14 +320,16 @@ public class MsgImpl implements Msg {
             }, consumerTag -> {
             });
 
-            jsonCategoriaList = response.take();
+            json = response.take();
             channel.basicCancel(ctag);
 
-            LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + jsonCategoriaList);
+            LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + json);
 
         } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | InterruptedException | KeyManagementException e) {
             e.printStackTrace();
         }
+
+        return json;
     }
 
 }

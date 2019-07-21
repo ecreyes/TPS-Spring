@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface NoticiaService {
 
-    List<NoticiaRoot> obtenerLista(String categorias);
+    List<NoticiaRoot> obtenerNoticias(String categorias);
 
     void agregar(NoticiaRoot noticiaRoot);
 
