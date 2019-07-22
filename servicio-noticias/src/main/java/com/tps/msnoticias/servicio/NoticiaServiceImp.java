@@ -90,6 +90,7 @@ public class NoticiaServiceImp implements NoticiaService {
             noticia.setDescripcion(noticiaRoot.getDescripcion());
             noticia.setTitular(noticiaRoot.getTitular());
             noticia.setUrl(noticiaRoot.getUrl());
+            noticia.setId_categoria(noticiaRoot.getCategoriaNoticiaVO().getId());
 
             noticiaJpaRepository.save(noticia);
         }
