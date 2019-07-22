@@ -8,7 +8,6 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 import com.ts.mscategoria.dominio.CategoriaRoot;
 import com.ts.mscategoria.dominio.EstadoCategoriaVO;
-import com.ts.mscategoria.repositorio.entidad.Categoria;
 import com.ts.mscategoria.servicio.CategoriaService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -263,7 +262,7 @@ public class MsgImpl implements Msg {
 
             channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LIST_SUBS, null, data);
 
-            LOGGER.info("[x] Enviando por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LIST_SUBS + "' ->" + new Gson().toJson(categoriaRootList));
+            LOGGER.info("[x] Enviando por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LIST_SUBS + "' ->" + mapList);
 
         } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
             e.printStackTrace();
