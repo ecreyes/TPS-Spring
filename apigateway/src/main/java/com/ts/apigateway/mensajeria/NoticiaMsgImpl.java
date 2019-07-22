@@ -44,7 +44,7 @@ public class NoticiaMsgImpl implements NoticiaMsg {
     public void enviarMsg(Noticia noticia, String route_key) {
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
@@ -72,7 +72,8 @@ public class NoticiaMsgImpl implements NoticiaMsg {
 
         List<Noticia> noticiaList = new ArrayList<>();
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
+
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
             String correlation_id = UUID.randomUUID().toString();
 
@@ -108,6 +109,7 @@ public class NoticiaMsgImpl implements NoticiaMsg {
             String json = response.take();
             channel.basicCancel(ctag);
 
+            //JSON PARSE
             JsonArray jsonArray = new JsonParser().parse(json).getAsJsonArray();
 
             for (int i = 0; i < jsonArray.size(); i++) {

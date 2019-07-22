@@ -5,11 +5,11 @@ public class CategoriaNoticiaVO {
     private int id;
     private String nombre;
 
-    public CategoriaNoticiaVO(int id) {
+    CategoriaNoticiaVO(int id) {
         this.id = id;
     }
 
-    public CategoriaNoticiaVO(int id, String nombre) {
+    CategoriaNoticiaVO(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }

@@ -8,23 +8,23 @@ public class FavoritoRoot {
     private String fechaFavorito;
 
     //Constructor de eliminacion
-    public FavoritoRoot(UsuarioIdVO usuarioIdVO, NoticiaIdVO noticiaIdVO) {
-        this.usuarioIdVO = usuarioIdVO;
-        this.noticiaIdVO = noticiaIdVO;
+    public FavoritoRoot(int usuarioIdVO, int noticiaIdVO) {
+        this.usuarioIdVO = new UsuarioIdVO(usuarioIdVO);
+        this.noticiaIdVO = new NoticiaIdVO(noticiaIdVO);
     }
 
     //Constructor de creacion
-    public FavoritoRoot(UsuarioIdVO usuarioIdVO, NoticiaIdVO noticiaIdVO, String fechaFavorito) {
-        this.usuarioIdVO = usuarioIdVO;
-        this.noticiaIdVO = noticiaIdVO;
+    public FavoritoRoot(int usuarioIdVO, int noticiaIdVO, String fechaFavorito) {
+        this.usuarioIdVO = new UsuarioIdVO(usuarioIdVO);
+        this.noticiaIdVO = new NoticiaIdVO(noticiaIdVO);
         this.fechaFavorito = fechaFavorito;
     }
 
     //Constructor para consulta de favs
-    public FavoritoRoot(int id, UsuarioIdVO usuarioIdVO, NoticiaIdVO noticiaIdVO, String fechaFavorito) {
+    public FavoritoRoot(int id, int usuarioIdVO, int noticiaIdVO, String fechaFavorito) {
         this.id = id;
-        this.usuarioIdVO = usuarioIdVO;
-        this.noticiaIdVO = noticiaIdVO;
+        this.usuarioIdVO = new UsuarioIdVO(usuarioIdVO);
+        this.noticiaIdVO = new NoticiaIdVO(noticiaIdVO);
         this.fechaFavorito = fechaFavorito;
     }
 

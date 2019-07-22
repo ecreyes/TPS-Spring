@@ -6,10 +6,7 @@ import com.google.gson.JsonParser;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
-import com.tps.msnoticias.dominio.CategoriaNoticiaVO;
-import com.tps.msnoticias.dominio.FuenteNoticiaVO;
 import com.tps.msnoticias.dominio.NoticiaRoot;
-import com.tps.msnoticias.repositorio.entidad.Noticia;
 import com.tps.msnoticias.servicio.NoticiaService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -63,7 +60,7 @@ public class MsgImpl implements Msg {
     @Override
     public void procesarCUD() {
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
             String receiver_queue = channel.queueDeclare(QUEUE_REQUEST_CUD, true, false, false, null).getQueue();
@@ -88,13 +85,10 @@ public class MsgImpl implements Msg {
                     //Solicitudes de creacion de noticias
                     case ROUTE_KEY_CREATE: {
 
-                        FuenteNoticiaVO fuenteNoticiaVO = new FuenteNoticiaVO(jsonObject.get("fuente").getAsString());
-                        CategoriaNoticiaVO categoriaNoticiaVO =
-                                new CategoriaNoticiaVO(jsonObject.get("id_categoria").getAsInt());
-
                         NoticiaRoot noticiaRoot = new NoticiaRoot(jsonObject.get("titular").getAsString(),
                                 jsonObject.get("descripcion").getAsString(), jsonObject.get("autor").getAsString(),
-                                jsonObject.get("url").getAsString(), fuenteNoticiaVO, categoriaNoticiaVO);
+                                jsonObject.get("url").getAsString(), jsonObject.get("fuente").getAsString(),
+                                jsonObject.get("id_categoria").getAsInt());
 
                         LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + noticiaRoot.toString());
 
@@ -109,14 +103,11 @@ public class MsgImpl implements Msg {
                     //Solicitudes de edicion de noticias
                     case ROUTE_KEY_EDIT: {
 
-                        FuenteNoticiaVO fuenteNoticiaVO = new FuenteNoticiaVO(jsonObject.get("fuente").getAsString());
-                        CategoriaNoticiaVO categoriaNoticiaVO =
-                                new CategoriaNoticiaVO(jsonObject.get("id_categoria").getAsInt());
-
                         NoticiaRoot noticiaRoot = new NoticiaRoot(jsonObject.get("id").getAsInt(), jsonObject.get(
                                 "titular").getAsString(),
                                 jsonObject.get("descripcion").getAsString(), jsonObject.get("autor").getAsString(),
-                                jsonObject.get("url").getAsString(), fuenteNoticiaVO, categoriaNoticiaVO);
+                                jsonObject.get("url").getAsString(), jsonObject.get("fuente").getAsString(),
+                                jsonObject.get("id_categoria").getAsInt());
 
                         LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + noticiaRoot.toString());
 
@@ -161,7 +152,8 @@ public class MsgImpl implements Msg {
     public void procesarListadoNoticias() {
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
+
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
             String receiver_queue = channel.queueDeclare(QUEUE_REQUEST_LIST, false, false, false, null).getQueue();
 
@@ -187,18 +179,18 @@ public class MsgImpl implements Msg {
                 List<NoticiaRoot> noticiaRootList = noticiaService.obtenerNoticias(jsonCategoriaList);
 
                 //Construccion JSON
-                List<Map<String,Object>> mapList = new ArrayList<>();
+                List<Map<String, Object>> mapList = new ArrayList<>();
 
-                for(NoticiaRoot noticiaRoot: noticiaRootList){
+                for (NoticiaRoot noticiaRoot : noticiaRootList) {
 
-                    Map<String,Object> map = new HashMap<>();
-                    map.put("id",noticiaRoot.getId());
-                    map.put("titular",noticiaRoot.getTitular());
-                    map.put("descripcion",noticiaRoot.getDescripcion());
-                    map.put("autor",noticiaRoot.getAutor());
-                    map.put("url",noticiaRoot.getUrl());
-                    map.put("fuente",noticiaRoot.getFuenteNoticiaVO().getFuente());
-                    map.put("categoria",noticiaRoot.getCategoriaNoticiaVO().getNombre());
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", noticiaRoot.getId());
+                    map.put("titular", noticiaRoot.getTitular());
+                    map.put("descripcion", noticiaRoot.getDescripcion());
+                    map.put("autor", noticiaRoot.getAutor());
+                    map.put("url", noticiaRoot.getUrl());
+                    map.put("fuente", noticiaRoot.getFuenteNoticiaVO().getFuente());
+                    map.put("categoria", noticiaRoot.getCategoriaNoticiaVO().getNombre());
 
                     mapList.add(map);
                 }
@@ -248,7 +240,7 @@ public class MsgImpl implements Msg {
         jsonCategoriaList = solicitarListadoCategorias();
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME_CAT, "direct");
 
@@ -286,7 +278,8 @@ public class MsgImpl implements Msg {
 
         String json = "";
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
+
             channel.exchangeDeclare(EXCHANGE_NAME_CAT, "direct");
 
             String correlation_id = UUID.randomUUID().toString();

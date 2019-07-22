@@ -56,7 +56,7 @@ public class MsgImpl implements Msg {
     public void procesarCD() {
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
@@ -75,8 +75,8 @@ public class MsgImpl implements Msg {
 
                 JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
 
-                NoticiaIdVO noticiaIdVO = new NoticiaIdVO(jsonObject.get("id_noticia").getAsInt());
-                UsuarioIdVO usuarioIdVO = new UsuarioIdVO(jsonObject.get("id_usuario").getAsInt());
+                int id_noticia=jsonObject.get("id_noticia").getAsInt();
+                int id_usuario =jsonObject.get("id_usuario").getAsInt();
 
                 //Solicitudes de creacion de favoritos
                 if (delivery.getEnvelope().getRoutingKey().equals(ROUTE_KEY_CREATE)) {
@@ -86,7 +86,7 @@ public class MsgImpl implements Msg {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String date_now_s = simpleDateFormat.format(date_now);
 
-                    FavoritoRoot favoritoRoot = new FavoritoRoot(usuarioIdVO, noticiaIdVO, date_now_s);
+                    FavoritoRoot favoritoRoot = new FavoritoRoot(id_usuario, id_noticia, date_now_s);
 
                     LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + favoritoRoot.toString());
 
@@ -98,7 +98,7 @@ public class MsgImpl implements Msg {
                 //Solicitudes de eliminacion de favoritos
                 else if (delivery.getEnvelope().getRoutingKey().equals(ROUTE_KEY_DELETE)) {
 
-                    FavoritoRoot favoritoRoot = new FavoritoRoot(usuarioIdVO, noticiaIdVO);
+                    FavoritoRoot favoritoRoot = new FavoritoRoot(id_usuario, id_noticia);
 
                     LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + favoritoRoot.toString());
 
@@ -127,7 +127,7 @@ public class MsgImpl implements Msg {
     public void procesarListaFavUsuario() {
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 

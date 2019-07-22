@@ -32,7 +32,7 @@ public class RabbitMQ {
         }
     }
 
-    private static Connection getConnection() throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException, IOException, TimeoutException {
+    static Connection getConnection() throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException, IOException, TimeoutException {
         if (connection == null) {
             connection = RabbitMQ.getFactory().newConnection();
             LOGGER.info("Creando conexion");
@@ -42,33 +42,4 @@ public class RabbitMQ {
             return connection;
         }
     }
-
-    public static Channel getChannel() throws URISyntaxException, IOException, TimeoutException, NoSuchAlgorithmException, KeyManagementException {
-        if (channel == null) {
-            channel = RabbitMQ.getConnection().createChannel();
-            LOGGER.info("Creando canal");
-            return channel;
-        } else {
-            LOGGER.info("Reusando canal");
-            return channel;
-        }
-    }
-
-    /*public static boolean sendData(String nombre_cola, byte[] data) {
-        try {
-            factory = getFactory();
-            Connection connection = factory.newConnection();
-            Channel channel = connection.createChannel();
-            channel.queueDeclare(nombre_cola, false, false, false, null);
-            channel.basicPublish("", nombre_cola, null, data);
-            channel.close();
-            connection.close();
-            return true;
-
-        } catch (NoSuchAlgorithmException | KeyManagementException | URISyntaxException | IOException | TimeoutException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-    }*/
 }

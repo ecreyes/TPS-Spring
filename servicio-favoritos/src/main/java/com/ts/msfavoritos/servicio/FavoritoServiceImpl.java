@@ -53,10 +53,8 @@ public class FavoritoServiceImpl implements FavoritoService {
         List<Favorito> favoritoList = favoritoJpaRepository.findAllById_usuario(id_usuario);
 
         for (Favorito favorito : favoritoList) {
-            UsuarioIdVO usuarioIdVO = new UsuarioIdVO(favorito.getId_usuario());
-            NoticiaIdVO noticiaIdVO = new NoticiaIdVO(favorito.getId_noticia());
 
-            FavoritoRoot favoritoRoot = new FavoritoRoot(favorito.getId(), usuarioIdVO, noticiaIdVO,
+            FavoritoRoot favoritoRoot = new FavoritoRoot(favorito.getId(), favorito.getId_usuario(),favorito.getId_noticia(),
                     favorito.getFecha_favorito());
 
             favoritoRootList.add(favoritoRoot);

@@ -4,7 +4,7 @@ public class EstadoCategoriaVO {
 
     private String estado;
 
-    public EstadoCategoriaVO(String estado) {
+    EstadoCategoriaVO(String estado) {
         this.estado = estado;
     }
 

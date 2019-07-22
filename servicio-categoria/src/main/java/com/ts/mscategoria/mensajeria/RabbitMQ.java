@@ -31,7 +31,7 @@ class RabbitMQ {
         }
     }
 
-    private static Connection getConnection() throws NoSuchAlgorithmException, KeyManagementException,
+    static Connection getConnection() throws NoSuchAlgorithmException, KeyManagementException,
             URISyntaxException, IOException, TimeoutException {
         if (connection == null) {
             connection = RabbitMQ.getFactory().newConnection();
@@ -40,18 +40,6 @@ class RabbitMQ {
         } else {
             LOGGER.info("Reusando conexion");
             return connection;
-        }
-    }
-
-    static Channel getChannel() throws URISyntaxException, IOException, TimeoutException, NoSuchAlgorithmException,
-            KeyManagementException {
-        if (channel == null) {
-            channel = RabbitMQ.getConnection().createChannel();
-            LOGGER.info("Creando canal");
-            return channel;
-        } else {
-            LOGGER.info("Reusando canal");
-            return channel;
         }
     }
 

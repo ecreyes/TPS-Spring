@@ -4,7 +4,7 @@ public class NoticiaIdVO {
 
     private int id;
 
-    public NoticiaIdVO(int id) {
+    NoticiaIdVO(int id) {
         this.id = id;
     }
 

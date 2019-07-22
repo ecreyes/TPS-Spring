@@ -2,7 +2,6 @@ package com.ts.mscategoria.servicio;
 
 
 import com.ts.mscategoria.dominio.CategoriaRoot;
-import com.ts.mscategoria.dominio.EstadoCategoriaVO;
 import com.ts.mscategoria.repositorio.CategoriaJpaRepository;
 import com.ts.mscategoria.repositorio.entidad.Categoria;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,10 +34,8 @@ public class CategoriaServiceImpl implements CategoriaService {
 
         for (Categoria categoria : categoriaList) {
 
-            EstadoCategoriaVO estadoCategoriaVO = new EstadoCategoriaVO(categoria.getEstado());
-
             CategoriaRoot categoriaRoot = new CategoriaRoot(categoria.getId(), categoria.getNombre(),
-                    estadoCategoriaVO);
+                    categoria.getEstado());
 
             categoriaRootList.add(categoriaRoot);
         }

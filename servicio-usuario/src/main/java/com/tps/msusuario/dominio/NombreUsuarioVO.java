@@ -4,7 +4,7 @@ public class NombreUsuarioVO {
 
     private String nombreUsuario;
 
-    public NombreUsuarioVO(String nombreUsuario) {
+    NombreUsuarioVO(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
     }
 

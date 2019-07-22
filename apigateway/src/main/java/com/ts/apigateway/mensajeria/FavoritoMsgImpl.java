@@ -46,7 +46,7 @@ public class FavoritoMsgImpl implements FavoritoMsg {
     public void enviarMsg(Favorito favorito, String route_key) {
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
@@ -74,7 +74,7 @@ public class FavoritoMsgImpl implements FavoritoMsg {
         List<Favorito> favoritoList = new ArrayList<>();
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
@@ -118,10 +118,11 @@ public class FavoritoMsgImpl implements FavoritoMsg {
 
             String json = response.take();
             channel.basicCancel(ctag);
+
+            //JSON PARSE
             JsonArray jsonArray = new JsonParser().parse(json).getAsJsonArray();
 
             for (int i = 0; i < jsonArray.size(); i++) {
-
 
                 JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
                 Favorito favorito = new Favorito(jsonObject.get("id").getAsInt(),

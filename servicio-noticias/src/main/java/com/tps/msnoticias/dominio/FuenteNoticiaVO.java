@@ -4,7 +4,7 @@ public class FuenteNoticiaVO {
 
     private String fuente;
 
-    public FuenteNoticiaVO(String fuente) {
+    FuenteNoticiaVO(String fuente) {
         this.fuente = fuente;
     }
 

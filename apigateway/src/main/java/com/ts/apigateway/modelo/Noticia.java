@@ -8,20 +8,20 @@ public class Noticia {
     private String autor;
     private String url;
     private String fuente;
-    private String categoria;
+    private String id_categoria;
 
     public Noticia() {
     }
 
     public Noticia(int id, String titular, String descripcion, String autor, String url, String fuente,
-                   String categoria) {
+                   String id_categoria) {
         this.id = id;
         this.titular = titular;
         this.descripcion = descripcion;
         this.autor = autor;
         this.url = url;
         this.fuente = fuente;
-        this.categoria = categoria;
+        this.id_categoria = id_categoria;
     }
 
     public int getId() {
@@ -72,12 +72,12 @@ public class Noticia {
         this.fuente = fuente;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getId_categoria() {
+        return id_categoria;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setId_categoria(String id_categoria) {
+        this.id_categoria = id_categoria;
     }
 
     @Override
@@ -89,7 +89,7 @@ public class Noticia {
                 ", autor='" + autor + '\'' +
                 ", url='" + url + '\'' +
                 ", fuente='" + fuente + '\'' +
-                ", categoria='" + categoria + '\'' +
+                ", id_categoria='" + id_categoria + '\'' +
                 '}';
     }
 }

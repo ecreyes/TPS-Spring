@@ -15,25 +15,37 @@ public class NoticiaRoot {
 
     //Contructor para edicion
     public NoticiaRoot(int id, String titular, String descripcion, String autor, String url,
-                       FuenteNoticiaVO fuenteNoticiaVO, CategoriaNoticiaVO categoriaNoticiaVO) {
+                       String fuenteNoticiaVO, int id_categoria) {
         this.id = id;
         this.titular = titular;
         this.descripcion = descripcion;
         this.autor = autor;
         this.url = url;
-        this.fuenteNoticiaVO = fuenteNoticiaVO;
-        this.categoriaNoticiaVO = categoriaNoticiaVO;
+        this.fuenteNoticiaVO = new FuenteNoticiaVO(fuenteNoticiaVO);
+        this.categoriaNoticiaVO = new CategoriaNoticiaVO(id_categoria);
     }
 
     //Constructor para creacion
-    public NoticiaRoot(String titular, String descripcion, String autor, String url, FuenteNoticiaVO fuenteNoticiaVO,
-                       CategoriaNoticiaVO categoriaNoticiaVO) {
+    public NoticiaRoot(String titular, String descripcion, String autor, String url, String fuenteNoticiaVO,
+                       int id_categoria) {
         this.titular = titular;
         this.descripcion = descripcion;
         this.autor = autor;
         this.url = url;
-        this.fuenteNoticiaVO = fuenteNoticiaVO;
-        this.categoriaNoticiaVO = categoriaNoticiaVO;
+        this.fuenteNoticiaVO = new FuenteNoticiaVO(fuenteNoticiaVO);
+        this.categoriaNoticiaVO = new CategoriaNoticiaVO(id_categoria);
+    }
+
+    //Constructor para get Categorias
+    public NoticiaRoot(int id, String titular, String descripcion, String autor, String url, String fuenteNoticiaVO,
+                       int id_categoria, String nombre_categoria) {
+        this.id = id;
+        this.titular = titular;
+        this.descripcion = descripcion;
+        this.autor = autor;
+        this.url = url;
+        this.fuenteNoticiaVO = new FuenteNoticiaVO(fuenteNoticiaVO);
+        this.categoriaNoticiaVO = new CategoriaNoticiaVO(id_categoria, nombre_categoria);
     }
 
     //Constructor para eliminacion

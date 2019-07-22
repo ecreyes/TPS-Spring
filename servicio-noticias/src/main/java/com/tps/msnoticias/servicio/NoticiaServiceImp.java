@@ -3,8 +3,6 @@ package com.tps.msnoticias.servicio;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.tps.msnoticias.dominio.CategoriaNoticiaVO;
-import com.tps.msnoticias.dominio.FuenteNoticiaVO;
 import com.tps.msnoticias.dominio.NoticiaRoot;
 import com.tps.msnoticias.repositorio.NoticiaJpaRepository;
 import com.tps.msnoticias.repositorio.entidad.Noticia;
@@ -43,21 +41,19 @@ public class NoticiaServiceImp implements NoticiaService {
 
         for (Noticia noticia : noticiaList) {
 
-            FuenteNoticiaVO fuenteNoticiaVO = new FuenteNoticiaVO(noticia.getFuente());
-            CategoriaNoticiaVO categoriaNoticiaVO = null;
-
+            NoticiaRoot noticiaRoot = null;
             for (int i = 0; i < jsonArray.size(); i++) {
 
                 JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
 
                 if (noticia.getId_categoria() == jsonObject.get("id").getAsInt()) {
-                    categoriaNoticiaVO = new CategoriaNoticiaVO(noticia.getId_categoria(),
+
+                    noticiaRoot = new NoticiaRoot(noticia.getId(), noticia.getTitular(), noticia.getDescripcion()
+                            , noticia.getAutor(), noticia.getUrl(), noticia.getFuente(),
+                            jsonObject.get("id").getAsInt(),
                             jsonObject.get("nombre").getAsString());
                 }
             }
-            NoticiaRoot noticiaRoot = new NoticiaRoot(noticia.getId(), noticia.getTitular(), noticia.getDescripcion()
-                    , noticia.getAutor(), noticia.getUrl(), fuenteNoticiaVO, categoriaNoticiaVO);
-
             noticiaRootList.add(noticiaRoot);
         }
         return noticiaRootList;

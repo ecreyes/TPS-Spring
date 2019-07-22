@@ -9,31 +9,31 @@ public class UsuarioRoot {
     private EstadoUsuarioVO estadoUsuarioVO;
 
     //Contructor editar
-    public UsuarioRoot(int id, NombreUsuarioVO nombreUsuarioVO, String email, String password,
-                       EstadoUsuarioVO estadoUsuarioVO) {
+    public UsuarioRoot(int id, String nombreUsuarioVO, String email, String password,
+                       String estadoUsuarioVO) {
         this.id = id;
-        this.nombreUsuarioVO = nombreUsuarioVO;
+        this.nombreUsuarioVO = new NombreUsuarioVO(nombreUsuarioVO);
         this.email = email;
         this.password = password;
-        this.estadoUsuarioVO = estadoUsuarioVO;
+        this.estadoUsuarioVO = new EstadoUsuarioVO(estadoUsuarioVO);
     }
 
     //Contructor crear
-    public UsuarioRoot(NombreUsuarioVO nombreUsuarioVO, String email, String password,
-                       EstadoUsuarioVO estadoUsuarioVO) {
-        this.nombreUsuarioVO = nombreUsuarioVO;
+    public UsuarioRoot(String nombreUsuarioVO, String email, String password,
+                       String estadoUsuarioVO) {
+        this.nombreUsuarioVO = new NombreUsuarioVO(nombreUsuarioVO);
         this.email = email;
         this.password = password;
-        this.estadoUsuarioVO = estadoUsuarioVO;
+        this.estadoUsuarioVO = new EstadoUsuarioVO(estadoUsuarioVO);
     }
 
     //Constructor login
-    public UsuarioRoot(int id, NombreUsuarioVO nombreUsuarioVO, String email,
-                       EstadoUsuarioVO estadoUsuarioVO) {
+    public UsuarioRoot(int id, String nombreUsuarioVO, String email,
+                       String estadoUsuarioVO) {
         this.id = id;
-        this.nombreUsuarioVO = nombreUsuarioVO;
+        this.nombreUsuarioVO = new NombreUsuarioVO(nombreUsuarioVO);
         this.email = email;
-        this.estadoUsuarioVO = estadoUsuarioVO;
+        this.estadoUsuarioVO = new EstadoUsuarioVO(estadoUsuarioVO);
     }
 
     //Contructor para eliminar

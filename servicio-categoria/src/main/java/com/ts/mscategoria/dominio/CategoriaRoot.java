@@ -7,16 +7,16 @@ public class CategoriaRoot {
     private EstadoCategoriaVO estadoCategoriaVO;
 
     //Constructor de creacion
-    public CategoriaRoot(String nombre, EstadoCategoriaVO estadoCategoriaVO) {
+    public CategoriaRoot(String nombre, String estadoCategoriaVO) {
         this.nombre = nombre;
-        this.estadoCategoriaVO = estadoCategoriaVO;
+        this.estadoCategoriaVO = new EstadoCategoriaVO(estadoCategoriaVO);
     }
 
     //Constructor de edicion
-    public CategoriaRoot(int id, String nombre, EstadoCategoriaVO estadoCategoriaVO) {
+    public CategoriaRoot(int id, String nombre, String estadoCategoriaVO) {
         this.id = id;
         this.nombre = nombre;
-        this.estadoCategoriaVO = estadoCategoriaVO;
+        this.estadoCategoriaVO = new EstadoCategoriaVO(estadoCategoriaVO);
     }
 
     //Constructor de eliminacion

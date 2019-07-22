@@ -4,7 +4,7 @@ public class UsuarioIdVO {
 
     private int id;
 
-    public UsuarioIdVO(int id) {
+    UsuarioIdVO(int id) {
         this.id = id;
     }
 

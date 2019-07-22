@@ -47,7 +47,7 @@ public class CategoriaMsgImpl implements CategoriaMsg {
     public void enviarMsg(Categoria categoria, String route_key) {
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
@@ -76,7 +76,7 @@ public class CategoriaMsgImpl implements CategoriaMsg {
         List<Categoria> categoriaList = new ArrayList<>();
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
             String correlation_id = UUID.randomUUID().toString();
@@ -113,6 +113,7 @@ public class CategoriaMsgImpl implements CategoriaMsg {
             String json = response.take();
             channel.basicCancel(ctag);
 
+            //JSON PARSE
             JsonArray jsonArray = new JsonParser().parse(json).getAsJsonArray();
 
             for (int i = 0; i < jsonArray.size(); i++) {

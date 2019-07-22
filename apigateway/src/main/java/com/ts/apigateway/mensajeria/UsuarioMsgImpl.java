@@ -39,7 +39,7 @@ public class UsuarioMsgImpl implements UsuarioMsg {
     public void enviarMsg(Usuario usuario, String route_key) {
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
@@ -49,6 +49,7 @@ public class UsuarioMsgImpl implements UsuarioMsg {
 
             channel.basicPublish(EXCHANGE_NAME, route_key, MessageProperties.PERSISTENT_TEXT_PLAIN, data);
             LOGGER.info("[x] Enviando por exchange '" + EXCHANGE_NAME + "' por ruta '" + route_key + "' ->" + new Gson().toJson(usuario));
+
         } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
             e.printStackTrace();
         }
@@ -67,7 +68,7 @@ public class UsuarioMsgImpl implements UsuarioMsg {
         String json = "";
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 

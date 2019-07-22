@@ -7,7 +7,6 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 import com.ts.mscategoria.dominio.CategoriaRoot;
-import com.ts.mscategoria.dominio.EstadoCategoriaVO;
 import com.ts.mscategoria.servicio.CategoriaService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -58,7 +57,7 @@ public class MsgImpl implements Msg {
     public void procesarCUD() {
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
@@ -83,10 +82,8 @@ public class MsgImpl implements Msg {
                 switch (delivery.getEnvelope().getRoutingKey()) {
                     case ROUTE_KEY_CREATE: {
 
-                        EstadoCategoriaVO estadoCategoriaVO =
-                                new EstadoCategoriaVO(jsonObject.get("estado").getAsString());
                         CategoriaRoot categoriaRoot = new CategoriaRoot(jsonObject.get("nombre").getAsString(),
-                                estadoCategoriaVO);
+                                jsonObject.get("estado").getAsString());
 
                         LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + categoriaRoot.toString());
 
@@ -103,10 +100,9 @@ public class MsgImpl implements Msg {
 
                     //Solicitudes de edicion de categorias
                     case ROUTE_KEY_EDIT: {
-                        EstadoCategoriaVO estadoCategoriaVO =
-                                new EstadoCategoriaVO(jsonObject.get("estado").getAsString());
+
                         CategoriaRoot categoriaRoot = new CategoriaRoot(jsonObject.get("id").getAsInt(), jsonObject.get(
-                                "nombre").getAsString(), estadoCategoriaVO);
+                                "nombre").getAsString(), jsonObject.get("estado").getAsString());
 
                         LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + categoriaRoot.toString());
 
@@ -122,7 +118,6 @@ public class MsgImpl implements Msg {
 
                     //Solicitudes de eliminar categorias
                     case ROUTE_KEY_DELETE: {
-
 
                         CategoriaRoot categoriaRoot = new CategoriaRoot(jsonObject.get("id").getAsInt());
 
@@ -157,7 +152,7 @@ public class MsgImpl implements Msg {
     public void procesarListaCategorias() {
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
@@ -186,14 +181,14 @@ public class MsgImpl implements Msg {
                 List<CategoriaRoot> categoriaRootList = categoriaService.obtenerCategorias();
 
                 //Construccion de JSON
-                List<Map<String,Object>> mapList = new ArrayList<>();
+                List<Map<String, Object>> mapList = new ArrayList<>();
 
-                for (CategoriaRoot categoriaRoot : categoriaRootList){
+                for (CategoriaRoot categoriaRoot : categoriaRootList) {
 
-                    Map<String,Object> map = new HashMap<>();
-                    map.put("id",categoriaRoot.getId());
-                    map.put("nombre",categoriaRoot.getNombre());
-                    map.put("estado",categoriaRoot.getEstadoCategoriaVO().getEstado());
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", categoriaRoot.getId());
+                    map.put("nombre", categoriaRoot.getNombre());
+                    map.put("estado", categoriaRoot.getEstadoCategoriaVO().getEstado());
 
                     mapList.add(map);
                 }
@@ -237,7 +232,7 @@ public class MsgImpl implements Msg {
     private void enviarListaCategorias() {
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
@@ -246,14 +241,14 @@ public class MsgImpl implements Msg {
             List<CategoriaRoot> categoriaRootList = categoriaService.obtenerCategorias();
 
             //Construccion de JSON
-            List<Map<String,Object>> mapList = new ArrayList<>();
+            List<Map<String, Object>> mapList = new ArrayList<>();
 
-            for (CategoriaRoot categoriaRoot : categoriaRootList){
+            for (CategoriaRoot categoriaRoot : categoriaRootList) {
 
-                Map<String,Object> map = new HashMap<>();
-                map.put("id",categoriaRoot.getId());
-                map.put("nombre",categoriaRoot.getNombre());
-                map.put("estado",categoriaRoot.getEstadoCategoriaVO().getEstado());
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", categoriaRoot.getId());
+                map.put("nombre", categoriaRoot.getNombre());
+                map.put("estado", categoriaRoot.getEstadoCategoriaVO().getEstado());
 
                 mapList.add(map);
             }

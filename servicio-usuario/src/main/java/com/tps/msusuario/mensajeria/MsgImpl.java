@@ -52,7 +52,7 @@ public class MsgImpl implements Msg {
     public void procesarCUD() {
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
@@ -77,13 +77,10 @@ public class MsgImpl implements Msg {
                     //Solicitud de creacion de usuario
                     case ROUTE_KEY_CREATE: {
 
-                        NombreUsuarioVO nombreUsuarioVO = new NombreUsuarioVO(jsonObject.get("username").getAsString());
-                        EstadoUsuarioVO estadoUsuarioVO = new EstadoUsuarioVO(jsonObject.get("estado").getAsString());
-
                         //Construccion agregado
-                        UsuarioRoot usuarioRoot = new UsuarioRoot(nombreUsuarioVO,
+                        UsuarioRoot usuarioRoot = new UsuarioRoot(jsonObject.get("username").getAsString(),
                                 jsonObject.get("email").getAsString(),
-                                jsonObject.get("password").getAsString(), estadoUsuarioVO);
+                                jsonObject.get("password").getAsString(), jsonObject.get("estado").getAsString());
 
                         LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot.toString());
 
@@ -96,14 +93,10 @@ public class MsgImpl implements Msg {
                     //Solicitudes de editar usuario
                     case ROUTE_KEY_EDIT: {
 
-                        NombreUsuarioVO nombreUsuarioVO =
-                                new NombreUsuarioVO(jsonObject.get("username").getAsString());
-                        EstadoUsuarioVO estadoUsuarioVO = new EstadoUsuarioVO(jsonObject.get("estado").getAsString());
-
                         //Construccion agregado
-                        UsuarioRoot usuarioRoot = new UsuarioRoot(jsonObject.get("id").getAsInt(), nombreUsuarioVO,
-                                jsonObject.get("email").getAsString(),
-                                jsonObject.get("password").getAsString(), estadoUsuarioVO);
+                        UsuarioRoot usuarioRoot = new UsuarioRoot(jsonObject.get("id").getAsInt(), jsonObject.get(
+                                "username").getAsString(), jsonObject.get("email").getAsString(), jsonObject.get(
+                                        "password").getAsString(), jsonObject.get("estado").getAsString());
 
                         LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot.toString());
 
@@ -147,7 +140,7 @@ public class MsgImpl implements Msg {
     public void procesarLogin() {
 
         try {
-            Channel channel = RabbitMQ.getChannel();
+            Channel channel = RabbitMQ.getConnection().createChannel();
 
             channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
