@@ -1,0 +1,124 @@
+version: '3.5'
+services:
+
+  #Definicion servicio mysql
+  mysql:
+    container_name: mysql
+    image: mysql
+    environment:
+      - MYSQL_DATABASE=mydb
+      - MYSQL_USER=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ROOT_HOST=%
+    ports:
+      - 3306:3306
+    networks:
+      - RED_TPS
+    restart: on-failure
+
+  #Definicion servicio msusuarios
+  msusuarios:
+    container_name: msusuarios
+    image: figonzal/msusuarios
+    networks:
+      - RED_TPS
+    depends_on:
+      - mysql
+
+  #Definicion servicio msfavoritos
+  msfavoritos:
+    container_name: msfavoritos
+    image: figonzal/msfavoritos
+    networks:
+      - RED_TPS
+    depends_on:
+      - mysql
+  
+  #Definicion servicio mscategorias
+  mscategorias:
+    container_name: mscategorias
+    image: figonzal/mscategorias
+    networks:
+      - RED_TPS
+    depends_on:
+      - mysql
+
+  #Definicion servicio msnoticias
+  msnoticias:
+    container_name: msnoticias
+    image: figonzal/msnoticias
+    networks:
+      - RED_TPS
+    depends_on:
+      - mysql
+      - mscategorias
+
+  #Definicion servicio apigateway
+  apigateway:
+    container_name: apigateway
+    image: figonzal/apigateway
+    ports:
+      - "8080:8080"
+    networks:
+      - RED_TPS
+    depends_on:
+      - mysql
+      - msusuarios
+      - msfavoritos
+      - mscategorias
+      - msnoticias
+
+  #Servicio de espera para apigateway
+  wait_for_apigateway:
+    container_name: w4d4
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - mysql
+      - mscategorias
+      - msusuarios
+      - msnoticias
+      - msfavoritos
+      - apigateway
+    networks:
+      - RED_TPS
+    command: apigateway:8080
+
+  #Servicio de espera para servicios no bases
+  wait_for_more_services:
+    container_name: w4d3
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - mysql
+      - mscategorias
+      - msusuarios
+      - msnoticias
+      - msfavoritos
+    networks:
+      - RED_TPS
+    command: msnoticias:8090 msusuarios:8090 msfavoritos:8090
+
+  #Servicio de espera para mscategoria (servicio base)
+  wait_for_mscategorias:
+    container_name: w4d2
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - mysql
+      - mscategorias
+    networks:
+      - RED_TPS
+    command: mscategorias:8090
+
+  #Servicio de espera para mysql
+  wait_for_mysql:
+    container_name: w4d
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - mysql
+    networks:
+      - RED_TPS
+    command: mysql:3306
+
+networks: 
+  RED_TPS:
+    name: RED_TPS
