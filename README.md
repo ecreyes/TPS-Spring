@@ -1,6 +1,24 @@
 # TPS
 
-### ApiGateway
+## Docker
+Imágenes docker de todos los servicios, disponibles en [docker hub](https://hub.docker.com/u/figonzal)
+### Modo auto con `Docker compose`
+Para ejecutar el sistema completo:
+ * `docker-compose up wait_for_mysql & docker-compose up wait_for_mscategorias & docker-compose up wait_for_more_services & docker-compose up wait_for_apigateway & docker rm -f w4d w4d2 w4d3 w4d4`
+
+### Modo manual
+Uso de docker para montar los microservicios.
+
+ * Crear la Red: ```docker network create RED_TPS```
+ * Imagen de mysql (no tener usado puerto 3306 en el pc): 
+ ```docker run --name mysql -e MYSQL_ROOT_HOST=% -e MYSQL_USER=root -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=mydb --network RED_TPS -p 3306:3306 -d  mysql```
+ * ApiGateway: ```docker run -d --name apigateway --network RED_TPS -p 8080:8080 figonzal/apigateway```
+ * MsCategorias: ```docker run -d --name mscategorias --network RED_TPS figonzal/mscategorias```
+ * MsUsuarios: ```docker run -d --name msusuarios --network RED_TPS figonzal/msusuarios```
+ * MsFavoritos: ```docker run -d --name msfavoritos --network RED_TPS figonzal/msfavoritos```
+ * MsNoticias: ```docker run -d --name msnoticias --network RED_TPS figonzal/msnoticias```
+
+## Acceso a Api-Gateway
 Se detallan los puntos de acceso al servicio
 * **Categorías**
   * http://localhost:8080/categorias,  Muestra un listado de categorías almacenadas en microservicio `mscategoria`
@@ -34,45 +52,34 @@ Se detallan los puntos de acceso al servicio
   * http://localhost:8080/usuario/login, loguear usuario via `POST`
     + Esquema -> ```{"email": "email@email.com","password": "pass1"}```
 
-## Docker
-Uso de docker para montar los microservicios.
-
- * Crear la Red: ```docker network create RED_TPS```
- * Imagen de mysql (no tener usado puerto 3306 en el pc): 
- ```docker run --name mysql -e MYSQL_ROOT_HOST=% -e MYSQL_USER=root -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=mydb --network RED_TPS -p 3306:3306 -d  mysql```
- * ApiGateway: ```docker run -d --name apigateway --network RED_TPS -p 8080:8080 figonzal/apigateway```
- * MsUsuarios: ```docker run -d --name msusuarios --network RED_TPS figonzal/msusuarios```
- * MsFavoritos: ```docker run -d --name msfavoritos --network RED_TPS figonzal/msfavoritos```
- * MsNoticias: ```docker run -d --name msnoticias --network RED_TPS figonzal/msnoticias```
- * MsCategorias: ```docker run -d --name mscategorias --network RED_TPS figonzal/mscategorias```
- 
- Comandos adicionales:
- * ver redes: `docker network ls`
- * ver contenedores: `docker container ps --all`
- * ver logs: `docker logs <nombre container>`
- * detener contenedor: `docker stop <nombre_container>`
-
+## Compilaciones `.jar`
+### MicroServicio Apigateway
+Se detalla como ejecutar el microservicio asociado
+* Via `Terminal`
+  * `mvn install`
+  * `java -jar target/apigateway-0.0.1-SNAPSHOT.jar`
+  
 ### MicroServicio Categoría
 Se detalla como ejecutar el microservicio asociado
 * Via `Terminal`
   * `mvn install`
-  * Micro servicio completo -> `java -jar target/mscategoria-0.0.1-SNAPSHOT.jar`
+  * `java -jar target/mscategoria-0.0.1-SNAPSHOT.jar`
     
 ### MicroServicio Noticia
 Se detalla como ejecutar el microservicio asociado
 * Via `Terminal`
   * `mvn install`
-  * Micro servicio completo -> `java -jar target/msnoticias-0.0.1-SNAPSHOT.jar`
+  * `java -jar target/msnoticias-0.0.1-SNAPSHOT.jar`
 
 ### MicroServicio Usuario
 Se detalla como ejecutar el microservicio asociado
 * Via `Terminal`
   * `mvn install`
-  * Micro servicio completo -> `java -jar target/msusuario-0.0.1-SNAPSHOT.jar`
+  * `java -jar target/msusuario-0.0.1-SNAPSHOT.jar`
  
 ### MicroServicio Favoritos
 Se detalla como ejecutar el microservicio asociado
 * Via `Terminal`
   * `mvn install`
-  * Micro servicio completo -> `java -jar target/msfavorito-0.0.1-SNAPSHOT.jar`
+  * `java -jar target/msfavorito-0.0.1-SNAPSHOT.jar`
    
