@@ -4,19 +4,42 @@
 Imágenes docker de todos los servicios, disponibles en [docker hub](https://hub.docker.com/u/figonzal)
 ### Modo auto con `Docker compose`
 Para ejecutar el sistema completo:
- * `docker-compose up wait_for_mysql & docker-compose up wait_for_mscategorias & docker-compose up wait_for_more_services & docker-compose up wait_for_apigateway & docker rm -f w4d w4d2 w4d3 w4d4`
+
+```sh
+$ docker-compose up wait_for_mysql & docker-compose up wait_for_mscategorias & docker-compose up wait_for_more_services & docker-compose up wait_for_apigateway & docker rm -f w4d w4d2 w4d3 w4d4
+```
 
 ### Modo manual
 Uso de docker para montar los microservicios.
 
- * Crear la Red: ```docker network create RED_TPS```
- * Imagen de mysql (no tener usado puerto 3306 en el pc): 
- ```docker run --name mysql -e MYSQL_ROOT_HOST=% -e MYSQL_USER=root -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=mydb --network RED_TPS -p 3306:3306 -d  mysql```
- * ApiGateway: ```docker run -d --name apigateway --network RED_TPS -p 8080:8080 figonzal/apigateway```
- * MsCategorias: ```docker run -d --name mscategorias --network RED_TPS figonzal/mscategorias```
- * MsUsuarios: ```docker run -d --name msusuarios --network RED_TPS figonzal/msusuarios```
- * MsFavoritos: ```docker run -d --name msfavoritos --network RED_TPS figonzal/msfavoritos```
- * MsNoticias: ```docker run -d --name msnoticias --network RED_TPS figonzal/msnoticias```
+ * Crear la Red: 
+ ```sh 
+ $ docker network create RED_TPS
+ ```
+ * Imagen de mysql: 
+ ```sh
+ $ docker run --name mysql --network RED_TPS -e MYSQL_DATABASE=tpsbd -e MYSQL_USER=tps -e MYSQL_RANDOM_ROOT_PASSWORD=yes -e MYSQL_PASSWORD=gcOiwC4P3vO5ZVft -d mysql
+ ```
+ * ApiGateway: 
+ ```sh
+ $ docker run -d --name apigateway --network RED_TPS -p 8080:8080 figonzal/apigateway
+ ```
+ * MsCategorias: 
+ ```sh
+ $ docker run -d --name mscategorias --network RED_TPS figonzal/mscategorias
+ ```
+ * MsUsuarios: 
+ ```sh
+ $ docker run -d --name msusuarios --network RED_TPS figonzal/msusuarios
+ ```
+ * MsFavoritos: 
+ ```sh
+ $ docker run -d --name msfavoritos --network RED_TPS figonzal/msfavoritos
+ ```
+ * MsNoticias: 
+ ```sh
+ $ docker run -d --name msnoticias --network RED_TPS figonzal/msnoticias
+ ```
 
 ## Acceso a Api-Gateway
 Se detallan los puntos de acceso al servicio
