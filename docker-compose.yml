@@ -6,16 +6,18 @@ services:
     container_name: mysql
     image: mysql
     environment:
-      - MYSQL_DATABASE=mydb
-      - MYSQL_USER=root
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=tpsbd
+      - MYSQL_USER=tps
+      - MYSQL_PASSWORD=gcOiwC4P3vO5ZVft
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
       - MYSQL_ROOT_HOST=%
     ports:
       - 3306:3306
     networks:
       - RED_TPS
     restart: on-failure
+    volumes:
+      - db-data:/var/lib/mysql
 
   #Definicion servicio msusuarios
   msusuarios:
@@ -122,3 +124,6 @@ services:
 networks: 
   RED_TPS:
     name: RED_TPS
+
+volumes:
+  db-data:
