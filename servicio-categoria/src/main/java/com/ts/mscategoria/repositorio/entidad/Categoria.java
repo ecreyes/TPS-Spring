@@ -6,51 +6,51 @@ import javax.persistence.*;
 @Table(name = "categoria")
 public class Categoria {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private int id;
+  @Id
+  @GeneratedValue
+  @Column(name = "id")
+  private int id;
 
-    @Column(name = "nombre")
-    private String nombre;
+  @Column(name = "nombre")
+  private String nombre;
 
-    @Column(name = "estado")
-    private String estado;
+  @Column(name = "estado")
+  private String estado;
 
-    public Categoria() {
-    }
+  public Categoria() {
+  }
 
-    public Categoria(String nombre, String estado) {
-        this.nombre = nombre;
-        this.estado = estado;
-    }
+  public Categoria(String nombre, String estado) {
+    this.nombre = nombre;
+    this.estado = estado;
+  }
 
-    public int getId() {
-        return id;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public String getNombre() {
-        return nombre;
-    }
+  public String getNombre() {
+    return nombre;
+  }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
 
-    public String getEstado() {
-        return estado;
-    }
+  public String getEstado() {
+    return estado;
+  }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+  public void setEstado(String estado) {
+    this.estado = estado;
+  }
 
-    @Override
-    public String toString() {
-        return "Categoria{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", estado='" + estado + '\'' +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Categoria{" +
+        "id=" + id +
+        ", nombre='" + nombre + '\'' +
+        ", estado='" + estado + '\'' +
+        '}';
+  }
 }

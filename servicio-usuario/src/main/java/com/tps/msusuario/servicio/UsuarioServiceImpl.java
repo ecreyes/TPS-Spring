@@ -13,74 +13,77 @@ import java.util.Map;
 @Service("usuarioService")
 public class UsuarioServiceImpl implements UsuarioService {
 
-    private final UsuarioJpaRepository usuarioJpaRepository;
+  private final UsuarioJpaRepository usuarioJpaRepository;
 
-    public UsuarioServiceImpl(@Qualifier("usuarioJpaRespository") UsuarioJpaRepository usuarioJpaRepository) {
-        this.usuarioJpaRepository = usuarioJpaRepository;
+  public UsuarioServiceImpl(
+      @Qualifier("usuarioJpaRespository") UsuarioJpaRepository usuarioJpaRepository) {
+    this.usuarioJpaRepository = usuarioJpaRepository;
+  }
+
+  @Override
+  public void agregar(UsuarioRoot usuarioRoot) {
+    Usuario usuario = new Usuario(usuarioRoot.getEmail(), usuarioRoot.getPassword(),
+        usuarioRoot.getNombreUsuarioVO().getNombreUsuario(),
+        usuarioRoot.getEstadoUsuarioVO().getEstado());
+    usuarioJpaRepository.save(usuario);
+  }
+
+  @Override
+  public void eliminar(UsuarioRoot usuarioRoot) {
+
+    if (usuarioJpaRepository.findById(usuarioRoot.getId()).isPresent()) {
+
+      usuarioJpaRepository.deleteById(usuarioRoot.getId());
     }
+  }
 
-    @Override
-    public void agregar(UsuarioRoot usuarioRoot) {
-        Usuario usuario = new Usuario(usuarioRoot.getEmail(), usuarioRoot.getPassword(),
-                usuarioRoot.getNombreUsuarioVO().getNombreUsuario(), usuarioRoot.getEstadoUsuarioVO().getEstado());
-        usuarioJpaRepository.save(usuario);
+  @Override
+  public void editar(UsuarioRoot usuarioRoot) {
+
+    if (usuarioJpaRepository.findById(usuarioRoot.getId()).isPresent()) {
+
+      Usuario usuario = usuarioJpaRepository.findById(usuarioRoot.getId()).get();
+
+      usuario.setEmail(usuarioRoot.getEmail());
+      usuario.setPassword(usuarioRoot.getPassword());
+      usuario.setNombreUsuario(usuarioRoot.getNombreUsuarioVO().getNombreUsuario());
+      usuario.setEstado(usuarioRoot.getEstadoUsuarioVO().getEstado());
+
+      usuarioJpaRepository.save(usuario);
     }
+  }
 
-    @Override
-    public void eliminar(UsuarioRoot usuarioRoot) {
+  @Override
+  public Map<String, Object> login(UsuarioRoot usuarioRoot) {
 
-        if (usuarioJpaRepository.findById(usuarioRoot.getId()).isPresent()) {
+    Usuario usuarioBd = usuarioJpaRepository.findUsuarioByEmail(usuarioRoot.getEmail());
 
-            usuarioJpaRepository.deleteById(usuarioRoot.getId());
-        }
+    Map<String, Object> result = new HashMap<>();
+
+    if (usuarioBd != null) {
+
+      //TODO: Mejorar seguridad
+      if (usuarioRoot.getPassword().equals(usuarioBd.getPassword()) && usuarioRoot.getEmail()
+          .equals(usuarioBd.getEmail())) {
+
+        //TODO: Quizas utilizar EstadoUsuarioVO para representar status de login
+        result.put("Login_estado", "OK");
+
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("id", usuarioBd.getId());
+        userMap.put("email", usuarioBd.getEmail());
+        userMap.put("username", usuarioBd.getNombreUsuario());
+
+        result.put("Usuario", userMap);
+        return result;
+
+      } else {
+        result.put("Login_estado", "PASS INCORRECTA");
+        return result;
+      }
+    } else {
+      result.put("Login_estado", "USUARIO NO EXISTE");
+      return result;
     }
-
-    @Override
-    public void editar(UsuarioRoot usuarioRoot) {
-
-        if (usuarioJpaRepository.findById(usuarioRoot.getId()).isPresent()) {
-
-            Usuario usuario = usuarioJpaRepository.findById(usuarioRoot.getId()).get();
-
-            usuario.setEmail(usuarioRoot.getEmail());
-            usuario.setPassword(usuarioRoot.getPassword());
-            usuario.setNombreUsuario(usuarioRoot.getNombreUsuarioVO().getNombreUsuario());
-            usuario.setEstado(usuarioRoot.getEstadoUsuarioVO().getEstado());
-
-            usuarioJpaRepository.save(usuario);
-        }
-    }
-
-    @Override
-    public Map<String, Object> login(UsuarioRoot usuarioRoot) {
-
-        Usuario usuario_bd = usuarioJpaRepository.findUsuarioByEmail(usuarioRoot.getEmail());
-
-        Map<String, Object> result = new HashMap<>();
-
-        if (usuario_bd != null) {
-
-            //TODO: Mejorar seguridad
-            if (usuarioRoot.getPassword().equals(usuario_bd.getPassword()) && usuarioRoot.getEmail().equals(usuario_bd.getEmail())) {
-
-                //TODO: Quizas utilizar EstadoUsuarioVO para representar status de login
-                result.put("Login_estado", "OK");
-
-                Map<String, Object> userMap = new HashMap<>();
-                userMap.put("id", usuario_bd.getId());
-                userMap.put("email", usuario_bd.getEmail());
-                userMap.put("username", usuario_bd.getNombreUsuario());
-
-                result.put("Usuario", userMap);
-                return result;
-
-            } else {
-                result.put("Login_estado", "PASS INCORRECTA");
-                return result;
-            }
-        } else {
-            result.put("Login_estado", "USUARIO NO EXISTE");
-            return result;
-        }
-    }
+  }
 }

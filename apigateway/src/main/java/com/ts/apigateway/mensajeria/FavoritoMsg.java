@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FavoritoMsg {
 
-    void enviarMsg(Favorito favorito, String route_key);
+  void enviarMsg(Favorito favorito, String routeKey);
 
-    List<Favorito> obtenerListaFavoritosUsuario(String id_usuario);
+  List<Favorito> obtenerListaFavoritosUsuario(String id_usuario);
 }

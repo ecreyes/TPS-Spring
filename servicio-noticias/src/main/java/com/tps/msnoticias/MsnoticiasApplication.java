@@ -8,22 +8,23 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class MsnoticiasApplication implements CommandLineRunner {
-    private final Msg msg;
 
-    public MsnoticiasApplication(@Qualifier("msgAdapter") Msg msg) {
-        this.msg = msg;
-    }
+  private final Msg msg;
 
-    public static void main(String[] args) {
-        SpringApplication.run(MsnoticiasApplication.class, args);
-    }
+  public MsnoticiasApplication(@Qualifier("msgAdapter") Msg msg) {
+    this.msg = msg;
+  }
 
-    @Override
-    public void run(String... args) {
+  public static void main(String[] args) {
+    SpringApplication.run(MsnoticiasApplication.class, args);
+  }
 
-        msg.procesarCUD();
-        msg.procesarListadoCategorias();
-        msg.procesarListadoNoticias();
+  @Override
+  public void run(String... args) {
 
-    }
+    msg.procesarCUD();
+    msg.procesarListadoCategorias();
+    msg.procesarListadoNoticias();
+
+  }
 }

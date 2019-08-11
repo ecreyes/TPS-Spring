@@ -9,20 +9,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MsfavoritosApplication implements CommandLineRunner {
 
-    private final Msg msg;
+  private final Msg msg;
 
-    public MsfavoritosApplication(@Qualifier("msgAdapter") Msg msg) {
-        this.msg = msg;
-    }
+  public MsfavoritosApplication(@Qualifier("msgAdapter") Msg msg) {
+    this.msg = msg;
+  }
 
-    public static void main(String[] args) {
-        SpringApplication.run(MsfavoritosApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(MsfavoritosApplication.class, args);
+  }
 
-    @Override
-    public void run(String... args) {
+  @Override
+  public void run(String... args) {
 
-        msg.procesarCD();
-        msg.procesarListaFavUsuario();
-    }
+    msg.procesarCD();
+    msg.procesarListaFavUsuario();
+  }
 }

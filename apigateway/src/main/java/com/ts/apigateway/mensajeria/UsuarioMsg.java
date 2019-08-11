@@ -4,7 +4,7 @@ import com.ts.apigateway.modelo.Usuario;
 
 public interface UsuarioMsg {
 
-    void enviarMsg(Usuario usuario, String route_key);
+  void enviarMsg(Usuario usuario, String routeKey);
 
-    String solicitarLogin(Usuario usuario);
+  String solicitarLogin(Usuario usuario);
 }

@@ -2,13 +2,13 @@ package com.tps.msusuario.dominio;
 
 public class NombreUsuarioVO {
 
-    private String nombreUsuario;
+  private String nombreUsuario;
 
-    NombreUsuarioVO(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
+  NombreUsuarioVO(String nombreUsuario) {
+    this.nombreUsuario = nombreUsuario;
+  }
 
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
+  public String getNombreUsuario() {
+    return nombreUsuario;
+  }
 }

@@ -1,74 +1,78 @@
 package com.ts.msfavoritos.repositorio.entidad;
 
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "favorito")
 public class Favorito {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private int id;
+  @Id
+  @GeneratedValue
+  @Column(name = "id")
+  private int id;
 
-    @Column(name = "id_noticia")
-    private int id_noticia;
+  @Column(name = "id_noticia")
+  private int idNoticia;
 
-    @Column(name = "id_usuario")
-    private int id_usuario;
+  @Column(name = "id_usuario")
+  private int idUsuario;
 
-    @Column(name = "fecha_favorito")
-    private String fecha_favorito;
+  @Column(name = "fecha_favorito")
+  private String fechaFavorito;
 
-    public Favorito() {
-    }
+  public Favorito() {
+  }
 
-    public Favorito(int id_noticia, int id_usuario, String fecha_favorito) {
-        this.id_noticia = id_noticia;
-        this.id_usuario = id_usuario;
-        this.fecha_favorito = fecha_favorito;
-    }
+  public Favorito(int idNoticia, int idUsuario, String fechaFavorito) {
+    this.idNoticia = idNoticia;
+    this.idUsuario = idUsuario;
+    this.fechaFavorito = fechaFavorito;
+  }
 
-    public int getId() {
-        return id;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public int getId_noticia() {
-        return id_noticia;
-    }
+  public int getIdNoticia() {
+    return idNoticia;
+  }
 
-    public void setId_noticia(int id_noticia) {
-        this.id_noticia = id_noticia;
-    }
+  public void setIdNoticia(int idNoticia) {
+    this.idNoticia = idNoticia;
+  }
 
-    public int getId_usuario() {
-        return id_usuario;
-    }
+  public int getIdUsuario() {
+    return idUsuario;
+  }
 
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
-    }
+  public void setIdUsuario(int idUsuario) {
+    this.idUsuario = idUsuario;
+  }
 
-    public String getFecha_favorito() {
-        return fecha_favorito;
-    }
+  public String getFechaFavorito() {
+    return fechaFavorito;
+  }
 
-    public void setFecha_favorito(String fecha_favorito) {
-        this.fecha_favorito = fecha_favorito;
-    }
+  public void setFechaFavorito(String fechaFavorito) {
+    this.fechaFavorito = fechaFavorito;
+  }
 
-    @Override
-    public String toString() {
-        return "Favorito{" +
-                "id_favorito=" + id +
-                ", id_noticia=" + id_noticia +
-                ", id_usuario=" + id_usuario +
-                ", fecha_favorito='" + fecha_favorito + '\'' +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Favorito{" +
+        "id=" + id +
+        ", idNoticia=" + idNoticia +
+        ", idUsuario=" + idUsuario +
+        ", fechaFavorito='" + fechaFavorito + '\'' +
+        '}';
+  }
 }

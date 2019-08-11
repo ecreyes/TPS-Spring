@@ -26,303 +26,312 @@ import java.util.concurrent.TimeoutException;
 @Component("msgAdapter")
 public class MsgImpl implements Msg {
 
-    //NOTICIA
-    private static final String EXCHANGE_NAME = "noticia_exchange";
+  //NOTICIA
+  private static final String EXCHANGE_NAME = "noticia_exchange";
 
-    private static final String ROUTE_KEY_CREATE = "noticia.crear";
-    private static final String ROUTE_KEY_EDIT = "noticia.editar";
-    private static final String ROUTE_KEY_DELETE = "noticia.eliminar";
+  private static final String ROUTE_KEY_CREATE = "noticia.crear";
+  private static final String ROUTE_KEY_EDIT = "noticia.editar";
+  private static final String ROUTE_KEY_DELETE = "noticia.eliminar";
 
-    private static final String ROUTE_KEY_LIST = "noticia.lista";
+  private static final String ROUTE_KEY_LIST = "noticia.lista";
 
-    private static final String QUEUE_REQUEST_CUD = "noticia_request_cud";
-    private static final String QUEUE_REQUEST_LIST = "noticia_request_list";
+  private static final String QUEUE_REQUEST_CUD = "noticia_request_cud";
+  private static final String QUEUE_REQUEST_LIST = "noticia_request_list";
 
-    //CATEGORIA
-    private static final String EXCHANGE_NAME_CAT = "categoria_exchange";
-    private static final String ROUTE_KEY_LIST_CAT = "categoria.lista";
-    private static final String ROUTE_KEY_LIST_CAT_SUBS = "noticia.lista.suscritos";
-    private static final String QUEUE_REQUEST_LIST_CAT = "noticia_susc_categoria";
-    private String jsonCategoriaList;
+  //CATEGORIA
+  private static final String EXCHANGE_NAME_CAT = "categoria_exchange";
+  private static final String ROUTE_KEY_LIST_CAT = "categoria.lista";
+  private static final String ROUTE_KEY_LIST_CAT_SUBS = "noticia.lista.suscritos";
+  private static final String QUEUE_REQUEST_LIST_CAT = "noticia_susc_categoria";
+  private String jsonCategoriaList;
 
-    private static final Log LOGGER = LogFactory.getLog(MsgImpl.class);
+  private static final Log LOGGER = LogFactory.getLog(MsgImpl.class);
 
-    private final NoticiaService noticiaService;
+  private final NoticiaService noticiaService;
 
-    public MsgImpl(@Qualifier("noticiaService") NoticiaService noticiaService) {
-        this.noticiaService = noticiaService;
-    }
+  public MsgImpl(@Qualifier("noticiaService") NoticiaService noticiaService) {
+    this.noticiaService = noticiaService;
+  }
 
-    /**
-     * Proceso de mensajeria encargado de CREAR, ACTUALIZAR y ELIMINAR noticias.
-     * (Suscripcion)
-     */
-    @Override
-    public void procesarCUD() {
-        try {
-            Channel channel = RabbitMQ.getConnection().createChannel();
-            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+  /**
+   * Proceso de mensajeria encargado de CREAR, ACTUALIZAR y ELIMINAR noticias. (Suscripcion)
+   */
+  @Override
+  public void procesarCUD() {
+    try {
+      Channel channel = RabbitMQ.getConnection().createChannel();
+      channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
-            String receiver_queue = channel.queueDeclare(QUEUE_REQUEST_CUD, true, false, false, null).getQueue();
+      String receiverQueue = channel.queueDeclare(QUEUE_REQUEST_CUD, true, false, false, null)
+          .getQueue();
 
-            LOGGER.info("Creando queue: " + receiver_queue);
+      LOGGER.info("Creando queue: " + receiverQueue);
 
-            //Configuracion de rutas
-            channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_CREATE);
-            channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_EDIT);
-            channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_DELETE);
+      //Configuracion de rutas
+      channel.queueBind(receiverQueue, EXCHANGE_NAME, ROUTE_KEY_CREATE);
+      channel.queueBind(receiverQueue, EXCHANGE_NAME, ROUTE_KEY_EDIT);
+      channel.queueBind(receiverQueue, EXCHANGE_NAME, ROUTE_KEY_DELETE);
 
-            LOGGER.info("[*] Esperando por solicitudes de (Creacion - Edicion - Eliminacion) de noticias. Para salir " +
-                    "presiona CTRL+C");
+      LOGGER.info(
+          "[*] Esperando por solicitudes de (Creacion - Edicion - Eliminacion) de noticias. Para salir "
+              +
+              "presiona CTRL+C");
 
-            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+      DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
-                String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
 
-                switch (delivery.getEnvelope().getRoutingKey()) {
+        switch (delivery.getEnvelope().getRoutingKey()) {
 
-                    //Solicitudes de creacion de noticias
-                    case ROUTE_KEY_CREATE: {
+          //Solicitudes de creacion de noticias
+          case ROUTE_KEY_CREATE: {
 
-                        NoticiaRoot noticiaRoot = new NoticiaRoot(jsonObject.get("titular").getAsString(),
-                                jsonObject.get("descripcion").getAsString(), jsonObject.get("autor").getAsString(),
-                                jsonObject.get("url").getAsString(), jsonObject.get("fuente").getAsString(),
-                                jsonObject.get("id_categoria").getAsInt());
+            NoticiaRoot noticiaRoot = new NoticiaRoot(jsonObject.get("titular").getAsString(),
+                jsonObject.get("descripcion").getAsString(), jsonObject.get("autor").getAsString(),
+                jsonObject.get("url").getAsString(), jsonObject.get("fuente").getAsString(),
+                jsonObject.get("id_categoria").getAsInt());
 
-                        LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + noticiaRoot.toString());
+            LOGGER.info(
+                "[x] Recibido por queue '" + receiverQueue + "' -> " + noticiaRoot.toString());
 
-                        //Persistir noticia
-                        noticiaService.agregar(noticiaRoot);
+            //Persistir noticia
+            noticiaService.agregar(noticiaRoot);
 
-                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 
-                        break;
-                    }
+            break;
+          }
 
-                    //Solicitudes de edicion de noticias
-                    case ROUTE_KEY_EDIT: {
+          //Solicitudes de edicion de noticias
+          case ROUTE_KEY_EDIT: {
 
-                        NoticiaRoot noticiaRoot = new NoticiaRoot(jsonObject.get("id").getAsInt(), jsonObject.get(
-                                "titular").getAsString(),
-                                jsonObject.get("descripcion").getAsString(), jsonObject.get("autor").getAsString(),
-                                jsonObject.get("url").getAsString(), jsonObject.get("fuente").getAsString(),
-                                jsonObject.get("id_categoria").getAsInt());
+            NoticiaRoot noticiaRoot = new NoticiaRoot(jsonObject.get("id").getAsInt(),
+                jsonObject.get(
+                    "titular").getAsString(),
+                jsonObject.get("descripcion").getAsString(), jsonObject.get("autor").getAsString(),
+                jsonObject.get("url").getAsString(), jsonObject.get("fuente").getAsString(),
+                jsonObject.get("id_categoria").getAsInt());
 
-                        LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + noticiaRoot.toString());
+            LOGGER.info(
+                "[x] Recibido por queue '" + receiverQueue + "' -> " + noticiaRoot.toString());
 
-                        noticiaService.editar(noticiaRoot);
+            noticiaService.editar(noticiaRoot);
 
-                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 
-                        break;
-                    }
+            break;
+          }
 
-                    //Solicitudes de eliminacion de noticias
-                    case ROUTE_KEY_DELETE: {
+          //Solicitudes de eliminacion de noticias
+          case ROUTE_KEY_DELETE: {
 
-                        NoticiaRoot noticiaRoot = new NoticiaRoot(jsonObject.get("id").getAsInt());
+            NoticiaRoot noticiaRoot = new NoticiaRoot(jsonObject.get("id").getAsInt());
 
-                        LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + noticiaRoot.toString());
+            LOGGER.info(
+                "[x] Recibido por queue '" + receiverQueue + "' -> " + noticiaRoot.toString());
 
-                        //eliminar noticia
-                        noticiaService.eliminar(noticiaRoot);
+            //eliminar noticia
+            noticiaService.eliminar(noticiaRoot);
 
-                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 
-                        break;
-                    }
-                }
-            };
-
-            boolean autoAck = false;
-            channel.basicConsume(receiver_queue, autoAck, deliverCallback, (consumerTag) -> {
-            });
-
-        } catch (NoSuchAlgorithmException | KeyManagementException | URISyntaxException | IOException | TimeoutException e) {
-            e.printStackTrace();
+            break;
+          }
         }
+      };
+
+      boolean autoAck = false;
+      channel.basicConsume(receiverQueue, autoAck, deliverCallback, (consumerTag) -> {
+      });
+
+    } catch (NoSuchAlgorithmException | KeyManagementException | URISyntaxException | IOException | TimeoutException e) {
+      e.printStackTrace();
     }
+  }
 
-    /**
-     * Proceso de mensajeria encargado de enviar listado de noticias.
-     * (Request-Response Sincronico a solicitudes desde Apigateway)
-     */
-    @Override
-    public void procesarListadoNoticias() {
+  /**
+   * Proceso de mensajeria encargado de enviar listado de noticias. (Request-Response Sincronico a
+   * solicitudes desde Apigateway)
+   */
+  @Override
+  public void procesarListadoNoticias() {
 
-        try {
-            Channel channel = RabbitMQ.getConnection().createChannel();
+    try {
+      Channel channel = RabbitMQ.getConnection().createChannel();
 
-            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
-            String receiver_queue = channel.queueDeclare(QUEUE_REQUEST_LIST, false, false, false, null).getQueue();
+      channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+      String receiverQueue = channel.queueDeclare(QUEUE_REQUEST_LIST, false, false, false, null)
+          .getQueue();
 
-            //CONFIGURACION DE RUTAS
-            channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_LIST);
+      //CONFIGURACION DE RUTAS
+      channel.queueBind(receiverQueue, EXCHANGE_NAME, ROUTE_KEY_LIST);
 
-            LOGGER.info("Creando queue: " + receiver_queue);
-            LOGGER.info("[*] Esperando por solicitudes de lista noticias. Para salir presiona CTRL+C");
+      LOGGER.info("Creando queue: " + receiverQueue);
+      LOGGER.info("[*] Esperando por solicitudes de lista noticias. Para salir presiona CTRL+C");
 
-            Object monitor = new Object();
+      Object monitor = new Object();
 
-            //RECEPCION DE SOLICITUDES
-            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+      //RECEPCION DE SOLICITUDES
+      DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
-                String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                LOGGER.info("[x] Solicitud de listado de noticias desde '" + json + "'");
+        String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
+        LOGGER.info("[x] Solicitud de listado de noticias desde '" + json + "'");
 
-                AMQP.BasicProperties reply_props = new AMQP.BasicProperties
-                        .Builder()
-                        .correlationId(delivery.getProperties().getCorrelationId())
-                        .build();
+        AMQP.BasicProperties replyProps = new AMQP.BasicProperties
+            .Builder()
+            .correlationId(delivery.getProperties().getCorrelationId())
+            .build();
 
-                List<NoticiaRoot> noticiaRootList = noticiaService.obtenerNoticias(jsonCategoriaList);
+        List<NoticiaRoot> noticiaRootList = noticiaService.obtenerNoticias(jsonCategoriaList);
 
-                //Construccion JSON
-                List<Map<String, Object>> mapList = new ArrayList<>();
+        //Construccion JSON
+        List<Map<String, Object>> mapList = new ArrayList<>();
 
-                for (NoticiaRoot noticiaRoot : noticiaRootList) {
+        for (NoticiaRoot noticiaRoot : noticiaRootList) {
 
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("id", noticiaRoot.getId());
-                    map.put("titular", noticiaRoot.getTitular());
-                    map.put("descripcion", noticiaRoot.getDescripcion());
-                    map.put("autor", noticiaRoot.getAutor());
-                    map.put("url", noticiaRoot.getUrl());
-                    map.put("fuente", noticiaRoot.getFuenteNoticiaVO().getFuente());
-                    map.put("categoria", noticiaRoot.getCategoriaNoticiaVO().getNombre());
+          Map<String, Object> map = new HashMap<>();
+          map.put("id", noticiaRoot.getId());
+          map.put("titular", noticiaRoot.getTitular());
+          map.put("descripcion", noticiaRoot.getDescripcion());
+          map.put("autor", noticiaRoot.getAutor());
+          map.put("url", noticiaRoot.getUrl());
+          map.put("fuente", noticiaRoot.getFuenteNoticiaVO().getFuente());
+          map.put("categoria", noticiaRoot.getCategoriaNoticiaVO().getNombre());
 
-                    mapList.add(map);
-                }
-
-                byte[] data = (new Gson().toJson(mapList).getBytes(StandardCharsets.UTF_8));
-
-                //Enviarlo por cola unica (reply_to)
-                channel.basicPublish("", delivery.getProperties().getReplyTo(), reply_props, data);
-
-                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + mapList
-                        .toString());
-
-                synchronized (monitor) {
-                    monitor.notify();
-                }
-            };
-
-            //En espera de solicitudes
-            channel.basicConsume(receiver_queue, true, deliverCallback, (consumerTag) -> {
-            });
-
-            while (true) {
-                synchronized (monitor) {
-                    try {
-                        monitor.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-        } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
-            e.printStackTrace();
+          mapList.add(map);
         }
 
-    }
+        byte[] data = (new Gson().toJson(mapList).getBytes(StandardCharsets.UTF_8));
 
-    /**
-     * Proceso de mensajeria encargado de suscribirse y recibir actualizaciones de listado de categorias
-     * enviadas desde Mscategoria
-     * (Suscripcion)
-     */
-    @Override
-    public void procesarListadoCategorias() {
+        //Enviarlo por cola unica (reply_to)
+        channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, data);
 
-        //Solicitar datos en primera partida
-        jsonCategoriaList = solicitarListadoCategorias();
+        LOGGER.info(
+            "[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + mapList
+                .toString());
 
-        try {
-            Channel channel = RabbitMQ.getConnection().createChannel();
-
-            channel.exchangeDeclare(EXCHANGE_NAME_CAT, "direct");
-
-            String receiver_queue = channel.queueDeclare(QUEUE_REQUEST_LIST_CAT, false, false, false, null).getQueue();
-
-            LOGGER.info("Creando queue: " + receiver_queue);
-
-            //Configuracion de rutas
-            channel.queueBind(receiver_queue, EXCHANGE_NAME_CAT, ROUTE_KEY_LIST_CAT_SUBS);
-
-            LOGGER.info("[*] Esperando por actualizaciones de categorias. Para salir presiona CTRL+C");
-
-            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-
-                String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
-
-                LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + json);
-
-                jsonCategoriaList = json;
-
-            };
-            channel.basicConsume(receiver_queue, true, deliverCallback, (consumerTag) -> {
-            });
-        } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
-            e.printStackTrace();
+        synchronized (monitor) {
+          monitor.notify();
         }
+      };
+
+      //En espera de solicitudes
+      channel.basicConsume(receiverQueue, true, deliverCallback, (consumerTag) -> {
+      });
+
+      while (true) {
+        synchronized (monitor) {
+          try {
+            monitor.wait();
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+
+    } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
+      e.printStackTrace();
     }
 
-    /**
-     * Funcion encargada de solicitar listado de categorias a MsCategoria cuando
-     * MsNoticia se encuentra en partida en frio.
-     * (Request-response) Hacia mscategoria
-     */
-    private String solicitarListadoCategorias() {
+  }
 
-        String json = "";
-        try {
-            Channel channel = RabbitMQ.getConnection().createChannel();
+  /**
+   * Proceso de mensajeria encargado de suscribirse y recibir actualizaciones de listado de
+   * categorias enviadas desde Mscategoria (Suscripcion)
+   */
+  @Override
+  public void procesarListadoCategorias() {
 
-            channel.exchangeDeclare(EXCHANGE_NAME_CAT, "direct");
+    //Solicitar datos en primera partida
+    jsonCategoriaList = solicitarListadoCategorias();
 
-            String correlation_id = UUID.randomUUID().toString();
+    try {
+      Channel channel = RabbitMQ.getConnection().createChannel();
 
-            //Queue de respuesta (Queue aleatoria)
-            String receiver_queue = channel.queueDeclare().getQueue();
-            LOGGER.info("Creando queue receptora: " + receiver_queue);
+      channel.exchangeDeclare(EXCHANGE_NAME_CAT, "direct");
 
-            AMQP.BasicProperties properties = new AMQP.BasicProperties
-                    .Builder()
-                    .correlationId(correlation_id)
-                    .replyTo(receiver_queue)
-                    .build();
+      String receiverQueue = channel
+          .queueDeclare(QUEUE_REQUEST_LIST_CAT, false, false, false, null).getQueue();
 
-            String consumer = "msnoticia";
-            byte[] data = consumer.getBytes(StandardCharsets.UTF_8);
+      LOGGER.info("Creando queue: " + receiverQueue);
 
-            //Publicacion hacia exchange con ruta adecuada
-            channel.basicPublish(EXCHANGE_NAME_CAT, ROUTE_KEY_LIST_CAT, properties, data);
-            LOGGER.info("[x] Solicitando lista categorias por exchange '" + EXCHANGE_NAME_CAT + "' por ruta '" + ROUTE_KEY_LIST_CAT + "'");
+      //Configuracion de rutas
+      channel.queueBind(receiverQueue, EXCHANGE_NAME_CAT, ROUTE_KEY_LIST_CAT_SUBS);
 
-            //RECEPCION DE MENSAJES DESDE MSCATEGORIA
-            BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
+      LOGGER.info("[*] Esperando por actualizaciones de categorias. Para salir presiona CTRL+C");
 
-            String ctag = channel.basicConsume(receiver_queue, true, (consumerTag, delivery) -> {
+      DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
-                if (delivery.getProperties().getCorrelationId().equals(correlation_id)) {
-                    response.offer(new String(delivery.getBody(), StandardCharsets.UTF_8));
-                }
+        String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
 
-            }, consumerTag -> {
-            });
+        LOGGER.info("[x] Recibido por queue '" + receiverQueue + "' -> " + json);
 
-            json = response.take();
-            channel.basicCancel(ctag);
+        jsonCategoriaList = json;
 
-            LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + json);
+      };
+      channel.basicConsume(receiverQueue, true, deliverCallback, (consumerTag) -> {
+      });
+    } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
+      e.printStackTrace();
+    }
+  }
 
-        } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | InterruptedException | KeyManagementException e) {
-            e.printStackTrace();
+  /**
+   * Funcion encargada de solicitar listado de categorias a MsCategoria cuando MsNoticia se
+   * encuentra en partida en frio. (Request-response) Hacia mscategoria
+   */
+  private String solicitarListadoCategorias() {
+
+    String json = "";
+    try {
+      Channel channel = RabbitMQ.getConnection().createChannel();
+
+      channel.exchangeDeclare(EXCHANGE_NAME_CAT, "direct");
+
+      String correlationId = UUID.randomUUID().toString();
+
+      //Queue de respuesta (Queue aleatoria)
+      String receiverQueue = channel.queueDeclare().getQueue();
+      LOGGER.info("Creando queue receptora: " + receiverQueue);
+
+      AMQP.BasicProperties properties = new AMQP.BasicProperties
+          .Builder()
+          .correlationId(correlationId)
+          .replyTo(receiverQueue)
+          .build();
+
+      String consumer = "msnoticia";
+      byte[] data = consumer.getBytes(StandardCharsets.UTF_8);
+
+      //Publicacion hacia exchange con ruta adecuada
+      channel.basicPublish(EXCHANGE_NAME_CAT, ROUTE_KEY_LIST_CAT, properties, data);
+      LOGGER.info(
+          "[x] Solicitando lista categorias por exchange '" + EXCHANGE_NAME_CAT + "' por ruta '"
+              + ROUTE_KEY_LIST_CAT + "'");
+
+      //RECEPCION DE MENSAJES DESDE MSCATEGORIA
+      BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
+
+      String ctag = channel.basicConsume(receiverQueue, true, (consumerTag, delivery) -> {
+
+        if (delivery.getProperties().getCorrelationId().equals(correlationId)) {
+          response.offer(new String(delivery.getBody(), StandardCharsets.UTF_8));
         }
 
-        return json;
+      }, consumerTag -> {
+      });
+
+      json = response.take();
+      channel.basicCancel(ctag);
+
+      LOGGER.info("[x] Recibido por queue '" + receiverQueue + "' -> " + json);
+
+    } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | InterruptedException | KeyManagementException e) {
+      e.printStackTrace();
     }
+
+    return json;
+  }
 
 }

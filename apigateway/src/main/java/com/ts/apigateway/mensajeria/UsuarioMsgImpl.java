@@ -22,96 +22,97 @@ import java.util.concurrent.TimeoutException;
 @Component("usuarioMsgAdapter")
 public class UsuarioMsgImpl implements UsuarioMsg {
 
-    private static final String EXCHANGE_NAME = "usuario_exchange";
+  private static final String EXCHANGE_NAME = "usuario_exchange";
 
-    private static final String ROUTE_KEY_LOGIN = "usuario.login";
+  private static final String ROUTE_KEY_LOGIN = "usuario.login";
 
-    private static final Log LOGGER = LogFactory.getLog(UsuarioMsgImpl.class);
+  private static final Log LOGGER = LogFactory.getLog(UsuarioMsgImpl.class);
 
-    /**
-     * Envio de solicitudes de usuarios hacia exchange
-     * (Publicacion)
-     *
-     * @param usuario   Objecto con datos de usuario enviado a MsUsuario
-     * @param route_key Ruta utilizada para diferenciar operacion (Create,edit,delete)
-     */
-    @Override
-    public void enviarMsg(Usuario usuario, String route_key) {
+  /**
+   * Envio de solicitudes de usuarios hacia exchange (Publicacion)
+   *
+   * @param usuario   Objecto con datos de usuario enviado a MsUsuario
+   * @param routeKey Ruta utilizada para diferenciar operacion (Create,edit,delete)
+   */
+  @Override
+  public void enviarMsg(Usuario usuario, String routeKey) {
 
-        try {
-            Channel channel = RabbitMQ.getConnection().createChannel();
+    try {
+      Channel channel = RabbitMQ.getConnection().createChannel();
 
-            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+      channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
-            LOGGER.info("Creando exchange: " + EXCHANGE_NAME);
+      LOGGER.info("Creando exchange: " + EXCHANGE_NAME);
 
-            byte[] data = (new Gson().toJson(usuario)).getBytes(StandardCharsets.UTF_8);
+      byte[] data = (new Gson().toJson(usuario)).getBytes(StandardCharsets.UTF_8);
 
-            channel.basicPublish(EXCHANGE_NAME, route_key, MessageProperties.PERSISTENT_TEXT_PLAIN, data);
-            LOGGER.info("[x] Enviando por exchange '" + EXCHANGE_NAME + "' por ruta '" + route_key + "' ->" + new Gson().toJson(usuario));
+      channel.basicPublish(EXCHANGE_NAME, routeKey, MessageProperties.PERSISTENT_TEXT_PLAIN, data);
+      LOGGER.info(
+          "[x] Enviando por exchange '" + EXCHANGE_NAME + "' por ruta '" + routeKey + "' ->"
+              + new Gson().toJson(usuario));
 
-        } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
-            e.printStackTrace();
-        }
+    } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
+      e.printStackTrace();
     }
+  }
 
-    /**
-     * Funcion que solicita el login de un usuario en el sistema
-     * (Request-Response) desde MsUsuario
-     *
-     * @param usuario Objecto usuario con datos
-     * @return JSON con el estado de login
-     */
-    @Override
-    public String solicitarLogin(Usuario usuario) {
+  /**
+   * Funcion que solicita el login de un usuario en el sistema (Request-Response) desde MsUsuario
+   *
+   * @param usuario Objecto usuario con datos
+   * @return JSON con el estado de login
+   */
+  @Override
+  public String solicitarLogin(Usuario usuario) {
 
-        String json = "";
+    String json = "";
 
-        try {
-            Channel channel = RabbitMQ.getConnection().createChannel();
+    try {
+      Channel channel = RabbitMQ.getConnection().createChannel();
 
-            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+      channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
-            String correlation_id = UUID.randomUUID().toString();
+      String correlationId = UUID.randomUUID().toString();
 
-            //Queue de respuesta
-            String receiver_queue = channel.queueDeclare().getQueue();
-            LOGGER.info("Creando queue receptora: " + receiver_queue);
+      //Queue de respuesta
+      String receiverQueue = channel.queueDeclare().getQueue();
+      LOGGER.info("Creando queue receptora: " + receiverQueue);
 
-            AMQP.BasicProperties properties = new AMQP.BasicProperties
-                    .Builder()
-                    .correlationId(correlation_id)
-                    .replyTo(receiver_queue)
-                    .build();
+      AMQP.BasicProperties properties = new AMQP.BasicProperties
+          .Builder()
+          .correlationId(correlationId)
+          .replyTo(receiverQueue)
+          .build();
 
-            byte[] data = (new Gson().toJson(usuario)).getBytes(StandardCharsets.UTF_8);
+      byte[] data = (new Gson().toJson(usuario)).getBytes(StandardCharsets.UTF_8);
 
-            //Publicacion
-            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LOGIN, properties, data);
-            LOGGER.info("[x] Solicitando login usuario por exchange '" + EXCHANGE_NAME + "' por ruta '" + ROUTE_KEY_LOGIN + "' ->" + new Gson().toJson(usuario));
+      //Publicacion
+      channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY_LOGIN, properties, data);
+      LOGGER.info("[x] Solicitando login usuario por exchange '" + EXCHANGE_NAME + "' por ruta '"
+          + ROUTE_KEY_LOGIN + "' ->" + new Gson().toJson(usuario));
 
-            //Recepcion de datos desde msusuario
-            BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
+      //Recepcion de datos desde msusuario
+      BlockingQueue<String> response = new ArrayBlockingQueue<>(1);
 
-            String ctag = channel.basicConsume(receiver_queue, false, (consumerTag, delivery) -> {
+      String ctag = channel.basicConsume(receiverQueue, false, (consumerTag, delivery) -> {
 
-                if (delivery.getProperties().getCorrelationId().equals(correlation_id)) {
-                    response.offer(new String(delivery.getBody(), StandardCharsets.UTF_8));
+        if (delivery.getProperties().getCorrelationId().equals(correlationId)) {
+          response.offer(new String(delivery.getBody(), StandardCharsets.UTF_8));
 
-                    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-                }
-            }, consumerTag -> {
-            });
-
-            json = response.take();
-
-            channel.basicCancel(ctag);
-
-            LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + json);
-
-        } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException | InterruptedException e) {
-            e.printStackTrace();
+          channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
         }
-        return json;
+      }, consumerTag -> {
+      });
+
+      json = response.take();
+
+      channel.basicCancel(ctag);
+
+      LOGGER.info("[x] Recibido por queue '" + receiverQueue + "' -> " + json);
+
+    } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException | InterruptedException e) {
+      e.printStackTrace();
     }
+    return json;
+  }
 }

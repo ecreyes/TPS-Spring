@@ -26,178 +26,186 @@ import java.util.concurrent.TimeoutException;
 @Component("msgAdapter")
 public class MsgImpl implements Msg {
 
-    private static final String EXCHANGE_NAME = "usuario_exchange";
+  private static final String EXCHANGE_NAME = "usuario_exchange";
 
-    private static final String ROUTE_KEY_CREATE = "usuario.crear";
-    private static final String ROUTE_KEY_DELETE = "usuario.eliminar";
-    private static final String ROUTE_KEY_EDIT = "usuario.editar";
-    private static final String ROUTE_KEY_LOGIN = "usuario.login";
+  private static final String ROUTE_KEY_CREATE = "usuario.crear";
+  private static final String ROUTE_KEY_DELETE = "usuario.eliminar";
+  private static final String ROUTE_KEY_EDIT = "usuario.editar";
+  private static final String ROUTE_KEY_LOGIN = "usuario.login";
 
-    private static final String QUEUE_REQUEST_CUD = "usuario_request_cud";
-    private static final String QUEUE_REQUEST_LOGIN = "usuario_request_login";
+  private static final String QUEUE_REQUEST_CUD = "usuario_request_cud";
+  private static final String QUEUE_REQUEST_LOGIN = "usuario_request_login";
 
-    private static final Log LOGGER = LogFactory.getLog(MsgImpl.class);
+  private static final Log LOGGER = LogFactory.getLog(MsgImpl.class);
 
-    private final UsuarioService usuarioService;
+  private final UsuarioService usuarioService;
 
-    public MsgImpl(@Qualifier("usuarioService") UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
+  public MsgImpl(@Qualifier("usuarioService") UsuarioService usuarioService) {
+    this.usuarioService = usuarioService;
+  }
 
-    /**
-     * Proceso de mensajeria encargado de CREAR, ACTUALIZAR y ELIMINAR usuarios.
-     * (Suscripcion)
-     */
-    @Override
-    public void procesarCUD() {
+  /**
+   * Proceso de mensajeria encargado de CREAR, ACTUALIZAR y ELIMINAR usuarios. (Suscripcion)
+   */
+  @Override
+  public void procesarCUD() {
 
-        try {
-            Channel channel = RabbitMQ.getConnection().createChannel();
+    try {
+      Channel channel = RabbitMQ.getConnection().createChannel();
 
-            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+      channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
-            String receiver_queue = channel.queueDeclare(QUEUE_REQUEST_CUD, true, false, false, null).getQueue();
+      String receiverQueue = channel.queueDeclare(QUEUE_REQUEST_CUD, true, false, false, null)
+          .getQueue();
 
-            LOGGER.info("Creando queue: " + receiver_queue);
+      LOGGER.info("Creando queue: " + receiverQueue);
 
-            channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_CREATE);
-            channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_DELETE);
-            channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_EDIT);
+      channel.queueBind(receiverQueue, EXCHANGE_NAME, ROUTE_KEY_CREATE);
+      channel.queueBind(receiverQueue, EXCHANGE_NAME, ROUTE_KEY_DELETE);
+      channel.queueBind(receiverQueue, EXCHANGE_NAME, ROUTE_KEY_EDIT);
 
-            LOGGER.info("[*] Esperando por solicitudes de (Creacion - Edicion - Eliminacion) de usuarios. Para salir " +
-                    "presiona CTRL+C");
+      LOGGER.info(
+          "[*] Esperando por solicitudes de (Creacion - Edicion - Eliminacion) de usuarios. Para salir presiona CTRL+C");
 
-            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+      DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
-                String json = new String(delivery.getBody());
-                JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        String json = new String(delivery.getBody());
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
 
-                switch (delivery.getEnvelope().getRoutingKey()) {
+        switch (delivery.getEnvelope().getRoutingKey()) {
 
-                    //Solicitud de creacion de usuario
-                    case ROUTE_KEY_CREATE: {
+          //Solicitud de creacion de usuario
+          case ROUTE_KEY_CREATE: {
 
-                        //Construccion agregado
-                        UsuarioRoot usuarioRoot = new UsuarioRoot(jsonObject.get("username").getAsString(),
-                                jsonObject.get("email").getAsString(),
-                                jsonObject.get("password").getAsString(), jsonObject.get("estado").getAsString());
+            //Construccion agregado
+            UsuarioRoot usuarioRoot = new UsuarioRoot(jsonObject.get("username").getAsString(),
+                jsonObject.get("email").getAsString(),
+                jsonObject.get("password").getAsString(), jsonObject.get("estado").getAsString());
 
-                        LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot.toString());
+            LOGGER.info(
+                "[x] Recibido por queue '" + receiverQueue + "' -> " + usuarioRoot.toString());
 
-                        usuarioService.agregar(usuarioRoot);
+            usuarioService.agregar(usuarioRoot);
 
-                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-                        break;
-                    }
+            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+            break;
+          }
 
-                    //Solicitudes de editar usuario
-                    case ROUTE_KEY_EDIT: {
+          //Solicitudes de editar usuario
+          case ROUTE_KEY_EDIT: {
 
-                        //Construccion agregado
-                        UsuarioRoot usuarioRoot = new UsuarioRoot(jsonObject.get("id").getAsInt(), jsonObject.get(
-                                "username").getAsString(), jsonObject.get("email").getAsString(), jsonObject.get(
-                                        "password").getAsString(), jsonObject.get("estado").getAsString());
+            //Construccion agregado
+            UsuarioRoot usuarioRoot = new UsuarioRoot(jsonObject.get("id").getAsInt(),
+                jsonObject.get(
+                    "username").getAsString(), jsonObject.get("email").getAsString(),
+                jsonObject.get(
+                    "password").getAsString(), jsonObject.get("estado").getAsString());
 
-                        LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot.toString());
+            LOGGER.info(
+                "[x] Recibido por queue '" + receiverQueue + "' -> " + usuarioRoot.toString());
 
-                        usuarioService.editar(usuarioRoot);
+            usuarioService.editar(usuarioRoot);
 
-                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-                        break;
-                    }
+            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+            break;
+          }
 
-                    //Solicitudes de eliminar usuarios
-                    case ROUTE_KEY_DELETE: {
+          //Solicitudes de eliminar usuarios
+          case ROUTE_KEY_DELETE: {
 
-                        //Construccion agregado
-                        UsuarioRoot usuarioRoot = new UsuarioRoot(jsonObject.get("id").getAsInt());
+            //Construccion agregado
+            UsuarioRoot usuarioRoot = new UsuarioRoot(jsonObject.get("id").getAsInt());
 
-                        LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot.toString());
+            LOGGER.info(
+                "[x] Recibido por queue '" + receiverQueue + "' -> " + usuarioRoot.toString());
 
-                        //Eliminar usuario
-                        usuarioService.eliminar(usuarioRoot);
+            //Eliminar usuario
+            usuarioService.eliminar(usuarioRoot);
 
-                        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-                        break;
-                    }
-                }
-            };
-
-            boolean autoAck = false;
-            channel.basicConsume(receiver_queue, autoAck, deliverCallback, (consumerTag) -> {
-            });
-        } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
-            e.printStackTrace();
+            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+            break;
+          }
         }
+      };
 
+      boolean autoAck = false;
+      channel.basicConsume(receiverQueue, autoAck, deliverCallback, (consumerTag) -> {
+      });
+    } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
+      e.printStackTrace();
     }
 
-    /**
-     * Proceso de mensajeria encargado del logear usuarios en el sistema
-     * (Request-Response Sincronico a solicitudes desde Apigateway)
-     */
-    @Override
-    public void procesarLogin() {
+  }
 
-        try {
-            Channel channel = RabbitMQ.getConnection().createChannel();
+  /**
+   * Proceso de mensajeria encargado del logear usuarios en el sistema (Request-Response Sincronico
+   * a solicitudes desde Apigateway)
+   */
+  @Override
+  public void procesarLogin() {
 
-            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+    try {
+      Channel channel = RabbitMQ.getConnection().createChannel();
 
-            String receiver_queue = channel.queueDeclare(QUEUE_REQUEST_LOGIN, false, false, false, null).getQueue();
+      channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
-            LOGGER.info("Creando queue: " + receiver_queue);
+      String receiverQueue = channel.queueDeclare(QUEUE_REQUEST_LOGIN, false, false, false, null)
+          .getQueue();
 
-            channel.queueBind(receiver_queue, EXCHANGE_NAME, ROUTE_KEY_LOGIN);
+      LOGGER.info("Creando queue: " + receiverQueue);
 
-            LOGGER.info("[*] Esperando por solicitudes de login. Para salir presiona CTRL+C");
+      channel.queueBind(receiverQueue, EXCHANGE_NAME, ROUTE_KEY_LOGIN);
 
-            Object monitor = new Object();
+      LOGGER.info("[*] Esperando por solicitudes de login. Para salir presiona CTRL+C");
 
-            //RECEPCION DE SOLICITUDES
-            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+      Object monitor = new Object();
 
-                AMQP.BasicProperties reply_props = new AMQP.BasicProperties
-                        .Builder()
-                        .correlationId(delivery.getProperties().getCorrelationId())
-                        .build();
+      //RECEPCION DE SOLICITUDES
+      DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
-                String json_received = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                UsuarioRoot usuarioRoot = new Gson().fromJson(json_received, UsuarioRoot.class);
+        AMQP.BasicProperties replyProps = new AMQP.BasicProperties
+            .Builder()
+            .correlationId(delivery.getProperties().getCorrelationId())
+            .build();
 
-                LOGGER.info("[x] Recibido por queue '" + receiver_queue + "' -> " + usuarioRoot.toString());
-                channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+        String jsonReceived = new String(delivery.getBody(), StandardCharsets.UTF_8);
+        UsuarioRoot usuarioRoot = new Gson().fromJson(jsonReceived, UsuarioRoot.class);
 
-                //Realizar login
-                Map<String, Object> map = usuarioService.login(usuarioRoot);
-                byte[] data = (new Gson().toJson(map)).getBytes(StandardCharsets.UTF_8);
+        LOGGER.info("[x] Recibido por queue '" + receiverQueue + "' -> " + usuarioRoot.toString());
+        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 
-                //Enviarlo por cola unica (reply_to)
-                channel.basicPublish("", delivery.getProperties().getReplyTo(), reply_props, data);
+        //Realizar login
+        Map<String, Object> map = usuarioService.login(usuarioRoot);
+        byte[] data = (new Gson().toJson(map)).getBytes(StandardCharsets.UTF_8);
 
-                LOGGER.info("[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + map.toString());
+        //Enviarlo por cola unica (reply_to)
+        channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, data);
 
-                synchronized (monitor) {
-                    monitor.notify();
-                }
-            };
+        LOGGER.info(
+            "[x] Enviando por queue '" + delivery.getProperties().getReplyTo() + "' -> " + map
+                .toString());
 
-            //En espera de solicitudes
-            channel.basicConsume(receiver_queue, false, deliverCallback, (consumerTag) -> {
-            });
-
-            while (true) {
-                synchronized (monitor) {
-                    try {
-                        monitor.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-        } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
-            e.printStackTrace();
+        synchronized (monitor) {
+          monitor.notify();
         }
+      };
+
+      //En espera de solicitudes
+      channel.basicConsume(receiverQueue, false, deliverCallback, (consumerTag) -> {
+      });
+
+      while (true) {
+        synchronized (monitor) {
+          try {
+            monitor.wait();
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+
+    } catch (IOException | NoSuchAlgorithmException | URISyntaxException | TimeoutException | KeyManagementException e) {
+      e.printStackTrace();
     }
+  }
 }

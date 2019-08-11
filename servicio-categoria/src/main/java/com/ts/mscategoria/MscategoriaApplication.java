@@ -9,21 +9,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MscategoriaApplication implements CommandLineRunner {
 
-    private final Msg msg;
+  private final Msg msg;
 
-    public MscategoriaApplication(@Qualifier("msgAdapter") Msg msg) {
-        this.msg = msg;
-    }
+  public MscategoriaApplication(@Qualifier("msgAdapter") Msg msg) {
+    this.msg = msg;
+  }
 
-    public static void main(String[] args) {
-        SpringApplication.run(MscategoriaApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(MscategoriaApplication.class, args);
+  }
 
 
-    @Override
-    public void run(String... args) {
+  @Override
+  public void run(String... args) {
 
-        msg.procesarCUD();
-        msg.procesarListaCategorias();
-    }
+    msg.procesarCUD();
+    msg.procesarListaCategorias();
+  }
 }

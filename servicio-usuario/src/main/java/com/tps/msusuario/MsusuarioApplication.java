@@ -9,20 +9,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MsusuarioApplication implements CommandLineRunner {
 
-    private final Msg msg;
+  private final Msg msg;
 
-    public MsusuarioApplication(@Qualifier("msgAdapter") Msg msg) {
-        this.msg = msg;
-    }
+  public MsusuarioApplication(@Qualifier("msgAdapter") Msg msg) {
+    this.msg = msg;
+  }
 
-    public static void main(String[] args) {
-        SpringApplication.run(MsusuarioApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(MsusuarioApplication.class, args);
+  }
 
-    @Override
-    public void run(String... args) {
+  @Override
+  public void run(String... args) {
 
-        msg.procesarCUD();
-        msg.procesarLogin();
-    }
+    msg.procesarCUD();
+    msg.procesarLogin();
+  }
 }

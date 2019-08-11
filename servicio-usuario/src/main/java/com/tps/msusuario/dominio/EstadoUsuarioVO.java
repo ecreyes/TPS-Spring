@@ -2,13 +2,13 @@ package com.tps.msusuario.dominio;
 
 public class EstadoUsuarioVO {
 
-    private String estado;
+  private String estado;
 
-    EstadoUsuarioVO(String estado) {
-        this.estado = estado;
-    }
+  EstadoUsuarioVO(String estado) {
+    this.estado = estado;
+  }
 
-    public String getEstado() {
-        return estado;
-    }
+  public String getEstado() {
+    return estado;
+  }
 }

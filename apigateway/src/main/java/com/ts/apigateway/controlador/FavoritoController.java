@@ -10,29 +10,29 @@ import java.util.List;
 @RestController
 public class FavoritoController {
 
-    private final FavoritoMsg favoritoMsg;
+  private final FavoritoMsg favoritoMsg;
 
-    private static final String ROUTE_KEY_CREATE = "favorito.crear";
-    private static final String ROUTE_KEY_DELETE = "favorito.eliminar";
+  private static final String ROUTE_KEY_CREATE = "favorito.crear";
+  private static final String ROUTE_KEY_DELETE = "favorito.eliminar";
 
-    public FavoritoController(@Qualifier("favoritoMsgAdapter") FavoritoMsg favoritoMsg) {
-        this.favoritoMsg = favoritoMsg;
-    }
+  public FavoritoController(@Qualifier("favoritoMsgAdapter") FavoritoMsg favoritoMsg) {
+    this.favoritoMsg = favoritoMsg;
+  }
 
-    @PostMapping("/favorito/agregar")
-    public void agregar(@RequestBody Favorito favorito) {
-        favoritoMsg.enviarMsg(favorito, ROUTE_KEY_CREATE);
-    }
+  @PostMapping("/favorito/agregar")
+  public void agregar(@RequestBody Favorito favorito) {
+    favoritoMsg.enviarMsg(favorito, ROUTE_KEY_CREATE);
+  }
 
-    @DeleteMapping("/favorito/eliminar")
-    public void eliminar(@RequestBody Favorito favorito) {
-        favoritoMsg.enviarMsg(favorito, ROUTE_KEY_DELETE);
-    }
+  @DeleteMapping("/favorito/eliminar")
+  public void eliminar(@RequestBody Favorito favorito) {
+    favoritoMsg.enviarMsg(favorito, ROUTE_KEY_DELETE);
+  }
 
-    @GetMapping("/favorito/usuario/{id}")
-    public List<Favorito> favoritosUsuario(@PathVariable(name = "id") String id_usuario) {
-        return favoritoMsg.obtenerListaFavoritosUsuario(id_usuario);
-    }
+  @GetMapping("/favorito/usuario/{id}")
+  public List<Favorito> favoritosUsuario(@PathVariable(name = "id") String id_usuario) {
+    return favoritoMsg.obtenerListaFavoritosUsuario(id_usuario);
+  }
 
 
 }

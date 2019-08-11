@@ -8,38 +8,36 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UsuarioController {
 
-    private final UsuarioMsg usuarioMsg;
-    private static final String ROUTE_KEY_CREATE = "usuario.crear";
-    private static final String ROUTE_KEY_DELETE = "usuario.eliminar";
-    private static final String ROUTE_KEY_EDIT = "usuario.editar";
+  private final UsuarioMsg usuarioMsg;
 
-    public UsuarioController(@Qualifier("usuarioMsgAdapter") UsuarioMsg usuarioMsg) {
-        this.usuarioMsg = usuarioMsg;
-    }
+  private static final String ROUTE_KEY_CREATE = "usuario.crear";
+  private static final String ROUTE_KEY_DELETE = "usuario.eliminar";
+  private static final String ROUTE_KEY_EDIT = "usuario.editar";
 
-    @PostMapping("/usuario/agregar")
-    public Usuario agregar(@RequestBody Usuario usuario) {
-        usuarioMsg.enviarMsg(usuario, ROUTE_KEY_CREATE);
+  public UsuarioController(@Qualifier("usuarioMsgAdapter") UsuarioMsg usuarioMsg) {
+    this.usuarioMsg = usuarioMsg;
+  }
 
-        return usuario;
-    }
+  @PostMapping("/usuario/agregar")
+  public Usuario agregar(@RequestBody Usuario usuario) {
+    usuarioMsg.enviarMsg(usuario, ROUTE_KEY_CREATE);
+    return usuario;
+  }
 
-    @PutMapping("/usuario/editar")
-    public Usuario editar(@RequestBody Usuario usuario) {
-        usuarioMsg.enviarMsg(usuario, ROUTE_KEY_EDIT);
+  @PutMapping("/usuario/editar")
+  public Usuario editar(@RequestBody Usuario usuario) {
+    usuarioMsg.enviarMsg(usuario, ROUTE_KEY_EDIT);
+    return usuario;
+  }
 
-        return usuario;
-    }
+  @DeleteMapping("/usuario/eliminar")
+  public Usuario eliminar(@RequestBody Usuario usuario) {
+    usuarioMsg.enviarMsg(usuario, ROUTE_KEY_DELETE);
+    return usuario;
+  }
 
-    @DeleteMapping("/usuario/eliminar")
-    public Usuario eliminar(@RequestBody Usuario usuario) {
-        usuarioMsg.enviarMsg(usuario, ROUTE_KEY_DELETE);
-
-        return usuario;
-    }
-
-    @PostMapping("/usuario/login")
-    public String login(@RequestBody Usuario usuario) {
-        return usuarioMsg.solicitarLogin(usuario);
-    }
+  @PostMapping("/usuario/login")
+  public String login(@RequestBody Usuario usuario) {
+    return usuarioMsg.solicitarLogin(usuario);
+  }
 }

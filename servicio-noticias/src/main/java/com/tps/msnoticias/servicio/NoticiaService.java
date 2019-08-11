@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface NoticiaService {
 
-    List<NoticiaRoot> obtenerNoticias(String categorias);
+  List<NoticiaRoot> obtenerNoticias(String categorias);
 
-    void agregar(NoticiaRoot noticiaRoot);
+  void agregar(NoticiaRoot noticiaRoot);
 
-    void eliminar(NoticiaRoot noticiaRoot);
+  void eliminar(NoticiaRoot noticiaRoot);
 
-    void editar(NoticiaRoot noticiaRoot);
+  void editar(NoticiaRoot noticiaRoot);
 }

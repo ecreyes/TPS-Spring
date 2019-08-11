@@ -2,13 +2,13 @@ package com.ts.msfavoritos.dominio;
 
 public class NoticiaIdVO {
 
-    private int id;
+  private int id;
 
-    NoticiaIdVO(int id) {
-        this.id = id;
-    }
+  NoticiaIdVO(int id) {
+    this.id = id;
+  }
 
-    public int getId() {
-        return id;
-    }
+  public int getId() {
+    return id;
+  }
 }

@@ -5,107 +5,109 @@ import javax.persistence.*;
 @Entity
 @Table(name = "noticia")
 public class Noticia {
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private int id;
 
-    @Column(name = "titular")
-    private String titular;
+  @Id
+  @GeneratedValue
+  @Column(name = "id")
+  private int id;
 
-    @Column(name = "descripcion")
-    private String descripcion;
+  @Column(name = "titular")
+  private String titular;
 
-    @Column(name = "autor")
-    private String autor;
+  @Column(name = "descripcion")
+  private String descripcion;
 
-    @Column(name = "url")
-    private String url;
+  @Column(name = "autor")
+  private String autor;
 
-    @Column(name = "fuente")
-    private String fuente;
+  @Column(name = "url")
+  private String url;
 
-    @Column(name = "id_categoria")
-    private int id_categoria;
+  @Column(name = "fuente")
+  private String fuente;
 
-    public Noticia() {
-    }
+  @Column(name = "id_categoria")
+  private int idCategoria;
 
-    public Noticia(String titular, String descripcion, String autor, String url, String fuente, int id_categoria) {
-        this.titular = titular;
-        this.descripcion = descripcion;
-        this.autor = autor;
-        this.url = url;
-        this.fuente = fuente;
-        this.id_categoria = id_categoria;
-    }
+  public Noticia() {
+  }
 
-    public int getId() {
-        return id;
-    }
+  public Noticia(String titular, String descripcion, String autor, String url, String fuente,
+      int idCategoria) {
+    this.titular = titular;
+    this.descripcion = descripcion;
+    this.autor = autor;
+    this.url = url;
+    this.fuente = fuente;
+    this.idCategoria = idCategoria;
+  }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public String getTitular() {
-        return titular;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public void setTitular(String titular) {
-        this.titular = titular;
-    }
+  public String getTitular() {
+    return titular;
+  }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+  public void setTitular(String titular) {
+    this.titular = titular;
+  }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+  public String getDescripcion() {
+    return descripcion;
+  }
 
-    public String getAutor() {
-        return autor;
-    }
+  public void setDescripcion(String descripcion) {
+    this.descripcion = descripcion;
+  }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
+  public String getAutor() {
+    return autor;
+  }
 
-    public String getUrl() {
-        return url;
-    }
+  public void setAutor(String autor) {
+    this.autor = autor;
+  }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+  public String getUrl() {
+    return url;
+  }
 
-    public String getFuente() {
-        return fuente;
-    }
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
-    public void setFuente(String fuente) {
-        this.fuente = fuente;
-    }
+  public String getFuente() {
+    return fuente;
+  }
 
-    public int getId_categoria() {
-        return id_categoria;
-    }
+  public void setFuente(String fuente) {
+    this.fuente = fuente;
+  }
 
-    public void setId_categoria(int id_categoria) {
-        this.id_categoria = id_categoria;
-    }
+  public int getIdCategoria() {
+    return idCategoria;
+  }
 
-    @Override
-    public String toString() {
-        return "Noticia{" +
-                "id=" + id +
-                ", titular='" + titular + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", autor='" + autor + '\'' +
-                ", url='" + url + '\'' +
-                ", fuente='" + fuente + '\'' +
-                ", id_categoria=" + id_categoria +
-                '}';
-    }
+  public void setIdCategoria(int idCategoria) {
+    this.idCategoria = idCategoria;
+  }
+
+  @Override
+  public String toString() {
+    return "Noticia{" +
+        "id=" + id +
+        ", titular='" + titular + '\'' +
+        ", descripcion='" + descripcion + '\'' +
+        ", autor='" + autor + '\'' +
+        ", url='" + url + '\'' +
+        ", fuente='" + fuente + '\'' +
+        ", idCategoria=" + idCategoria +
+        '}';
+  }
 }

@@ -2,7 +2,7 @@ package com.ts.msfavoritos.mensajeria;
 
 public interface Msg {
 
-    void procesarCD();
+  void procesarCD();
 
-    void procesarListaFavUsuario();
+  void procesarListaFavUsuario();
 }

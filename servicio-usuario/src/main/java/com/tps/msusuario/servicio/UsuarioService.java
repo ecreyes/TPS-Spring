@@ -6,12 +6,12 @@ import java.util.Map;
 
 public interface UsuarioService {
 
-    void agregar(UsuarioRoot usuario);
+  void agregar(UsuarioRoot usuario);
 
-    void eliminar(UsuarioRoot usuarioRoot);
+  void eliminar(UsuarioRoot usuarioRoot);
 
-    void editar(UsuarioRoot usuarioRoot);
+  void editar(UsuarioRoot usuarioRoot);
 
-    Map<String, Object> login(UsuarioRoot usuarioRoot);
+  Map<String, Object> login(UsuarioRoot usuarioRoot);
 
 }

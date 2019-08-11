@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface CategoriaService {
 
-    List<CategoriaRoot> obtenerCategorias();
+  List<CategoriaRoot> obtenerCategorias();
 
-    void agregar(CategoriaRoot categoriaRoot);
+  void agregar(CategoriaRoot categoriaRoot);
 
-    void eliminar(CategoriaRoot categoriaRoot);
+  void eliminar(CategoriaRoot categoriaRoot);
 
-    void editar(CategoriaRoot categoriaRoot);
+  void editar(CategoriaRoot categoriaRoot);
 }
