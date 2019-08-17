@@ -1,5 +1,7 @@
 # TPS
-
+| Apigateway | MsCategorias | MsUsuarios | MsFavoritos | MsNoticias |
+|------------|--------------|------------|-------------|------------|
+|[![Build Status](https://travis-ci.com/figonzal1/TPS-Spring.svg?branch=apigateway)](https://travis-ci.com/figonzal1/TPS-Spring)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Spring.svg?branch=mscategorias)](https://travis-ci.com/figonzal1/TPS-Spring)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Spring.svg?branch=msusuarios)](https://travis-ci.com/figonzal1/TPS-Spring)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Spring.svg?branch=msfavoritos)](https://travis-ci.com/figonzal1/TPS-Spring)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Spring.svg?branch=msnoticias)](https://travis-ci.com/figonzal1/TPS-Spring)|
 ## Docker
 Imágenes docker de todos los servicios, disponibles en [docker hub](https://hub.docker.com/u/figonzal)
 ### Modo auto con `Docker compose`
@@ -42,7 +44,7 @@ Uso de docker para montar los microservicios.
  ```
 
 ## Acceso a Api-Gateway
-Se detallan los puntos de acceso al servicio
+Se detallan los puntos de acceso a los servicios
 * **Categorías**
   * http://localhost:8080/categorias,  Muestra un listado de categorías almacenadas en microservicio `mscategoria`
   * http://localhost:8080/categoria/agregar, Agregar una categoria vía `POST`
@@ -76,31 +78,31 @@ Se detallan los puntos de acceso al servicio
     + Esquema -> ```{"email": "email@email.com","password": "pass1"}```
 
 ## Compilaciones `.jar`
-### MicroServicio Apigateway
+### Apigateway
 Se detalla como ejecutar el microservicio asociado
 * Via `Terminal`
   * `mvn install`
   * `java -jar target/apigateway-0.0.1-SNAPSHOT.jar`
   
-### MicroServicio Categoría
+### MsCategorias
 Se detalla como ejecutar el microservicio asociado
 * Via `Terminal`
   * `mvn install`
   * `java -jar target/mscategoria-0.0.1-SNAPSHOT.jar`
     
-### MicroServicio Noticia
+### MsNoticias
 Se detalla como ejecutar el microservicio asociado
 * Via `Terminal`
   * `mvn install`
   * `java -jar target/msnoticias-0.0.1-SNAPSHOT.jar`
 
-### MicroServicio Usuario
+### MsUsuarios
 Se detalla como ejecutar el microservicio asociado
 * Via `Terminal`
   * `mvn install`
   * `java -jar target/msusuario-0.0.1-SNAPSHOT.jar`
  
-### MicroServicio Favoritos
+### MsFavoritos
 Se detalla como ejecutar el microservicio asociado
 * Via `Terminal`
   * `mvn install`
