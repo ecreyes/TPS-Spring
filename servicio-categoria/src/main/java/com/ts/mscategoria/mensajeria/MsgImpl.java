@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
+/**Adaptador que implementa los metodos de Msg para realizar la comunicación**/
 @Component("msgAdapter")
 public class MsgImpl implements Msg {
 

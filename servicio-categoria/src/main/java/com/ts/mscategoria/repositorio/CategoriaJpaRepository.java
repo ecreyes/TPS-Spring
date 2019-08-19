@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
 
+/**JPA para categoria**/
 @Repository("categoriaJpaRepository")
 public interface CategoriaJpaRepository extends JpaRepository<Categoria, Serializable> {
 

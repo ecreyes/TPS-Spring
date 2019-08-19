@@ -1,7 +1,7 @@
 package com.ts.mscategoria.dominio;
-
+/**CategoriaRoot**/
 public class CategoriaRoot {
-
+  /**atributos de la categoria**/
   private int id;
   private String nombre;
   private EstadoCategoriaVO estadoCategoriaVO;
@@ -24,6 +24,7 @@ public class CategoriaRoot {
     this.id = id;
   }
 
+  //getters y setters de categoria
   public int getId() {
     return id;
   }
