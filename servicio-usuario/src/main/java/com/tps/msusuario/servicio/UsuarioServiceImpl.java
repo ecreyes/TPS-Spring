@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**Implementación de la interfaz usuario Servies con los métodos respectivos**/
 @Service("usuarioService")
 public class UsuarioServiceImpl implements UsuarioService {
 
@@ -20,6 +21,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     this.usuarioJpaRepository = usuarioJpaRepository;
   }
 
+  //método para agregar usuario
   @Override
   public void agregar(UsuarioRoot usuarioRoot) {
     Usuario usuario = new Usuario(usuarioRoot.getEmail(), usuarioRoot.getPassword(),
@@ -28,6 +30,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     usuarioJpaRepository.save(usuario);
   }
 
+  //método para eliminar usuario
   @Override
   public void eliminar(UsuarioRoot usuarioRoot) {
 
@@ -37,6 +40,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
   }
 
+  //método para editar usuario
   @Override
   public void editar(UsuarioRoot usuarioRoot) {
 
@@ -53,6 +57,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
   }
 
+  //Método para el login de usuario
   @Override
   public Map<String, Object> login(UsuarioRoot usuarioRoot) {
 
