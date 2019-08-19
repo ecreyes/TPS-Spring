@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**Entidad de favorito para el jpa**/
 @Entity
 @Table(name = "favorito")
 public class Favorito {

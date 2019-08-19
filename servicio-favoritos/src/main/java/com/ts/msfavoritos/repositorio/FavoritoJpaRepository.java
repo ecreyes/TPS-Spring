@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+/**JPA de favorito**/
 @Repository("favoritoJpaRepository")
 public interface FavoritoJpaRepository extends JpaRepository<Favorito, Serializable> {
 

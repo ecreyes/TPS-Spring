@@ -24,9 +24,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+/**Implementación de la interfaz Msg para realizar la comunicación a las colas**/
 @Component("msgAdapter")
 public class MsgImpl implements Msg {
 
+  /**Nombre de las colas**/
   private static final String EXCHANGE_NAME = "favorito_exchange";
 
   private static final String ROUTE_KEY_CREATE = "favorito.crear";

@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+/**Clase para ejecutar las pruebas**/
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MsfavoritosApplicationTests {
