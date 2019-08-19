@@ -5,6 +5,8 @@ import com.tps.msnoticias.repositorio.entidad.Noticia;
 
 import java.util.List;
 
+/**Interfaz para listar,agregar,eliminar o editar noticias.**/
+
 public interface NoticiaService {
 
   List<NoticiaRoot> obtenerNoticias(String categorias);

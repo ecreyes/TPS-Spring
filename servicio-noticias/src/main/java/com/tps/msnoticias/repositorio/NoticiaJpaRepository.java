@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
 
+/**Jpa para realizar acciones en la base de datos**/
 @Repository("noticiaJpaRepository")
 public interface NoticiaJpaRepository extends JpaRepository<Noticia, Serializable> {
 

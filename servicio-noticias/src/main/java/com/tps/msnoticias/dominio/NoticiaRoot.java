@@ -1,7 +1,7 @@
 package com.tps.msnoticias.dominio;
-
+/**NoticiaRoot**/
 public class NoticiaRoot {
-
+  /**Atributos de noticiaRoot**/
   private int id;
   private String titular;
   private String descripcion;
@@ -55,6 +55,7 @@ public class NoticiaRoot {
     this.id = id;
   }
 
+  //geters y setters de NoticiaRoot
   public int getId() {
     return id;
   }
@@ -111,6 +112,7 @@ public class NoticiaRoot {
     this.categoriaNoticiaVO = categoriaNoticiaVO;
   }
 
+  /**metodo para retornar noticiaRoot como String con sus atributos**/
   @Override
   public String toString() {
     return "NoticiaRoot{" +

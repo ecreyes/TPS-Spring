@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+/**Clase singleton para relizar la comunicación con RabbitMQ**/
 public class RabbitMQ {
 
   private static ConnectionFactory factory = null;
