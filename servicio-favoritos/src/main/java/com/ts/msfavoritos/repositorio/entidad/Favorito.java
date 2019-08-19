@@ -29,12 +29,14 @@ public class Favorito {
   public Favorito() {
   }
 
+  /**constructor de favorito **/
   public Favorito(int idNoticia, int idUsuario, String fechaFavorito) {
     this.idNoticia = idNoticia;
     this.idUsuario = idUsuario;
     this.fechaFavorito = fechaFavorito;
   }
 
+  //geters y setters
   public int getId() {
     return id;
   }
