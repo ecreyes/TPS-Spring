@@ -1,19 +1,24 @@
 package com.ts.apigateway.modelo;
 
 import java.io.Serializable;
-
+/*
+Clase categoria correspondiente a la logica
+de negocio.
+ */
 public class Categoria implements Serializable {
-
+  //atributos de la clase categoria
   private int id;
   private String nombre;
   private String estado;
 
+  //constructor para crear la clase categoria.
   public Categoria(int id, String nombre, String estado) {
     this.id = id;
     this.nombre = nombre;
     this.estado = estado;
   }
 
+  //getters y setters de la clase categoria
   public int getId() {
     return id;
   }
@@ -38,6 +43,7 @@ public class Categoria implements Serializable {
     this.estado = estado;
   }
 
+  //método que entrega la categoria como string con sus propieades
   @Override
   public String toString() {
     return "Categoria{" +
