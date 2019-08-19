@@ -24,7 +24,7 @@ import java.util.concurrent.TimeoutException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
-
+/**Implementación de FavoritoMsg para realizar la comunicación con rabbitmq**/
 @Component("favoritoMsgAdapter")
 public class FavoritoMsgImpl implements FavoritoMsg {
 
