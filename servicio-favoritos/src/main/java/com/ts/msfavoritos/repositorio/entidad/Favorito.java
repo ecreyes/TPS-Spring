@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**Entidad de favorito para el jpa**/
 @Entity
 @Table(name = "favorito")
 public class Favorito {
@@ -28,12 +29,14 @@ public class Favorito {
   public Favorito() {
   }
 
+  /**constructor de favorito **/
   public Favorito(int idNoticia, int idUsuario, String fechaFavorito) {
     this.idNoticia = idNoticia;
     this.idUsuario = idUsuario;
     this.fechaFavorito = fechaFavorito;
   }
 
+  //geters y setters
   public int getId() {
     return id;
   }

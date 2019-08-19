@@ -2,6 +2,7 @@ package com.tps.msnoticias.repositorio.entidad;
 
 import javax.persistence.*;
 
+/**Entidad Noticia usada por el JPA**/
 @Entity
 @Table(name = "noticia")
 public class Noticia {

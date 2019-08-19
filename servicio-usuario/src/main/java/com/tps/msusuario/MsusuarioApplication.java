@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**Clase encargada de realizar la incialización del microservicio de springboot**/
 @SpringBootApplication
 public class MsusuarioApplication implements CommandLineRunner {
 

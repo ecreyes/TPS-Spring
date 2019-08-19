@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
-
+/**Clase con patrón Singleton que permite la conexión al servidor de rabbit**/
 public class RabbitMQ {
 
   private static ConnectionFactory factory = null;

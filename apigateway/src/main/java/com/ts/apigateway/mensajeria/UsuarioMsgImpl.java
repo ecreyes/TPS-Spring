@@ -18,7 +18,7 @@ import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeoutException;
-
+/**Implementación de la interfaz UsuarioMsg**/
 @Component("usuarioMsgAdapter")
 public class UsuarioMsgImpl implements UsuarioMsg {
 

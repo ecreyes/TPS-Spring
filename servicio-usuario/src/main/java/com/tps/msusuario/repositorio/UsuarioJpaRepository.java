@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
 
+/** Jpa de usuario **/
 @Repository("usuarioJpaRespository")
 public interface UsuarioJpaRepository extends JpaRepository<Usuario, Serializable> {
 

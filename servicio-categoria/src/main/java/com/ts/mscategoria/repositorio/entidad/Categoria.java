@@ -2,6 +2,7 @@ package com.ts.mscategoria.repositorio.entidad;
 
 import javax.persistence.*;
 
+/**Entidad de categoria usada por el JPA**/
 @Entity
 @Table(name = "categoria")
 public class Categoria {

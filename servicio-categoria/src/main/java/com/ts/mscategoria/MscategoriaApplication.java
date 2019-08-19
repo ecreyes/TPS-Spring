@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+/**Clase que permite inicializar el proyecto de Spring Boot**/
 @SpringBootApplication
 public class MscategoriaApplication implements CommandLineRunner {
 

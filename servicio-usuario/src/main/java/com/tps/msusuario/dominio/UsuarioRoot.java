@@ -1,7 +1,8 @@
 package com.tps.msusuario.dominio;
 
+/**Usuario Root, clase que representa un usuario**/
 public class UsuarioRoot {
-
+  //atributos de usuario root
   private int id;
   private NombreUsuarioVO nombreUsuarioVO;
   private String email;
@@ -41,6 +42,7 @@ public class UsuarioRoot {
     this.id = id;
   }
 
+  //getters y setters
   public int getId() {
     return id;
   }
@@ -81,6 +83,7 @@ public class UsuarioRoot {
     this.estadoUsuarioVO = estadoUsuarioVO;
   }
 
+  //método para mostrar el objeto usuarioroot como string con sus atributos
   @Override
   public String toString() {
     return "UsuarioRoot{" +

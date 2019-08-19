@@ -1,7 +1,7 @@
 package com.ts.msfavoritos.dominio;
-
+/**Root de Favorito**/
 public class FavoritoRoot {
-
+  //atributos de la clase favoritoRoot
   private int id;
   private UsuarioIdVO usuarioIdVO;
   private NoticiaIdVO noticiaIdVO;
@@ -28,6 +28,7 @@ public class FavoritoRoot {
     this.fechaFavorito = fechaFavorito;
   }
 
+  //getters y setters
   public int getId() {
     return id;
   }
@@ -60,6 +61,7 @@ public class FavoritoRoot {
     this.fechaFavorito = fechaFavorito;
   }
 
+  //metodo que devuelve el favoritoRoot como string con sus atributos
   @Override
   public String toString() {
     return "FavoritoRoot{" +

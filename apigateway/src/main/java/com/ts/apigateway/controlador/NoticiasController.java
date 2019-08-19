@@ -8,37 +8,42 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * Controlador de noticias para recibir las peticiones
+ * relacionadas con noticias**/
 @RestController
 public class NoticiasController {
 
   private final NoticiaMsg noticiaMsg;
-
+  /**nombre de colas que estan en rabbit para el envío de mensajes**/
   private static final String ROUTE_KEY_CREATE = "noticia.crear";
   private static final String ROUTE_KEY_EDIT = "noticia.editar";
   private static final String ROUTE_KEY_DELETE = "noticia.eliminar";
 
+  /**Constructor para setear el adaptador de noticias y realizar la comunicación**/
   public NoticiasController(@Qualifier("noticiaMsgAdapter") NoticiaMsg noticiaMsg) {
     this.noticiaMsg = noticiaMsg;
   }
 
+  /**Obtener el listado de noticias**/
   @GetMapping("/noticias")
   public List<Noticia> noticias() {
     return noticiaMsg.obtenerListadoNoticias();
   }
-
+  /**Agregar una noticia**/
   @PostMapping("/noticia/agregar")
   public Noticia agregar(@RequestBody Noticia noticia) {
     noticiaMsg.enviarMsg(noticia, ROUTE_KEY_CREATE);
     return noticia;
   }
-
+  /**Eliminar una noticia**/
   @DeleteMapping("/noticia/eliminar")
   public Noticia eliminar(@RequestBody Noticia noticia) {
     noticiaMsg.enviarMsg(noticia, ROUTE_KEY_DELETE);
     return noticia;
   }
 
+  /**Actualizar una noticia**/
   @PutMapping("/noticia/editar")
   public Noticia editar(@RequestBody Noticia noticia) {
     noticiaMsg.enviarMsg(noticia, ROUTE_KEY_EDIT);

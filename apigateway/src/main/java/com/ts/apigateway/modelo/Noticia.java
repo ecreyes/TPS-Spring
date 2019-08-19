@@ -1,7 +1,11 @@
 package com.ts.apigateway.modelo;
-
+/*
+Clase para representar una Noticia
+del modelo de nogicio.
+ */
 public class Noticia {
 
+  //atributos de la noticia
   private int id;
   private String titular;
   private String descripcion;
@@ -13,6 +17,7 @@ public class Noticia {
   public Noticia() {
   }
 
+  //constructor para crear la noticia
   public Noticia(int id, String titular, String descripcion, String autor, String url,
       String fuente,
       String id_categoria) {
@@ -25,6 +30,7 @@ public class Noticia {
     this.id_categoria = id_categoria;
   }
 
+  //Getters y Setters para obtener la noticia
   public int getId() {
     return id;
   }
@@ -81,6 +87,7 @@ public class Noticia {
     this.id_categoria = id_categoria;
   }
 
+  //devuelve la noticia en un formato de string
   @Override
   public String toString() {
     return "Noticia{" +

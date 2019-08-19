@@ -1,5 +1,5 @@
 package com.ts.msfavoritos.dominio;
-
+/**Value object de la clase usuario**/
 public class UsuarioIdVO {
 
   private int id;

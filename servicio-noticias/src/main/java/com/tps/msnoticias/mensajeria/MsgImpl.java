@@ -23,6 +23,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeoutException;
 
+/**Implementación de los métodos de comunicación para rabbit**/
 @Component("msgAdapter")
 public class MsgImpl implements Msg {
 

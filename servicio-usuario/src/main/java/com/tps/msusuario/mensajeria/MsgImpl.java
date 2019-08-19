@@ -22,10 +22,12 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
-
+/**Adaptador que implementa los metodos de Msg para permitir la comunicacion
+ * de mensajes con rabbit**/
 @Component("msgAdapter")
 public class MsgImpl implements Msg {
 
+  //Nombre de las colas que estan en rabbit para enviar mensajes
   private static final String EXCHANGE_NAME = "usuario_exchange";
 
   private static final String ROUTE_KEY_CREATE = "usuario.crear";

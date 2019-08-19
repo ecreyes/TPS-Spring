@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**Implementación de la interfaz NoticiaService**/
 @Service("noticiaService")
 public class NoticiaServiceImp implements NoticiaService {
 

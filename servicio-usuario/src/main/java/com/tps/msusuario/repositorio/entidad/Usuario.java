@@ -2,6 +2,7 @@ package com.tps.msusuario.repositorio.entidad;
 
 import javax.persistence.*;
 
+/**Entidad usada por el JPA de usuario**/
 @Entity
 @Table(name = "usuario")
 public class Usuario {

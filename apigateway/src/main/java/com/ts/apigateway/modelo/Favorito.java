@@ -1,12 +1,16 @@
 package com.ts.apigateway.modelo;
-
+/*
+Clase de favorito para representar la logica
+de negocio.
+ */
 public class Favorito {
-
+  //atributos de la clase de favorito
   private int id;
   private int id_usuario;
   private int id_noticia;
   private String fechaFavorito;
 
+  //constructor para crear un favorito
   public Favorito(int id, int id_usuario, int id_noticia, String fechaFavorito) {
     this.id = id;
     this.id_usuario = id_usuario;
@@ -14,6 +18,7 @@ public class Favorito {
     this.fechaFavorito = fechaFavorito;
   }
 
+  //getters y setters de favorito
   public int getId() {
     return id;
   }
@@ -46,6 +51,7 @@ public class Favorito {
     this.fechaFavorito = fechaFavorito;
   }
 
+  //metodo que entrega favorito como string con sus atributos.
   @Override
   public String toString() {
     return "Favorito{" +
