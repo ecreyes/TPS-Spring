@@ -1,7 +1,8 @@
 # TPS
 | Apigateway | MsCategorias | MsUsuarios | MsFavoritos | MsNoticias |
+|[Repo](https://travis-ci.com/figonzal1/TPS-Apigateway)|[Repo](https://travis-ci.com/figonzal1/TPS-Mscategorias)|[Repo](https://travis-ci.com/figonzal1/TPS-Msusuarios)|[Repo](https://travis-ci.com/figonzal1/TPS-Msfavoritos)|[Repo](https://travis-ci.com/figonzal1/TPS-Msnoticias)|
 |------------|--------------|------------|-------------|------------|
-|[![Build Status](https://travis-ci.com/figonzal1/TPS-Spring.svg?branch=apigateway)](https://travis-ci.com/figonzal1/TPS-Spring)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Spring.svg?branch=mscategorias)](https://travis-ci.com/figonzal1/TPS-Spring)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Spring.svg?branch=msusuarios)](https://travis-ci.com/figonzal1/TPS-Spring)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Spring.svg?branch=msfavoritos)](https://travis-ci.com/figonzal1/TPS-Spring)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Spring.svg?branch=msnoticias)](https://travis-ci.com/figonzal1/TPS-Spring)|
+|[![Build Status](https://travis-ci.com/figonzal1/TPS-Apigateway.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Apigateway)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Mscategorias.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Mscategorias)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Msusuarios.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Msusuarios)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Msfavoritos.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Msfavoritos)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Msnoticias.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Msnoticias)|
 ## Docker
 Imágenes docker de todos los servicios, disponibles en [docker hub](https://hub.docker.com/u/figonzal)
 ### Modo auto con `Docker compose`
