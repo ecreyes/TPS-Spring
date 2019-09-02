@@ -1,8 +1,8 @@
 # TPS
-| Apigateway | MsCategorias | MsUsuarios | MsFavoritos | MsNoticias |
-|[Repo](https://travis-ci.com/figonzal1/TPS-Apigateway)|[Repo](https://travis-ci.com/figonzal1/TPS-Mscategorias)|[Repo](https://travis-ci.com/figonzal1/TPS-Msusuarios)|[Repo](https://travis-ci.com/figonzal1/TPS-Msfavoritos)|[Repo](https://travis-ci.com/figonzal1/TPS-Msnoticias)|
-|------------|--------------|------------|-------------|------------|
-|[![Build Status](https://travis-ci.com/figonzal1/TPS-Apigateway.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Apigateway)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Mscategorias.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Mscategorias)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Msusuarios.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Msusuarios)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Msfavoritos.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Msfavoritos)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Msnoticias.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Msnoticias)|
+## Estado y repositorios
+|  [Apigateway](https://github.com/figonzal1/TPS-Apigateway) |  [MsCategorias](https://github.com/figonzal1/TPS-Mscategorias) |  [MsUsuarios](https://github.com/figonzal1/TPS-Msusuarios) | [MsFavoritos](https://github.com/figonzal1/TPS-Msfavoritos) |  [MsNoticias](https://github.com/figonzal1/TPS-Msnoticias)| [MsNoticias-API](https://github.com/ecreyes/TPS-msnoticias-api)
+|------------|--------------|------------|-------------|------------|------------|
+|[![Build Status](https://travis-ci.com/figonzal1/TPS-Apigateway.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Apigateway)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Mscategorias.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Mscategorias)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Msusuarios.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Msusuarios)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Msfavoritos.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Msfavoritos)|[![Build Status](https://travis-ci.com/figonzal1/TPS-Msnoticias.svg?branch=master)](https://travis-ci.com/figonzal1/TPS-Msnoticias)|[![Build Status](https://travis-ci.com/ecreyes/TPS-msnoticias-api.svg?branch=master)](https://travis-ci.com/ecreyes/TPS-msnoticias-api)
 ## Docker
 Imágenes docker de todos los servicios, disponibles en [docker hub](https://hub.docker.com/u/figonzal)
 ### Modo auto con `Docker compose`
