@@ -61,7 +61,7 @@ services:
   #Definicion servicio Msnoticias-api
   ms-noticias-api:
     container_name: ms-noticias-api
-    image: ecreyes/ms-noticias-api:v1.0.2
+    image: ecreyes/ms-noticias-api:v1.0.3
     networks:
       - RED_TPS
     depends_on:
