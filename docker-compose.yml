@@ -58,6 +58,19 @@ services:
       - mysql
       - mscategorias
 
+  #Definicion servicio Msnoticias-api
+  ms-noticias-api:
+    container_name: ms-noticias-api
+    image: ecreyes/ms-noticias-api:v1.0.2
+    networks:
+      - RED_TPS
+    depends_on:
+      - mysql
+      - msusuarios
+      - msfavoritos
+      - mscategorias
+      - msnoticias
+
   #Definicion servicio apigateway
   apigateway:
     container_name: apigateway
@@ -72,6 +85,7 @@ services:
       - msfavoritos
       - mscategorias
       - msnoticias
+      - ms-noticias-api
 
   #Servicio de espera para apigateway
   wait_for_apigateway:
@@ -84,6 +98,7 @@ services:
       - msnoticias
       - msfavoritos
       - apigateway
+      - ms-noticias-api
     networks:
       - RED_TPS
     command: apigateway:8080
@@ -98,9 +113,10 @@ services:
       - msusuarios
       - msnoticias
       - msfavoritos
+      - ms-noticias-api
     networks:
       - RED_TPS
-    command: msfavoritos:8090
+    command: msfavoritos:8090 ms-noticias-api:3000
 
   #Servicio de espera para servicios (MsUsuario y MsNoticias)
   wait_for_usuarios_noticias:

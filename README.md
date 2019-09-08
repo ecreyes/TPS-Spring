@@ -22,6 +22,7 @@ Uso de docker para montar los microservicios.
  * Imagen de mysql: 
  ```sh
  $ docker run --name mysql --network RED_TPS -e MYSQL_DATABASE=tpsbd -e MYSQL_USER=tps -e MYSQL_RANDOM_ROOT_PASSWORD=yes -e MYSQL_PASSWORD=gcOiwC4P3vO5ZVft -d mysql
+ $ docker exec -it mysql mysql --user=tps --password=gcOiwC4P3vO5ZVft
  ```
  * ApiGateway: 
  ```sh
