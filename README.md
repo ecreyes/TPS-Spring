@@ -9,7 +9,7 @@ Imágenes docker de todos los servicios, disponibles en [docker hub](https://hub
 Para ejecutar el sistema completo:
 
 ```sh
-$ docker-compose up wait_for_mysql & docker-compose up wait_for_mscategorias & docker-compose up wait_for_more_services & docker-compose up wait_for_apigateway & docker rm -f w4d w4d2 w4d3 w4d4
+$ ./init.sh
 ```
 
 ### Modo manual
