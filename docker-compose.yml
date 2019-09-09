@@ -51,7 +51,7 @@ services:
   #Definicion servicio msnoticias
   msnoticias:
     container_name: msnoticias
-    image: figonzal/msnoticias:v1.0.0
+    image: figonzal/msnoticias:v1.0.1
     networks:
       - RED_TPS
     depends_on:
