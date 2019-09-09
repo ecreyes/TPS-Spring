@@ -20,7 +20,7 @@ services:
   #Definicion servicio msusuarios
   msusuarios:
     container_name: msusuarios
-    image: figonzal/msusuarios:v1.0.0
+    image: figonzal/msusuarios:v1.0.1
     networks:
       - RED_TPS
     depends_on:
@@ -30,7 +30,7 @@ services:
   #Definicion servicio msfavoritos
   msfavoritos:
     container_name: msfavoritos
-    image: figonzal/msfavoritos:v1.0.0
+    image: figonzal/msfavoritos:v1.0.1
     networks:
       - RED_TPS
     depends_on:
@@ -74,7 +74,7 @@ services:
   #Definicion servicio apigateway
   apigateway:
     container_name: apigateway
-    image: figonzal/apigateway:v1.0.0
+    image: figonzal/apigateway:v1.0.1
     ports:
       - "80:8080"
     networks:
