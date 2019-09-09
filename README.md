@@ -56,34 +56,37 @@ Se detallan los puntos de acceso a los servicios
   * http://34.207.217.162/categoria/agregar, Agregar una categoria vía `POST`
     + Esquema JSON Request Body -> ```{"nombre": "Deportes","estado":"creado"}```
   * http://34.207.217.162/categoria/editar, edita una categoría vía `PUT`
-    + Esquema JSON Request Body -> -> ```{"nombre": "NombreEditado","id": 7,"estado":"editado"}```
+    + Esquema JSON Request Body -> ```{"nombre": "NombreEditado","id": 7,"estado":"editado"}```
   * http://34.207.217.162/categoria/eliminar, eliminar una categoría vía `DELETE`
-    + Esquema JSON Request Body -> -> ```{"id": 1}```
+    + Esquema JSON Request Body -> ```{"id": 1}```
 * **Noticias**
   * http://34.207.217.162/noticias, Muestra un listado de noticias almacenadas en microservicio `msnoticias` via `GET`
   * http://34.207.217.162/noticia/agregar, Agregar una noticia vía `POST`
-    + Esquema JSON Request Body -> -> ```{"titular": "titular",	"descripcion":"descripcion","autor": "autor","url": "url","fuente": "fuente","id_categoria":5}```
+    + Esquema JSON Request Body -> ```{"titular": "titular",	"descripcion":"descripcion","autor": "autor","url": "url","fuente": "fuente","id_categoria":5}```
   * http://34.207.217.162/noticia/editar, edita una noticia vía `PUT`
-    + Esquema JSON Request Body -> -> ```{"id": 1,"titular": "titular","descripcion": "descripcion","autor": "autor","url": "url","fuente": "fuente","id_categoria":5}```
+    + Esquema JSON Request Body -> ```{"id": 1,"titular": "titular","descripcion": "descripcion","autor": "autor","url": "url","fuente": "fuente","id_categoria":5}```
   * http://34.207.217.162/noticia/eliminar, eliminar una noticia vía `DELETE`
-    + Esquema JSON Request Body -> -> ```{"id": 1}```
+    + Esquema JSON Request Body -> ```{"id": 1}```
 * **Favoritos**
   * http://34.207.217.162/favoritos, Listado de todos los favoritos registrados en microservicio `msfavoritos` via `GET`
   * http://34.207.217.162/favorito/usuario/{id}, Listado de las noticias que son guardadas como favoritos por un usuario según `id` vía `GET`
   * http://34.207.217.162/favorito/agregar, agregar favorito via `POST`
-    + Esquema JSON Request Body -> -> ```{"id_usuario": 1,"id_noticia": 12}```
+    + Esquema JSON Request Body -> ```{"id_usuario": 1,"id_noticia": 12}```
   * http://34.207.217.162/favorito/eliminar, eliminar favorito via `DELETE`
-    + Esquema JSON Request Body -> -> ```{"id_usuario": 1,"id_noticia": 12}```
+    + Esquema JSON Request Body -> ```{"id_usuario": 1,"id_noticia": 12}```
 * **Usuarios**
   * http://34.207.217.162/usuarios, Listado de todos los usuarios registrados en microservicio `msusuarios` vía `GET`
   * http://34.207.217.162/usuario/agregar, agregar usuario via `POST`
-    + Esquema JSON Request Body -> -> ```{"email": "email@email.com","username": "username","password": "pass1","estado": "creado"}```
+    + Esquema JSON Request Body -> ```{"email": "email@email.com","username": "username","password": "pass1","estado": "creado"}```
   * http://34.207.217.162/usuario/editar, editar usuario via `PUT`
-    + Esquema JSON Request Body -> -> ```{"id": 1,"email": "email@email.com","username": "username","password": "pass1","estado": "editado"}```
+    + Esquema JSON Request Body -> ```{"id": 1,"email": "email@email.com","username": "username","password": "pass1","estado": "editado"}```
   * http://34.207.217.162/usuario/eliminar, eliminar usuario via `DELETE`
-    + Esquema JSON Request Body -> -> ```{"id": 1}```
+    + Esquema JSON Request Body -> ```{"id": 1}```
   * http://34.207.217.162/usuario/login, loguear usuario via `POST`
-    + Esquema JSON Request Body -> -> ```{"email": "email@email.com","password": "pass1"}```
+    + Esquema JSON Request Body -> ```{"email": "email@email.com","password": "pass1"}```
+    + Respuesta contraseña incorrecta -> ```{"Login_estado":"PASS INCORRECTA"}```
+    + Respuesta contraseña correcta -> ```{"Usuario":{"id":1,"email":"email@email.com","username":"username"},"Login_estado":"OK"}```
+    + Respuesta usuario no existe -> ```{"Login_estado":"USUARIO NO EXISTE"}```
 
 ## Compilaciones `.jar`
 ### Apigateway
